@@ -1,0 +1,27 @@
+{
+  "categorias": [
+    {
+      "id": "pizzas-tradicionais",
+      "nome": "Pizzas Tradicionais",
+      "descricao": "Massa artesanal no ponto perfeito com ingredientes selecionados.",
+      "itens": [
+        {
+          "id": "calabresa-artesanal",
+          "nome": "Calabresa Don Corleone",
+          "descricao": "Fatias de calabresa artesanal levemente douradas, cebola em rodelas finas, orégano e azeitonas pretas sobre queijo mussarela derretido.",
+          "preco": 62.00,
+          "destaque": true,
+          "foto": "/images/cardapio/calabresa-artesanal.jpg"
+        },
+        {
+          "id": "mussarela-especial",
+          "nome": "Mussarela Especial da Casa",
+          "descricao": "Generosa cobertura de queijo mussarela selecionado, molho de tomate artesanal, orégano fresco e fio de azeite extra virgem.",
+          "preco": 58.00,
+          "destaque": false,
+          "foto": "/images/cardapio/mussarela-especial.jpg"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+/* Faixa Marquee Lenta Elegante */
+
+.secao-marquee {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background: linear-gradient(90deg, #16120F, #1F1915, #16120F);
+  border-block: 1px solid var(--color-border-glass);
+  padding-block: var(--space-4);
+  user-select: none;
+  z-index: var(--z-base);
+}
+
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marqueeScroll 35s linear infinite;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+.marquee-content {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding-inline: var(--space-4);
+}
+
+.marquee-text {
+  font-family: var(--font-serif);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-gold-light);
+  white-space: nowrap;
+}
+
+.marquee-bullet {
+  font-size: 10px;
+  color: var(--color-gold);
+  opacity: 0.7;
+}

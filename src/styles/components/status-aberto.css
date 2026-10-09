@@ -1,0 +1,43 @@
+/* Badge de Aberto / Fechado */
+
+.status-funcionamento-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  backdrop-filter: blur(8px);
+  transition: all var(--transition-normal);
+}
+
+.status-indicador-ponto {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-circle);
+  flex-shrink: 0;
+}
+
+/* Aberto */
+.status--aberto {
+  background: rgba(46, 184, 114, 0.12);
+  border: 1px solid rgba(46, 184, 114, 0.3);
+  color: #5CF09F;
+}
+
+.status--aberto .status-indicador-ponto {
+  background: var(--color-status-open);
+  box-shadow: 0 0 8px rgba(46, 184, 114, 0.6);
+}
+
+/* Fechado */
+.status--fechado {
+  background: rgba(224, 82, 82, 0.12);
+  border: 1px solid rgba(224, 82, 82, 0.25);
+  color: #FFA3A3;
+}
+
+.status--fechado .status-indicador-ponto {
+  background: var(--color-status-closed);
+}

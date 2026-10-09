@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  * vite.config.js — Build do projeto. Injeta no HTML estático o SEO vindo de js/config.js
  * (título, descrição, Open Graph) e os caminhos de logo/imagem do hero, para que rastreadores
@@ -50,4 +51,21 @@ export default defineConfig({
   base: './', // caminhos relativos: funciona em Vercel, Netlify e GitHub Pages (subpasta)
   plugins: [seoFromConfig()],
   build: { target: 'es2020', chunkSizeWarningLimit: 700 },
+=======
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  root: './',
+  publicDir: 'public',
+  build: {
+    outDir: 'dist',
+    emptyOutDir: true,
+    target: 'es2020',
+    sourcemap: false
+  },
+  server: {
+    port: 3000,
+    open: false
+  }
+>>>>>>> b78a8338662fff7821a3b7b98d627b19063228f6
 });

@@ -1,0 +1,89 @@
+/* Rodapé com Wordmark Gigante */
+
+.site-footer {
+  position: relative;
+  padding-top: var(--space-16);
+  padding-bottom: calc(var(--bottom-bar-height) + var(--space-6));
+  background: #080605;
+  border-top: 1px solid rgba(200, 161, 90, 0.15);
+  overflow: hidden;
+  z-index: var(--z-base);
+}
+
+.footer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.footer-seal-wrap {
+  margin-bottom: var(--space-6);
+}
+
+.footer-seal-img {
+  filter: drop-shadow(0 4px 14px rgba(200, 161, 90, 0.3));
+}
+
+.footer-links-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-6);
+  margin-bottom: var(--space-12);
+}
+
+.footer-link {
+  font-size: var(--text-sm);
+  color: var(--color-text-secondary);
+  transition: color var(--transition-fast);
+}
+
+.footer-link:hover {
+  color: var(--color-gold-light);
+}
+
+.footer-link-instagram {
+  color: var(--color-gold);
+  font-weight: 600;
+}
+
+/* Wordmark Gigante */
+.footer-wordmark-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  margin-bottom: var(--space-8);
+  user-select: none;
+}
+
+.footer-wordmark-text {
+  font-family: var(--font-serif);
+  font-size: clamp(2.5rem, 8vw, 7.5rem);
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  background: linear-gradient(180deg, rgba(200, 161, 90, 0.28) 0%, rgba(200, 161, 90, 0.04) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  white-space: nowrap;
+  line-height: 0.9;
+}
+
+.footer-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  width: 100%;
+  padding-top: var(--space-6);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: var(--text-xs);
+  color: var(--color-text-muted);
+}
+
+@media (max-width: 600px) {
+  .footer-bottom {
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+}
