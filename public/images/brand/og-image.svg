@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <radialGradient id="ogBg" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#241C16" />
+      <stop offset="60%" stop-color="#140F0D" />
+      <stop offset="100%" stop-color="#080706" />
+    </radialGradient>
+    <radialGradient id="ogGlow" cx="50%" cy="50%" r="40%">
+      <stop offset="0%" stop-color="#C8A15A" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#C8A15A" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="ogGold" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#F5E4BE" />
+      <stop offset="50%" stop-color="#C8A15A" />
+      <stop offset="100%" stop-color="#F5E4BE" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#ogBg)" />
+  <circle cx="600" cy="315" r="450" fill="url(#ogGlow)" />
+
+  <!-- Outer frame border -->
+  <rect x="30" y="30" width="1140" height="570" fill="none" stroke="url(#ogGold)" stroke-width="1.5" opacity="0.6" />
+  <rect x="42" y="42" width="1116" height="546" fill="none" stroke="url(#ogGold)" stroke-width="0.75" stroke-dasharray="6 4" opacity="0.4" />
+  
+  <!-- Corner Ornaments -->
+  <g stroke="url(#ogGold)" stroke-width="1.5" fill="none" opacity="0.8">
+    <path d="M 30,70 L 70,70 L 70,30" />
+    <path d="M 1170,70 L 1130,70 L 1130,30" />
+    <path d="M 30,560 L 70,560 L 70,600" />
+    <path d="M 1170,560 L 1130,560 L 1130,600" />
+  </g>
+
+  <!-- Crest Icon -->
+  <g transform="translate(600, 180) scale(0.65)">
+    <circle cx="0" cy="0" r="110" fill="#1A1512" stroke="url(#ogGold)" stroke-width="3" />
+    <circle cx="0" cy="0" r="95" fill="none" stroke="url(#ogGold)" stroke-width="1" stroke-dasharray="4 3" />
+    <text x="0" y="24" font-family="'Cinzel', 'Playfair Display', Georgia, serif" font-size="70" font-weight="700" fill="url(#ogGold)" text-anchor="middle">DC</text>
+  </g>
+
+  <!-- Title -->
+  <text x="600" y="340" font-family="'Cinzel', 'Playfair Display', Georgia, serif" font-size="54" font-weight="700" fill="url(#ogGold)" text-anchor="middle" letter-spacing="8">
+    DON CORLEONE
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="600" y="390" font-family="'Manrope', 'DM Sans', sans-serif" font-size="20" font-weight="600" fill="#EAD9BD" text-anchor="middle" letter-spacing="10">
+    PIZZAS E ESFIHAS · CUIABÁ / MT
+  </text>
+
+  <!-- Highlights line -->
+  <text x="600" y="470" font-family="'Playfair Display', Georgia, serif" font-size="22" font-style="italic" fill="#C8A15A" text-anchor="middle">
+    Sabor incomparável · Entrega &amp; Retirada · Arena Cuiabá · 17h às 23h
+  </text>
+
+  <!-- WhatsApp Pill Badge -->
+  <g transform="translate(600, 525)">
+    <rect x="-160" y="-22" width="320" height="44" rx="22" fill="#A82A22" stroke="#E8CA88" stroke-width="1" />
+    <text x="0" y="6" font-family="'Manrope', sans-serif" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="2">
+      PEÇA PELO WHATSAPP
+    </text>
+  </g>
+</svg>

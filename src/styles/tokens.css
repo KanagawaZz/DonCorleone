@@ -1,0 +1,102 @@
+:root {
+  /* Colors - Italian Trattoria Palette */
+  --color-bg-primary: #0C0A09;
+  --color-bg-surface: #171310;
+  --color-bg-card: #1F1915;
+  --color-bg-card-hover: #29221C;
+  --color-bg-glass: rgba(16, 13, 11, 0.78);
+  --color-border-glass: rgba(200, 161, 90, 0.18);
+  --color-border-light: rgba(243, 235, 221, 0.1);
+
+  /* Gold / Champagne Accents */
+  --color-gold: #C8A15A;
+  --color-gold-light: #E8CA88;
+  --color-gold-dark: #8F6B27;
+  --color-gold-glow: rgba(200, 161, 90, 0.25);
+
+  /* Brand Accents */
+  --color-red: #A82A22;
+  --color-red-hover: #C2342A;
+  --color-red-glow: rgba(168, 42, 34, 0.35);
+  --color-basil: #5E7A4A;
+  --color-basil-light: #7E9E66;
+  --color-status-open: #2EB872;
+  --color-status-closed: #E05252;
+
+  /* Typography Colors */
+  --color-text-primary: #F3EBDD;
+  --color-text-secondary: #C8BCAC;
+  --color-text-muted: #8E8273;
+  --color-text-inverse: #0C0A09;
+
+  /* Typography Fonts */
+  --font-serif: 'Cinzel', 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  --font-serif-italic: 'Playfair Display', 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Manrope', 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+  /* Fluid Typography */
+  --text-xs: clamp(0.75rem, 0.7rem + 0.25vw, 0.8125rem);
+  --text-sm: clamp(0.875rem, 0.82rem + 0.28vw, 0.9375rem);
+  --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.0625rem);
+  --text-lg: clamp(1.125rem, 1.05rem + 0.38vw, 1.25rem);
+  --text-xl: clamp(1.25rem, 1.15rem + 0.5vw, 1.5rem);
+  --text-2xl: clamp(1.5rem, 1.35rem + 0.75vw, 1.875rem);
+  --text-3xl: clamp(1.875rem, 1.65rem + 1.1vw, 2.375rem);
+  --text-4xl: clamp(2.25rem, 1.95rem + 1.5vw, 3.125rem);
+  --text-5xl: clamp(2.75rem, 2.3rem + 2.25vw, 4.25rem);
+  --text-hero: clamp(2.5rem, 2.1rem + 2.8vw, 4.75rem);
+
+  /* Spacings */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+  --space-20: 5rem;
+  --space-24: 6rem;
+  --space-32: 8rem;
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-pill: 9999px;
+  --radius-circle: 50%;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.6);
+  --shadow-gold: 0 0 30px rgba(200, 161, 90, 0.2);
+  --shadow-red: 0 6px 24px rgba(168, 42, 34, 0.35);
+
+  /* Easings */
+  --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Transitions */
+  --transition-fast: 150ms var(--ease-smooth);
+  --transition-normal: 300ms var(--ease-smooth);
+  --transition-slow: 600ms var(--ease-smooth);
+
+  /* Layout */
+  --container-max: 1200px;
+  --container-narrow: 840px;
+  --header-height: 76px;
+  --bottom-bar-height: 76px;
+
+  /* Z-Index Hierarchy */
+  --z-base: 1;
+  --z-card: 10;
+  --z-header: 100;
+  --z-modal: 200;
+  --z-fixed-bar: 150;
+  --z-skip-link: 999;
+}

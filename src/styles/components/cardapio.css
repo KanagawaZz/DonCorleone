@@ -1,0 +1,190 @@
+/* Seção Cardápio */
+
+.secao-cardapio {
+  position: relative;
+  padding-block: var(--space-20);
+  background: linear-gradient(180deg, #0C0A09 0%, #15110E 50%, #0C0A09 100%);
+  z-index: var(--z-base);
+}
+
+.mb-8 {
+  margin-bottom: var(--space-8);
+}
+
+/* Fallback Card */
+.cardapio-fallback-card {
+  max-width: 600px;
+  margin-inline: auto;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-glass);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8) var(--space-6);
+  box-shadow: var(--shadow-md);
+  text-align: center;
+}
+
+.fallback-seal-wrap {
+  margin-bottom: var(--space-4);
+  display: flex;
+  justify-content: center;
+}
+
+.fallback-seal {
+  filter: drop-shadow(0 4px 12px rgba(200, 161, 90, 0.3));
+}
+
+.fallback-title {
+  font-size: var(--text-2xl);
+  color: var(--color-gold-light);
+  margin-bottom: var(--space-3);
+}
+
+.fallback-desc {
+  color: var(--color-text-secondary);
+  font-size: var(--text-base);
+  margin-bottom: var(--space-6);
+  line-height: 1.6;
+}
+
+.fallback-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+/* Abas */
+.cardapio-tabs-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-8);
+}
+
+.cardapio-tabs {
+  display: inline-flex;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-glass);
+  border-radius: var(--radius-pill);
+  padding: 6px;
+  gap: 6px;
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.tab-btn {
+  padding: 8px 20px;
+  border-radius: var(--radius-pill);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  transition: all var(--transition-fast);
+  white-space: nowrap;
+}
+
+.tab-btn.active {
+  background: var(--color-gold);
+  color: var(--color-text-inverse);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Painéis */
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Grid de Itens */
+.cardapio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--space-6);
+}
+
+.cardapio-item-card {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-glass);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-4);
+  transition: transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.cardapio-item-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-gold);
+  box-shadow: var(--shadow-gold);
+}
+
+.cardapio-item-img-wrap {
+  width: 100%;
+  height: 180px;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: #110E0C;
+}
+
+.cardapio-item-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-normal);
+}
+
+.cardapio-item-card:hover .cardapio-item-img {
+  transform: scale(1.05);
+}
+
+.cardapio-item-icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  background: rgba(200, 161, 90, 0.05);
+  border-radius: var(--radius-md);
+}
+
+.cardapio-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+.cardapio-item-nome {
+  font-size: var(--text-lg);
+  color: var(--color-text-primary);
+}
+
+.cardapio-item-preco {
+  font-family: var(--font-serif);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--color-gold-light);
+  white-space: nowrap;
+}
+
+.cardapio-item-desc {
+  font-size: var(--text-xs);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin-bottom: var(--space-4);
+}
+
+.btn--item-order {
+  width: 100%;
+  font-size: var(--text-xs);
+  padding: 0.6rem 1rem;
+}

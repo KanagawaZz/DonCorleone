@@ -1,0 +1,52 @@
+/* Barra Fixa Inferior Mobile */
+
+.barra-pedido-fixa {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: var(--bottom-bar-height);
+  background: rgba(12, 10, 9, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid var(--color-border-glass);
+  padding: 10px var(--space-4);
+  z-index: var(--z-fixed-bar);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(0);
+  transition: transform var(--transition-normal), opacity var(--transition-normal);
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.6);
+}
+
+.barra-pedido-fixa.barra--hidden {
+  transform: translateY(100%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.barra-pedido-inner {
+  width: 100%;
+  max-width: 480px;
+  display: flex;
+  gap: var(--space-3);
+}
+
+.barra-btn-whats {
+  flex: 1;
+  font-size: var(--text-sm);
+  padding: 0.75rem 1rem;
+}
+
+.barra-btn-tel {
+  padding: 0.75rem 1.25rem;
+  font-size: var(--text-sm);
+}
+
+/* Em desktop grande a barra é oculta para manter visual limpo */
+@media (min-width: 1024px) {
+  .barra-pedido-fixa {
+    display: none;
+  }
+}

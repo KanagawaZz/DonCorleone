@@ -1,0 +1,37 @@
+/* Seção Galeria */
+
+.secao-galeria {
+  position: relative;
+  padding-block: var(--space-20);
+  background: var(--color-bg-primary);
+  z-index: var(--z-base);
+}
+
+.galeria-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--space-4);
+}
+
+.galeria-item {
+  position: relative;
+  height: 260px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--color-border-glass);
+}
+
+.galeria-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-normal);
+}
+
+.galeria-item:hover .galeria-img {
+  transform: scale(1.06);
+}
+
+.mt-8 {
+  margin-top: var(--space-8);
+}

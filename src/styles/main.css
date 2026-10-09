@@ -1,0 +1,19 @@
+/* Stylesheet Central Don Corleone */
+
+@import './tokens.css';
+@import './base.css';
+@import './animations.css';
+
+/* Component Styles */
+@import './components/header.css';
+@import './components/status-aberto.css';
+@import './components/montagem.css';
+@import './components/marquee.css';
+@import './components/cardapio.css';
+@import './components/como-pedir.css';
+@import './components/sobre.css';
+@import './components/galeria.css';
+@import './components/depoimentos.css';
+@import './components/contato.css';
+@import './components/footer.css';
+@import './components/barra-pedido.css';
