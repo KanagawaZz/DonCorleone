@@ -3,12 +3,26 @@ import { esc } from '../utils/dom.js';
 export function renderSobre(config) {
   const sobre = config.textos?.sobre || {};
   const paragrafos = sobre.paragrafos || [
-    "Na Don Corleone, cada pizza é tratada com o devido respeito que a autêntica gastronomia italiana exige.",
-    "Nossa massa descansa por 48 horas em fermentação lenta e natural, resultando em uma borda aerada, crocante por fora e incrivelmente macia por dentro. O molho de tomate San Marzano e os ingredientes rigorosamente selecionados completam o espetáculo a cada mordida."
+    "A Don Corleone reúne pizzas e esfihas em uma experiência pensada para deixar sua noite mais gostosa.",
+    "Na unidade Arena Cuiabá, você escolhe seus sabores e conta com a praticidade do delivery ou da retirada no balcão."
+  ];
+
+  const destaques = sobre.destaques || [
+    { rotulo: "Variedade", valor: "Pizzas & Esfihas" },
+    { rotulo: "Praticidade", valor: "Delivery & Retirada" },
+    { rotulo: "Atendimento", valor: "17h às 23h" },
+    { rotulo: "Localização", valor: "Arena Cuiabá" }
   ];
 
   const paragrafosHtml = paragrafos.map(p => `
     <p class="sobre-paragrafo">${esc(p)}</p>
+  `).join('');
+
+  const destaquesHtml = destaques.map(d => `
+    <div class="sobre-badge-item">
+      <span class="sobre-badge-val">${esc(d.valor)}</span>
+      <span class="sobre-badge-label">${esc(d.rotulo)}</span>
+    </div>
   `).join('');
 
   return `
@@ -20,8 +34,8 @@ export function renderSobre(config) {
         <div class="sobre-img-frame">
           <img src="/images/cardapio/margherita-especial.jpg" alt="Preparação artesanal da pizza Don Corleone" class="sobre-img-main" />
           <div class="sobre-img-badge">
-            <span class="badge-number">48h</span>
-            <span class="badge-text">Fermentação Lenta</span>
+            <span class="badge-number">Arena</span>
+            <span class="badge-text">Cuiabá — MT</span>
           </div>
         </div>
       </div>
@@ -30,29 +44,18 @@ export function renderSobre(config) {
       <div class="sobre-content-col" data-reveal>
         <div class="sobre-ornamento-top">
           <img src="${config.marca?.seloUrl || '/images/brand/selo.svg'}" alt="Don Corleone Selo" class="sobre-selo-img" width="48" height="48" />
-          <span class="section-tag">La Tradizione di Famiglia</span>
+          <span class="section-tag">Cantina &amp; Pizzaria</span>
         </div>
 
-        <h2 id="sobre-titulo" class="section-title">${esc(sobre.titulo || 'O Segredo da Nossa Massa')}</h2>
-        <p class="sobre-subtitulo-desc text-italic text-gold mb-6">${esc(sobre.subtitulo || 'Artesanal, leve e com sabor inconfundível.')}</p>
+        <h2 id="sobre-titulo" class="section-title">${esc(sobre.titulo || 'Mais sabor para os seus momentos.')}</h2>
+        <p class="sobre-subtitulo-desc text-italic text-gold mb-6">${esc(sobre.subtitulo || 'Pizzas e esfihas na Arena Cuiabá')}</p>
 
         <div class="sobre-conteudo-box">
           ${paragrafosHtml}
         </div>
 
         <div class="sobre-badges-grid">
-          <div class="sobre-badge-item">
-            <span class="sobre-badge-val">450°C</span>
-            <span class="sobre-badge-label">Forno Ardente</span>
-          </div>
-          <div class="sobre-badge-item">
-            <span class="sobre-badge-val">100%</span>
-            <span class="sobre-badge-label">Farinha Especial</span>
-          </div>
-          <div class="sobre-badge-item">
-            <span class="sobre-badge-val">Arena Cuiabá</span>
-            <span class="sobre-badge-label">Entrega & Retirada</span>
-          </div>
+          ${destaquesHtml}
         </div>
       </div>
 
@@ -62,5 +65,5 @@ export function renderSobre(config) {
 }
 
 export function initSobre(config) {
-  // Animações de entrada tratadas pelo motion.js
+  // Inicialização de animações
 }

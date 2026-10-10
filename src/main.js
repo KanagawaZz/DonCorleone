@@ -12,6 +12,7 @@ import { renderMontagem, initMontagem } from './components/montagem/montagem.js'
 import { initStatusAberto } from './components/status-aberto.js';
 import { renderMarquee, initMarquee } from './components/marquee.js';
 import { renderCardapio, initCardapio } from './components/cardapio.js';
+import { renderCarrinhoModal, initCarrinhoModal } from './components/carrinho-modal.js';
 import { renderComoPedir, initComoPedir } from './components/como-pedir.js';
 import { renderSobre, initSobre } from './components/sobre.js';
 import { renderGaleria, initGaleria } from './components/galeria.js';
@@ -40,6 +41,7 @@ function montarAplicacao() {
     </main>
     ${renderFooter(siteConfig)}
     ${renderBarraPedido(siteConfig)}
+    ${renderCarrinhoModal(siteConfig)}
   `;
 
   app.innerHTML = html;
@@ -52,6 +54,7 @@ function montarAplicacao() {
   initMontagem(siteConfig);
   initMarquee(siteConfig);
   initCardapio(siteConfig);
+  initCarrinhoModal(siteConfig);
   initComoPedir(siteConfig);
   initSobre(siteConfig);
   initGaleria(siteConfig);

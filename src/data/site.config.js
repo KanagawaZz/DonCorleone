@@ -1,19 +1,19 @@
 /**
  * Configuração Central do Site Don Corleone (Cuiabá/MT)
  * 
- * Todas as informações factuais e textos do site vêm deste arquivo.
- * Qualquer alteração feita aqui reflete instantaneamente nos componentes.
+ * Todas as informações factuais, textos e configurações de contato
+ * estão centralizadas neste arquivo para fácil manutenção.
  */
 
 export const siteConfig = {
   // Marca e Identidade
   marca: {
     nome: "Don Corleone",
-    descritor: "Pizzas e Esfihas",
+    segmento: "Cantina e pizzaria — pizzas e esfihas",
     slogan: "Sabor incomparável",
     cidade: "Cuiabá",
     estado: "MT",
-    usarLogoOriginal: false, // Defina como true caso adicione o logo original em /images/brand/logo-original.png
+    usarLogoOriginal: false,
     logoOriginalUrl: "/images/brand/logo-original.png",
     brasaoUrl: "/images/brand/brasao.svg",
     wordmarkUrl: "/images/brand/wordmark.svg",
@@ -24,13 +24,13 @@ export const siteConfig = {
   modalidades: {
     entrega: {
       id: "entrega",
-      rotulo: "Entrega",
-      descricao: "Receba quentinha na sua casa"
+      rotulo: "Entrega (delivery)",
+      descricao: "Receba quentinha no conforto da sua casa"
     },
     retirada: {
       id: "retirada",
-      rotulo: "Retirada",
-      descricao: "Retire no balcão da Arena Cuiabá"
+      rotulo: "Retirada no balcão",
+      descricao: "Retire na unidade Arena Cuiabá"
     },
     padrao: "entrega"
   },
@@ -43,104 +43,125 @@ export const siteConfig = {
     fusoHorario: "America/Cuiaba",
     textoAberto: "Aberto agora · recebe pedidos até 23h",
     textoFechadoHoje: "Fechado agora · abrimos hoje às 17h",
-    textoFechadoAmanha: "Fechado agora · abrimos às 17h"
+    textoFechadoAmanha: "Fechado agora · abrimos às 17h",
+    textoGeral: "Todos os dias, das 17h às 23h"
   },
 
   // Contato e Atendimento
   contato: {
-    // Link direto fornecido pelo cliente
+    // Telefone celular padrão Brasil Cuiabá/MT (DDD 65 + 9 dígitos: 99265-0139)
+    // NOTA DE DIVERGÊNCIA: Se for necessário alterar para o formato sem o 9º dígito ("556592650139"),
+    // basta alterar o valor abaixo em um único lugar.
+    whatsappNumeroComDDD: "5565992650139", 
+    whatsappNumeroAlternativo: "556592650139",
+    
+    // Link direto oficial como fallback
     whatsappLinkOriginal: "https://wa.me/message/5MOA5LPC4SEMH1",
     
-    // DDD de Cuiabá é 65. Quando confirmado o DDD com o cliente, preencha numeroComDDD (ex: "5565992650139")
-    // Se preenchido, os botões usam https://wa.me/5565992650139?text=... para mensagem automática
-    // Se null, o sistema utiliza o whatsappLinkOriginal com total segurança
-    whatsappNumeroComDDD: null, 
-    
-    telefoneDelivery: "99265-0139", // Número para exibição e discagem
-    telefoneDDD: "65", // DDD padrão de Cuiabá/MT
-    telefoneCompleto: "65992650139", // Usado para tel: quando confirmado
+    telefoneDelivery: "(65) 99265-0139",
+    telefoneDDD: "65",
+    telefoneCompleto: "5565992650139",
     
     instagramUsuario: "@pizzaria_doncorleone",
-    instagramUrl: "https://instagram.com/pizzaria_doncorleone",
-
-    mensagens: {
-      geral: "Olá! Vim pelo site da Don Corleone e gostaria de fazer um pedido para {modalidade}.",
-      item: "Olá! Gostaria de pedir: {item}. Será para {modalidade}."
-    }
+    instagramUrl: "https://www.instagram.com/pizzaria_doncorleone/"
   },
 
-  // Localização
+  // Localização (Fatos confirmados)
   localizacao: {
     unidade: "Arena Cuiabá",
     cidade: "Cuiabá",
     estado: "MT",
-    // Os campos abaixo estão como null porque o endereço completo e o link do Maps ainda não foram informados
-    logradouro: null, // Ex: "Av. Agrícola Paes de Barros" (deixar null se não confirmado)
-    bairro: null, // Ex: "Verdão" (deixar null se não confirmado)
+    descricao: "Unidade Arena Cuiabá — Cuiabá/MT",
+    logradouro: null, // Endereço exato a ser confirmado
+    bairro: null,
     cep: null,
-    linkGoogleMaps: null // Link para traçar rota (botão oculta se null)
+    linkGoogleMaps: null
   },
 
-  // Textos das Seções
+  // Regras Comerciais e Entrega
+  regrasComerciais: {
+    // Taxa de entrega não é fixa no momento. Exibimos a mensagem de confirmação.
+    taxaEntregaTexto: "A confirmar com a pizzaria",
+    cidadePadrao: "Cuiabá",
+    estadoPadrao: "MT",
+    formasPagamento: [
+      { id: "pix", nome: "Pix", descricao: "Chave informada no WhatsApp" },
+      { id: "dinheiro", nome: "Dinheiro", descricao: "Pagamento na entrega ou retirada" },
+      { id: "cartao_credito", nome: "Cartão de Crédito", descricao: "Maquininha na entrega/retirada" },
+      { id: "cartao_debito", nome: "Cartão de Débito", descricao: "Maquininha na entrega/retirada" }
+    ]
+  },
+
+  // Textos Oficiais da Landing Page
   textos: {
     hero: {
-      badge: "Cantina & Pizzaria",
-      tituloLinha1: "A verdadeira tradição",
-      tituloLinha2: "na sua mesa.",
-      subtitulo: "Pizzas e esfihas artesanais preparadas com paixão. Peça para entrega ou retire na unidade Arena Cuiabá.",
-      ctaPedido: "Pedir no WhatsApp",
-      ctaCardapio: "Ver cardápio",
-      indicadorScroll: "Role para montar a pizza"
+      badge: "CANTINA & PIZZARIA · ARENA CUIABÁ",
+      tituloLinha1: "Uma noite especial começa",
+      tituloLinha2: "com uma boa pizza.",
+      subtitulo: "Pizzas e esfihas para transformar sua fome em um momento especial. Escolha seus sabores e peça para receber em casa ou retirar na unidade Arena Cuiabá.",
+      ctaPedido: "Fazer meu pedido",
+      ctaCardapio: "Explorar cardápio",
+      features: [
+        "Pizzas e esfihas",
+        "Delivery ou retirada",
+        "Todos os dias, das 17h às 23h",
+        "Unidade Arena Cuiabá"
+      ]
     },
     marquee: [
-      "Pizzas Artesanais",
-      "Esfihas Quentinhas",
-      "Entrega & Retirada",
-      "Todos os dias, 17h às 23h",
+      "Pizzas & Esfihas",
+      "Delivery & Retirada",
       "Arena Cuiabá",
-      "Sabor Incomparável"
+      "Todos os dias das 17h às 23h",
+      "Sabor Incomparável",
+      "Cuiabá — MT"
     ],
     comoPedir: {
       titulo: "Como Fazer Seu Pedido",
-      subtitulo: "Três passos simples para saborear o melhor de Cuiabá.",
+      subtitulo: "Três etapas simples para saborear a Don Corleone.",
       passos: [
         {
           numero: "01",
           titulo: "Escolha seus sabores",
-          descricao: "Navegue pelo nosso cardápio e selecione suas pizzas e esfihas favoritas."
+          descricao: "Explore o cardápio e selecione o que deseja pedir."
         },
         {
           numero: "02",
-          titulo: "Chame no WhatsApp",
-          descricao: "Envie sua escolha e selecione a modalidade: entrega rápida ou retirada."
+          titulo: "Informe os detalhes",
+          descricao: "Escolha entrega ou retirada, preencha seus dados e informe a forma de pagamento."
         },
         {
           numero: "03",
-          titulo: "Receba ou retire",
-          descricao: "Receba quentinho no conforto da sua casa ou retire na unidade Arena Cuiabá."
+          titulo: "Envie pelo WhatsApp",
+          descricao: "Confira o resumo e envie o pedido diretamente para a pizzaria."
         }
-      ]
+      ],
+      nota: "O pedido será encaminhado pelo WhatsApp e a confirmação final depende do atendimento da pizzaria."
     },
     sobre: {
-      titulo: "Don Corleone",
-      subtitulo: "Pizzas e Esfihas",
-      // Apenas fatos confirmados: unidade Arena Cuiabá, entrega e retirada, funcionamento diário
+      titulo: "Mais sabor para os seus momentos.",
+      subtitulo: "Don Corleone · Unidade Arena Cuiabá",
       paragrafos: [
-        "Localizada na região da Arena Cuiabá, a Don Corleone combina o amor pela pizza com o cuidado artesanal em cada preparo.",
-        "Com atendimento de segunda a domingo das 17h às 23h, oferecemos opções de entrega rápida e retirada no balcão, levando um sabor incomparável para a sua noite."
+        "A Don Corleone reúne pizzas e esfihas em uma experiência pensada para deixar sua noite mais gostosa.",
+        "Na unidade Arena Cuiabá, você escolhe seus sabores e conta com a praticidade do delivery ou da retirada no balcão, com atendimento todos os dias das 17h às 23h."
+      ],
+      destaques: [
+        { rotulo: "Variedade", valor: "Pizzas & Esfihas" },
+        { rotulo: "Praticidade", valor: "Delivery & Retirada" },
+        { rotulo: "Atendimento", valor: "17h às 23h" },
+        { rotulo: "Localização", valor: "Arena Cuiabá" }
       ]
     },
     cardapio: {
-      tituloItaliano: "La nostra carta",
+      tituloItaliano: "La Nostra Carta",
       titulo: "Nosso Cardápio",
-      subtitulo: "Pizzas e esfihas feitas para encantar o seu paladar.",
+      subtitulo: "Pizzas especiais, tradicionais e esfihas feitas para você.",
       fallbackMensagem: "Consulte nosso cardápio completo e as novidades de hoje diretamente no WhatsApp.",
       botaoFallback: "Ver Cardápio no WhatsApp"
     }
   },
 
-  // Galeria de Fotos (Ativa quando houver 4 ou mais fotos reais na pasta /images/galeria/)
   galeria: {
-    fotos: [] // Preencha com caminhos como "/images/galeria/foto1.jpg" quando fornecidas
+    fotos: []
   }
 };

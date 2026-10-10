@@ -2,7 +2,23 @@ import { esc } from '../utils/dom.js';
 
 export function renderComoPedir(config) {
   const dados = config.textos?.comoPedir || {};
-  const passos = dados.passos || [];
+  const passos = dados.passos || [
+    {
+      numero: "01",
+      titulo: "Escolha seus sabores",
+      descricao: "Explore o cardápio e selecione o que deseja pedir."
+    },
+    {
+      numero: "02",
+      titulo: "Informe os detalhes",
+      descricao: "Escolha entrega ou retirada, preencha seus dados e informe a forma de pagamento."
+    },
+    {
+      numero: "03",
+      titulo: "Envie pelo WhatsApp",
+      descricao: "Confira o resumo e envie o pedido diretamente para a pizzaria."
+    }
+  ];
 
   const passosHtml = passos.map((passo, idx) => `
     <div class="passo-card" data-step="${idx + 1}">
@@ -20,15 +36,21 @@ export function renderComoPedir(config) {
   <section id="como-pedir" class="secao-como-pedir" aria-labelledby="como-pedir-titulo">
     <div class="container">
       <div class="text-center">
-        <span class="section-tag">Sem complicações</span>
+        <span class="section-tag">Praticidade</span>
         <h2 id="como-pedir-titulo" class="section-title">${esc(dados.titulo || 'Como Fazer Seu Pedido')}</h2>
         <p class="section-subtitle mb-8">
-          ${esc(dados.subtitulo || 'Três passos simples para saborear o melhor de Cuiabá.')}
+          ${esc(dados.subtitulo || 'Três etapas simples para saborear a Don Corleone.')}
         </p>
       </div>
 
       <div class="passos-grid">
         ${passosHtml}
+      </div>
+
+      <div class="como-pedir-nota text-center mt-8">
+        <p class="text-muted text-sm">
+          ${esc(dados.nota || 'O pedido será encaminhado pelo WhatsApp e a confirmação final depende do atendimento da pizzaria.')}
+        </p>
       </div>
     </div>
   </section>
@@ -36,5 +58,5 @@ export function renderComoPedir(config) {
 }
 
 export function initComoPedir(config) {
-  // Passos animados e interativos
+  // Inicialização de passos
 }

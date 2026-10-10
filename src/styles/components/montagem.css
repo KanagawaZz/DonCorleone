@@ -1,4 +1,4 @@
-/* Seção Hero & Pizza 3D Interativa — Don Corleone */
+/* Seção Hero — Don Corleone (Fotografia Gastronômica com Efeito Flutuante) */
 
 .secao-montagem {
   position: relative;
@@ -11,7 +11,7 @@
   padding-bottom: var(--space-8);
   overflow: hidden;
   background: 
-    radial-gradient(circle at 75% 45%, rgba(200, 161, 90, 0.16) 0%, rgba(168, 42, 34, 0.08) 35%, transparent 65%),
+    radial-gradient(circle at 75% 45%, rgba(200, 161, 90, 0.14) 0%, rgba(168, 42, 34, 0.06) 40%, transparent 70%),
     radial-gradient(circle at 15% 85%, rgba(26, 20, 16, 0.9) 0%, transparent 60%),
     #0C0A09;
 }
@@ -20,7 +20,7 @@
   display: grid;
   grid-template-columns: 1.05fr 1.15fr;
   align-items: center;
-  gap: var(--space-8);
+  gap: var(--space-10);
   min-height: calc(100vh - var(--header-height) - var(--space-8));
   position: relative;
 }
@@ -128,7 +128,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-4);
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-8);
 }
 
 .btn--hero-order {
@@ -146,32 +146,34 @@
   box-shadow: 0 12px 30px rgba(168, 42, 34, 0.5);
 }
 
-/* Badge de Instrução 3D */
-.interactive-3d-hint {
+/* Lista de Diferenciais da Casa */
+.hero-features-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.feature-tag {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   padding: 6px 14px;
-  background: rgba(200, 161, 90, 0.08);
-  border: 1px solid rgba(200, 161, 90, 0.25);
+  background: rgba(23, 19, 16, 0.8);
+  border: 1px solid var(--color-border-glass);
   border-radius: var(--radius-pill);
   font-size: var(--text-xs);
-  color: var(--color-gold-light);
-  backdrop-filter: blur(8px);
-  animation: floatHint 3s infinite ease-in-out;
+  color: var(--color-text-secondary);
 }
 
-.hint-icon {
-  font-size: 0.9rem;
-}
-
-@keyframes floatHint {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4px); }
+.dot-gold {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-gold);
 }
 
 /* ==========================================================================
-   PALCO THREE.JS 3D (WEBGL REAL)
+   PALCO GASTRONÔMICO HERO (FOTOGRAFIA FLUTUANTE)
    ========================================================================== */
 
 .montagem-visual {
@@ -181,51 +183,117 @@
   justify-content: center;
   width: 100%;
   height: 100%;
-  min-height: 540px;
 }
 
-.montagem-stage {
+.hero-pizza-showcase {
   position: relative;
   width: min(560px, 92vw);
-  height: min(560px, 92vw);
   display: flex;
   align-items: center;
   justify-content: center;
+  perspective: 1000px;
 }
 
-.pizza-3d-canvas-container {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: grab;
-  user-select: none;
-  touch-action: none;
-  position: relative;
-  z-index: 2;
-}
-
-.pizza-3d-canvas-container:active {
-  cursor: grabbing;
-}
-
-.pizza-3d-canvas-container canvas {
-  width: 100% !important;
-  height: 100% !important;
-  display: block;
-  filter: drop-shadow(0 25px 40px rgba(0, 0, 0, 0.9));
-}
-
-.pizza-glow-overlay {
+.pizza-backlight-glow {
   position: absolute;
   width: 120%;
   height: 120%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(200, 161, 90, 0.22) 0%, rgba(168, 42, 34, 0.08) 40%, transparent 65%);
-  filter: blur(40px);
+  background: radial-gradient(circle, rgba(200, 161, 90, 0.22) 0%, rgba(168, 42, 34, 0.1) 45%, transparent 70%);
+  filter: blur(50px);
   pointer-events: none;
   z-index: 1;
+}
+
+.pizza-hero-card {
+  position: relative;
+  width: 100%;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.85), 0 0 40px rgba(200, 161, 90, 0.15);
+  border: 1px solid var(--color-border-glass);
+  z-index: 2;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.pizza-hero-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease-smooth);
+}
+
+.pizza-hero-card:hover .pizza-hero-image {
+  transform: scale(1.03);
+}
+
+/* Selo Flutuante sobre a Pizza */
+.pizza-seal-float {
+  position: absolute;
+  bottom: 24px;
+  left: 24px;
+  background: rgba(12, 10, 9, 0.88);
+  border: 1px solid var(--color-gold);
+  border-radius: var(--radius-lg);
+  padding: 12px 20px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 5;
+}
+
+.seal-star {
+  font-size: 0.75rem;
+  color: var(--color-gold);
+  letter-spacing: 2px;
+}
+
+.seal-title {
+  font-family: var(--font-serif);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.seal-sub {
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+}
+
+/* Efeito de Vapor / Fumaça Quente */
+.pizza-steam-effect {
+  position: absolute;
+  top: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 50%;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.steam-vap {
+  position: absolute;
+  bottom: 0;
+  width: 30px;
+  height: 70px;
+  border-radius: 50%;
+  background: rgba(243, 235, 221, 0.28);
+  filter: blur(14px);
+}
+
+.steam-vap.s1 { left: 20%; animation: steamRise 3.2s infinite ease-out; }
+.steam-vap.s2 { left: 50%; animation: steamRise 3.8s infinite ease-out 0.9s; }
+.steam-vap.s3 { left: 75%; animation: steamRise 3.0s infinite ease-out 1.7s; }
+
+@keyframes steamRise {
+  0% { transform: translateY(0) scale(0.8); opacity: 0; }
+  40% { opacity: 0.6; }
+  100% { transform: translateY(-75px) scale(1.6); opacity: 0; }
 }
 
 /* ==========================================================================
@@ -235,7 +303,7 @@
 @media (max-width: 992px) {
   .montagem-container {
     grid-template-columns: 1fr;
-    gap: var(--space-6);
+    gap: var(--space-8);
     text-align: center;
   }
 
@@ -244,26 +312,17 @@
   }
 
   .hero-header-top,
-  .hero-actions {
+  .hero-actions,
+  .hero-features-list {
     justify-content: center;
   }
 
-  .montagem-visual {
-    min-height: 420px;
-  }
-
-  .montagem-stage {
-    width: min(440px, 90vw);
-    height: min(440px, 90vw);
+  .hero-pizza-showcase {
+    max-width: 480px;
   }
 }
 
 @media (max-width: 480px) {
-  .montagem-stage {
-    width: min(340px, 92vw);
-    height: min(340px, 92vw);
-  }
-
   .hero-actions {
     flex-direction: column;
     width: 100%;
@@ -273,5 +332,11 @@
   .hero-actions .btn {
     width: 100%;
     justify-content: center;
+  }
+
+  .pizza-seal-float {
+    bottom: 14px;
+    left: 14px;
+    padding: 8px 14px;
   }
 }
