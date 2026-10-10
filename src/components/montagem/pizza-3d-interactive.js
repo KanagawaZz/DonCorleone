@@ -1,8 +1,8 @@
 /**
  * Pizza 3D Interativa — Don Corleone (WebGL / Three.js)
  * 
- * Renderizador 3D em tempo real com suporte a arraste/rotação 360° com o mouse,
- * iluminação de estúdio cinematográfica (PBR), mapa de relevo e suporte a arquivo .glb.
+ * Renderizador 3D em tempo real com rotação 360° pelo mouse e touch.
+ * Textura fotográfica hiper-realista com iluminação dinâmica PBR e relevo natural.
  */
 
 import * as THREE from 'three';
@@ -12,7 +12,6 @@ export function inicializarPizza3DInterativa(containerSelector = '#pizza-3d-canv
   const container = document.querySelector(containerSelector);
   if (!container) return null;
 
-  // Limpa instâncias anteriores
   container.innerHTML = '';
 
   const width = container.clientWidth || 540;
@@ -21,8 +20,8 @@ export function inicializarPizza3DInterativa(containerSelector = '#pizza-3d-canv
   // 1. Cena, Câmera e Renderizador
   const scene = new THREE.Scene();
   
-  const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
-  camera.position.set(0, 3.2, 4.2);
+  const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
+  camera.position.set(0, 3.4, 4.4);
   camera.lookAt(0, 0, 0);
 
   const renderer = new THREE.WebGLRenderer({
@@ -33,93 +32,93 @@ export function inicializarPizza3DInterativa(containerSelector = '#pizza-3d-canv
   renderer.setSize(width, height);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 1.25;
+  renderer.toneMappingExposure = 1.35;
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
   container.appendChild(renderer.domElement);
 
   // 2. Iluminação de Estúdio Gastronômico
-  const ambientLight = new THREE.AmbientLight(0xfff5ea, 1.2);
+  const ambientLight = new THREE.AmbientLight(0xfff8f0, 1.4);
   scene.add(ambientLight);
 
-  const keyLight = new THREE.DirectionalLight(0xffdfa0, 3.5);
-  keyLight.position.set(3, 6, 4);
+  const keyLight = new THREE.DirectionalLight(0xffe8b8, 3.0);
+  keyLight.position.set(3.5, 6, 4);
   keyLight.castShadow = true;
   keyLight.shadow.mapSize.width = 1024;
   keyLight.shadow.mapSize.height = 1024;
   keyLight.shadow.bias = -0.001;
   scene.add(keyLight);
 
-  const rimLight = new THREE.DirectionalLight(0xa82a22, 2.2);
-  rimLight.position.set(-4, 3, -3);
+  const rimLight = new THREE.DirectionalLight(0xb83226, 1.8);
+  rimLight.position.set(-4, 2.5, -3);
   scene.add(rimLight);
 
-  const fillLight = new THREE.PointLight(0xc8a15a, 2.0, 10);
-  fillLight.position.set(0, -2, 3);
+  const fillLight = new THREE.PointLight(0xc8a15a, 1.6, 12);
+  fillLight.position.set(0, -1, 3.5);
   scene.add(fillLight);
 
-  // Grupo Mestre da Pizza (para rotações pelo mouse e scroll)
+  // Grupo Mestre da Pizza
   const pizzaGroup = new THREE.Group();
   scene.add(pizzaGroup);
 
-  // 3. Textura Hiper-Realista da Pizza de Calabresa Don Corleone
+  // 3. Textura da Pizza de Calabresa Artesanal Don Corleone
   const textureLoader = new THREE.TextureLoader();
   const pizzaTexture = textureLoader.load('/images/cardapio/calabresa-artesanal.jpg', () => {
     renderer.render(scene, camera);
   });
-  pizzaTexture.wrapS = THREE.ClampToEdgeWrapping;
-  pizzaTexture.wrapT = THREE.ClampToEdgeWrapping;
   pizzaTexture.colorSpace = THREE.SRGBColorSpace;
+  pizzaTexture.generateMipmaps = true;
+  pizzaTexture.minFilter = THREE.LinearMipmapLinearFilter;
 
-  // 4. Criação da Geometria 3D Procedural Realista
-  // Borda alta napolitana (Torus com relevo)
-  const crustGeo = new THREE.TorusGeometry(1.6, 0.26, 32, 64);
-  const crustMat = new THREE.MeshStandardMaterial({
-    color: 0xdca868,
-    roughness: 0.85,
-    metalness: 0.05
+  // 4. Geometria da Pizza 3D (Sem anéis artificiais ou bordas amarelas)
+  // Cilindro fino com acabamento realista
+  const pizzaGeo = new THREE.CylinderGeometry(2.1, 2.1, 0.08, 64);
+  
+  // Materiais das faces: [lado, topo, base]
+  const sideMat = new THREE.MeshStandardMaterial({
+    color: 0x221812,
+    roughness: 0.95,
+    metalness: 0.0
   });
-  const crustMesh = new THREE.Mesh(crustGeo, crustMat);
-  crustMesh.rotation.x = Math.PI / 2;
-  crustMesh.castShadow = true;
-  crustMesh.receiveShadow = true;
-  pizzaGroup.add(crustMesh);
 
-  // Superfície da Pizza com Queijo e Molho
-  const pizzaFaceGeo = new THREE.CylinderGeometry(1.62, 1.62, 0.12, 64);
-  const pizzaFaceMat = new THREE.MeshStandardMaterial({
+  const topMat = new THREE.MeshStandardMaterial({
     map: pizzaTexture,
-    roughness: 0.45,
-    metalness: 0.1,
+    roughness: 0.42,
+    metalness: 0.08,
     bumpMap: pizzaTexture,
-    bumpScale: 0.04
+    bumpScale: 0.03
   });
-  const pizzaFaceMesh = new THREE.Mesh(pizzaFaceGeo, pizzaFaceMat);
-  pizzaFaceMesh.position.y = 0.02;
-  pizzaFaceMesh.castShadow = true;
-  pizzaFaceMesh.receiveShadow = true;
-  pizzaGroup.add(pizzaFaceMesh);
 
-  // Tábua Rústica de Madeira por baixo
-  const boardGeo = new THREE.CylinderGeometry(1.95, 1.95, 0.15, 64);
-  const boardMat = new THREE.MeshStandardMaterial({
-    color: 0x3d2b1f,
-    roughness: 0.9,
-    metalness: 0.05
+  const bottomMat = new THREE.MeshStandardMaterial({
+    color: 0x18120e,
+    roughness: 0.95
   });
-  const boardMesh = new THREE.Mesh(boardGeo, boardMat);
-  boardMesh.position.y = -0.12;
-  boardMesh.receiveShadow = true;
-  pizzaGroup.add(boardMesh);
 
-  // Tenta carregar .glb caso exista em /models/pizza.glb
+  const pizzaMesh = new THREE.Mesh(pizzaGeo, [sideMat, topMat, bottomMat]);
+  pizzaMesh.castShadow = true;
+  pizzaMesh.receiveShadow = true;
+  pizzaGroup.add(pizzaMesh);
+
+  // Sombra de Contato Suave no Fundo
+  const shadowGeo = new THREE.PlaneGeometry(5.2, 5.2);
+  const shadowMat = new THREE.MeshBasicMaterial({
+    color: 0x000000,
+    transparent: true,
+    opacity: 0.45,
+    depthWrite: false
+  });
+  const shadowMesh = new THREE.Mesh(shadowGeo, shadowMat);
+  shadowMesh.rotation.x = -Math.PI / 2;
+  shadowMesh.position.y = -0.06;
+  pizzaGroup.add(shadowMesh);
+
+  // Suporte a carregamento de arquivo .glb se o usuário colocar em /models/pizza.glb
   const gltfLoader = new GLTFLoader();
   gltfLoader.load('/models/pizza.glb', (gltf) => {
-    // Se o usuário adicionar um .glb, substitui a geometria procedural
     pizzaGroup.clear();
     const model = gltf.scene;
-    model.scale.set(1.5, 1.5, 1.5);
+    model.scale.set(1.6, 1.6, 1.6);
     model.traverse((node) => {
       if (node.isMesh) {
         node.castShadow = true;
@@ -128,15 +127,15 @@ export function inicializarPizza3DInterativa(containerSelector = '#pizza-3d-canv
     });
     pizzaGroup.add(model);
   }, undefined, () => {
-    // Se não houver .glb, mantém a mesh procedural em alta qualidade
+    // Mantém a mesh de alta fidelidade
   });
 
-  // 5. Interação com o Mouse (Girar 360° em todos os ângulos)
+  // 5. Interação com o Mouse / Touch (Girar 360° em todos os ângulos)
   let isDragging = false;
   let previousMousePosition = { x: 0, y: 0 };
-  let targetRotation = { x: 0.35, y: 0 };
-  let currentRotation = { x: 0.35, y: 0 };
-  let autoRotateSpeed = 0.003;
+  let targetRotation = { x: 0.42, y: 0 };
+  let currentRotation = { x: 0.42, y: 0 };
+  const autoRotateSpeed = 0.003;
 
   const canvas = renderer.domElement;
 
@@ -153,17 +152,17 @@ export function inicializarPizza3DInterativa(containerSelector = '#pizza-3d-canv
       targetRotation.y += deltaX * 0.008;
       targetRotation.x += deltaY * 0.008;
 
-      // Limite para não virar de ponta cabeça
-      targetRotation.x = Math.max(-0.2, Math.min(1.2, targetRotation.x));
+      // Limites de inclinação vertical para visão confortável
+      targetRotation.x = Math.max(-0.1, Math.min(1.1, targetRotation.x));
 
       previousMousePosition = { x: e.clientX, y: e.clientY };
     } else {
-      // Parallax sutil ao mover o cursor sem clicar
+      // Parallax sutil com o cursor
       const rect = canvas.getBoundingClientRect();
       const nx = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
       const ny = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
-      camera.position.x = nx * 0.4;
-      camera.position.y = 3.2 - ny * 0.3;
+      camera.position.x = nx * 0.35;
+      camera.position.y = 3.4 - ny * 0.25;
       camera.lookAt(0, 0, 0);
     }
   }
@@ -172,7 +171,7 @@ export function inicializarPizza3DInterativa(containerSelector = '#pizza-3d-canv
     isDragging = false;
   }
 
-  // Suporte a Touch no Mobile
+  // Touch Mobile
   function onTouchStart(e) {
     if (e.touches.length === 1) {
       isDragging = true;
@@ -187,7 +186,7 @@ export function inicializarPizza3DInterativa(containerSelector = '#pizza-3d-canv
 
       targetRotation.y += deltaX * 0.01;
       targetRotation.x += deltaY * 0.01;
-      targetRotation.x = Math.max(-0.2, Math.min(1.2, targetRotation.x));
+      targetRotation.x = Math.max(-0.1, Math.min(1.1, targetRotation.x));
 
       previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
     }
@@ -205,22 +204,19 @@ export function inicializarPizza3DInterativa(containerSelector = '#pizza-3d-canv
   window.addEventListener('touchmove', onTouchMove, { passive: true });
   window.addEventListener('touchend', onTouchEnd);
 
-  // 6. Integração com o Scroll da Página
+  // 6. Rotação Suave Sincronizada com o Scroll
   function onScroll() {
     const scrollY = window.scrollY || window.pageYOffset;
-    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     const scrollFraction = Math.min(1, Math.max(0, scrollY / (window.innerHeight * 1.5)));
 
-    // Rotação suave sincronizada com o scroll
     if (!isDragging) {
-      targetRotation.y += scrollFraction * 0.02;
-      pizzaGroup.position.y = -scrollFraction * 0.8;
-      pizzaGroup.scale.setScalar(1 + scrollFraction * 0.15);
+      targetRotation.y += scrollFraction * 0.015;
+      pizzaGroup.position.y = -scrollFraction * 0.6;
     }
   }
   window.addEventListener('scroll', onScroll, { passive: true });
 
-  // 7. Redimensionamento Responsivo
+  // 7. Resize Responsivo
   function onResize() {
     const newWidth = container.clientWidth || 540;
     const newHeight = container.clientHeight || 540;
@@ -230,17 +226,15 @@ export function inicializarPizza3DInterativa(containerSelector = '#pizza-3d-canv
   }
   window.addEventListener('resize', onResize);
 
-  // 8. Loop de Renderização Contínuo com Interpolação Suave (Lerp)
+  // 8. Loop de Renderização com Amortecimento Suave
   let animationFrameId;
   function animate() {
     animationFrameId = requestAnimationFrame(animate);
 
-    // Rotação automática contínua suave quando o usuário não estiver arrastando
     if (!isDragging) {
       targetRotation.y += autoRotateSpeed;
     }
 
-    // Interpolação amortecida
     currentRotation.x += (targetRotation.x - currentRotation.x) * 0.08;
     currentRotation.y += (targetRotation.y - currentRotation.y) * 0.08;
 
@@ -251,7 +245,6 @@ export function inicializarPizza3DInterativa(containerSelector = '#pizza-3d-canv
   }
   animate();
 
-  // Função de Limpeza
   return {
     destroy: () => {
       cancelAnimationFrame(animationFrameId);
