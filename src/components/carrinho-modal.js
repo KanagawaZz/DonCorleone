@@ -1,13 +1,14 @@
 /**
- * Modal & Drawer de Carrinho e Pedido Integrado - Don Corleone
+ * Modal & Drawer de Carrinho e Checkout Integrado - Don Corleone
  * 
- * Permite ao cliente visualizar itens, selecionar quantidade,
- * alternar entre entrega e retirada, preencher endereço/pagamento,
- * revisar o pedido e abrir diretamente no WhatsApp com a mensagem pronta.
+ * Permite ao cliente visualizar itens, editar pizzas e sabores,
+ * selecionar modalidade de entrega/retirada, informar endereço e pagamento,
+ * revisar o pedido completo e abrir diretamente no WhatsApp com a mensagem pronta.
  */
 
 import { carrinho } from '../utils/carrinho.js';
 import { formatarPreco, esc } from '../utils/dom.js';
+import { formatarTituloPizza } from '../utils/calculo-pizza.js';
 import { gerarLinkWhatsAppPedido } from '../utils/whatsapp-order.js';
 
 export function renderCarrinhoModal(config) {
@@ -20,7 +21,7 @@ export function renderCarrinhoModal(config) {
         <div class="pedido-modal-title-group">
           <img src="${config.marca?.brasaoUrl || '/images/brand/brasao.svg'}" alt="Don Corleone" class="pedido-header-brasao" width="28" height="28" />
           <div>
-            <h2 id="modal-titulo" class="pedido-modal-title">Monte Seu Pedido</h2>
+            <h2 id="modal-titulo" class="pedido-modal-title">Seu Pedido</h2>
             <p class="pedido-modal-subtitle">Don Corleone · Unidade Arena Cuiabá</p>
           </div>
         </div>
@@ -45,7 +46,7 @@ export function renderCarrinhoModal(config) {
             </svg>
           </div>
           <h3>Seu carrinho está vazio</h3>
-          <p>Escolha seus sabores favoritos em nosso cardápio para começar.</p>
+          <p>Monte uma pizza deliciosa ou escolha suas esfihas favoritas no cardápio.</p>
           <button type="button" class="btn btn--primary btn--voltar-cardapio" id="btn-ir-cardapio">
             Explorar Cardápio
           </button>
@@ -54,15 +55,15 @@ export function renderCarrinhoModal(config) {
         <!-- Conteúdo do Formulário quando há itens -->
         <div id="carrinho-conteudo-ativo">
           
-          <!-- SEÇÃO A: Itens Selecionados -->
+          <!-- SEÇÃO 1: Itens Selecionados no Carrinho -->
           <section class="pedido-secao secao-itens">
             <div class="secao-header-flex">
               <h3 class="pedido-secao-titulo">
                 <span class="secao-num">1</span>
-                Itens Selecionados
+                Itens no Carrinho
               </h3>
               <button type="button" class="btn-link-add-mais" id="btn-add-mais">
-                + Adicionar mais sabores
+                + Adicionar mais itens
               </button>
             </div>
             
@@ -76,7 +77,7 @@ export function renderCarrinhoModal(config) {
             </div>
           </section>
 
-          <!-- SEÇÃO B: Dados do Cliente -->
+          <!-- SEÇÃO 2: Dados do Cliente -->
           <section class="pedido-secao secao-cliente">
             <h3 class="pedido-secao-titulo">
               <span class="secao-num">2</span>
@@ -102,7 +103,7 @@ export function renderCarrinhoModal(config) {
             </div>
           </section>
 
-          <!-- SEÇÃO C: Modalidade de Atendimento -->
+          <!-- SEÇÃO 3: Modalidade de Atendimento -->
           <section class="pedido-secao secao-modalidade">
             <h3 class="pedido-secao-titulo">
               <span class="secao-num">3</span>
@@ -198,7 +199,7 @@ export function renderCarrinhoModal(config) {
 
                 <div class="form-campo">
                   <label for="entrega-referencia" class="form-label">Ponto de referência (opcional)</label>
-                  <input type="text" id="entrega-referencia" name="entrega_referencia" class="form-input" placeholder="Ex: Próximo à praça principal" />
+                  <input type="text" id="entrega-referencia" name="entrega_referencia" class="form-input" placeholder="Ex: Próximo à Arena Pantanal" />
                 </div>
               </div>
             </div>
@@ -217,7 +218,7 @@ export function renderCarrinhoModal(config) {
             </div>
           </section>
 
-          <!-- SEÇÃO D: Forma de Pagamento -->
+          <!-- SEÇÃO 4: Forma de Pagamento -->
           <section class="pedido-secao secao-pagamento">
             <h3 class="pedido-secao-titulo">
               <span class="secao-num">4</span>
@@ -294,16 +295,16 @@ export function renderCarrinhoModal(config) {
             </div>
           </section>
 
-          <!-- SEÇÃO E: Observações Gerais -->
+          <!-- SEÇÃO 5: Observações Gerais -->
           <section class="pedido-secao secao-obs">
             <h3 class="pedido-secao-titulo">
               <span class="secao-num">5</span>
-              Observações (opcional)
+              Observações Gerais (opcional)
             </h3>
-            <textarea id="pedido-observacoes" name="pedido_observacoes" class="form-textarea" rows="2" placeholder="Ex: Tirar cebola, campainha quebrada, ligar ao chegar..."></textarea>
+            <textarea id="pedido-observacoes" name="pedido_observacoes" class="form-textarea" rows="2" placeholder="Ex: Tocar campainha, ligar ao chegar..."></textarea>
           </section>
 
-          <!-- SEÇÃO F: Resumo e Revisão do Pedido -->
+          <!-- SEÇÃO 6: Resumo e Revisão do Pedido -->
           <section class="pedido-secao secao-revisao">
             <h3 class="pedido-secao-titulo">
               <span class="secao-num">✓</span>
@@ -341,7 +342,6 @@ export function renderCarrinhoModal(config) {
 
 export function initCarrinhoModal(config) {
   const overlay = document.querySelector('#pedido-modal-overlay');
-  const container = document.querySelector('#pedido-modal-container');
   const btnFechar = document.querySelector('#btn-fechar-modal');
   const btnAddMais = document.querySelector('#btn-add-mais');
   const btnIrCardapio = document.querySelector('#btn-ir-cardapio');
@@ -375,7 +375,7 @@ export function initCarrinhoModal(config) {
   const inputValorTroco = document.querySelector('#valor-troco');
   const inputObs = document.querySelector('#pedido-observacoes');
 
-  // Formatação de Telefone com máscara brasileira (XX) XXXXX-XXXX
+  // Formatação de Telefone com máscara brasileira
   if (inputTelefone) {
     inputTelefone.addEventListener('input', (e) => {
       let v = e.target.value.replace(/\D/g, '');
@@ -475,33 +475,81 @@ export function initCarrinhoModal(config) {
     if (footerModal) footerModal.style.display = 'flex';
 
     if (listaItens) {
-      listaItens.innerHTML = itens.map(item => `
-        <div class="item-linha" data-item-id="${item.id}">
-          <img src="${item.foto}" alt="${esc(item.nome)}" class="item-thumb" />
-          <div class="item-detalhes">
-            <h4 class="item-nome">${esc(item.nome)}</h4>
-            <span class="item-unitario">${formatarPreco(item.preco)} cada</span>
-          </div>
-          <div class="item-qty-controles">
-            <button type="button" class="btn-qty btn-qty-minus" data-action="minus" aria-label="Diminuir quantidade">−</button>
-            <span class="item-qty-num">${item.quantidade}</span>
-            <button type="button" class="btn-qty btn-qty-plus" data-action="plus" aria-label="Aumentar quantidade">+</button>
-          </div>
-          <div class="item-total-preco">
-            ${formatarPreco(item.preco * item.quantidade)}
-          </div>
-          <button type="button" class="btn-item-remover" data-action="remove" aria-label="Remover item">
-            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="3 6 5 6 21 6"></polyline>
-              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-            </svg>
-          </button>
-        </div>
-      `).join('');
+      listaItens.innerHTML = itens.map(item => {
+        const precoUnit = typeof item.precoUnitario === 'number' ? item.precoUnitario : (item.preco || 0);
+        const itemSubtotal = precoUnit * (item.quantidade || 1);
 
-      // Ações nos botões de quantidade e remover
+        if (item.tipo === 'pizza') {
+          const qtdSabores = item.sabores?.length || 1;
+          const tituloPizza = formatarTituloPizza(item, config);
+          const listaSaboresHtml = (item.sabores || []).map(s => `
+            <span class="pizza-sabor-pill">• ${esc(s.nome)}</span>
+          `).join('');
+
+          return `
+          <div class="item-linha pizza-item-card" data-item-id="${item.id}">
+            <img src="${item.foto}" alt="${esc(tituloPizza)}" class="item-thumb" />
+            <div class="item-detalhes">
+              <h4 class="item-nome">${esc(tituloPizza)}</h4>
+              <div class="pizza-sabores-wrap">
+                ${listaSaboresHtml}
+              </div>
+              <div class="item-meta-row">
+                <span class="item-unitario">${formatarPreco(precoUnit)} cada</span>
+                <button type="button" class="btn-editar-pizza-item" data-action="edit">
+                  ✏️ Editar Sabores
+                </button>
+              </div>
+            </div>
+            <div class="item-qty-controles">
+              <button type="button" class="btn-qty btn-qty-minus" data-action="minus" aria-label="Diminuir quantidade">−</button>
+              <span class="item-qty-num">${item.quantidade}</span>
+              <button type="button" class="btn-qty btn-qty-plus" data-action="plus" aria-label="Aumentar quantidade">+</button>
+            </div>
+            <div class="item-total-preco">
+              ${formatarPreco(itemSubtotal)}
+            </div>
+            <button type="button" class="btn-item-remover" data-action="remove" aria-label="Remover item">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+            </button>
+          </div>
+          `;
+        } else {
+          // Item Simples (Esfiha, Sobremesa)
+          return `
+          <div class="item-linha" data-item-id="${item.id}">
+            <img src="${item.foto}" alt="${esc(item.nome)}" class="item-thumb" />
+            <div class="item-detalhes">
+              <h4 class="item-nome">${esc(item.nome)}</h4>
+              <span class="item-unitario">${formatarPreco(precoUnit)} cada</span>
+            </div>
+            <div class="item-qty-controles">
+              <button type="button" class="btn-qty btn-qty-minus" data-action="minus" aria-label="Diminuir quantidade">−</button>
+              <span class="item-qty-num">${item.quantidade}</span>
+              <button type="button" class="btn-qty btn-qty-plus" data-action="plus" aria-label="Aumentar quantidade">+</button>
+            </div>
+            <div class="item-total-preco">
+              ${formatarPreco(itemSubtotal)}
+            </div>
+            <button type="button" class="btn-item-remover" data-action="remove" aria-label="Remover item">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"></polyline>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+            </button>
+          </div>
+          `;
+        }
+      }).join('');
+
+      // Ações nos botões de cada linha
       listaItens.querySelectorAll('.item-linha').forEach(linha => {
         const itemId = linha.dataset.itemId;
+        const itemObj = itens.find(i => i.id === itemId);
+
         linha.querySelector('[data-action="minus"]')?.addEventListener('click', () => {
           carrinho.alterarQuantidadeDelta(itemId, -1);
         });
@@ -510,6 +558,12 @@ export function initCarrinhoModal(config) {
         });
         linha.querySelector('[data-action="remove"]')?.addEventListener('click', () => {
           carrinho.removerItem(itemId);
+        });
+        linha.querySelector('[data-action="edit"]')?.addEventListener('click', () => {
+          if (itemObj && itemObj.tipo === 'pizza') {
+            fechar();
+            carrinho.abrirModalPizza(null, itemObj);
+          }
         });
       });
     }
@@ -605,7 +659,7 @@ export function initCarrinhoModal(config) {
         <span class="rev-val">${nomesPag[dados.pagamento.forma] || 'Pix'}</span>
       </div>
       <div class="rev-linha total-linha">
-        <span class="rev-label">Total dos produtos:</span>
+        <span class="rev-label">Subtotal dos produtos:</span>
         <span class="rev-val-destaque">${formatarPreco(subtotal)}</span>
       </div>
     `;
@@ -634,7 +688,7 @@ export function initCarrinhoModal(config) {
       marcarErro(inputNome, 'erro-cliente-nome', 'Por favor, informe seu nome completo.');
     }
 
-    // Validar Telefone (pelo menos 10 dígitos)
+    // Validar Telefone (mínimo 10 dígitos)
     const telDigits = inputTelefone?.value?.replace(/\D/g, '') || '';
     if (telDigits.length < 10) {
       marcarErro(inputTelefone, 'erro-cliente-telefone', 'Informe um telefone válido com DDD (ex: 65 99999-9999).');
@@ -715,7 +769,7 @@ export function initCarrinhoModal(config) {
   // Enviar Pedido para o WhatsApp
   btnEnviar?.addEventListener('click', () => {
     if (carrinho.obterItens().length === 0) {
-      alert('Seu carrinho está vazio. Escolha um produto no cardápio!');
+      alert('Seu carrinho está vazio. Monte uma pizza ou adicione um produto do cardápio!');
       return;
     }
 
@@ -726,18 +780,17 @@ export function initCarrinhoModal(config) {
     const dados = obterDadosFormulario();
     const linkWhats = gerarLinkWhatsAppPedido(config, dados);
 
-    // Abre o WhatsApp com a mensagem formatada
     window.open(linkWhats, '_blank', 'noopener,noreferrer');
   });
 
   // Sincronização com o store do Carrinho
   window.addEventListener('carrinho-atualizado', renderizarItensModal);
 
-  window.addEventListener('abrir-modal-pedido', () => {
+  window.addEventListener('abrir-modal-checkout', () => {
     abrir();
   });
 
-  window.addEventListener('fechar-modal-pedido', () => {
+  window.addEventListener('fechar-modal-checkout', () => {
     fechar();
   });
 }

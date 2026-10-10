@@ -1,11 +1,12 @@
 /**
  * Formatador de Mensagens e Links para WhatsApp - Don Corleone
  * 
- * Transforma os dados do formulário de pedidos em uma mensagem
- * estruturada, legível e profissional para o atendimento da pizzaria.
+ * Transforma o carrinho e os dados de finalização em uma mensagem
+ * estruturada, legível e profissional para o WhatsApp da Don Corleone.
  */
 
 import { formatarPreco } from './dom.js';
+import { formatarTituloPizza } from './calculo-pizza.js';
 
 export function montarMensagemWhatsApp(dados) {
   const {
@@ -25,21 +26,49 @@ export function montarMensagemWhatsApp(dados) {
   linhas.push('Olá! Gostaria de fazer o seguinte pedido.');
   linhas.push('');
 
-  // Cliente
-  linhas.push('CLIENTE');
+  // 1. Dados do Cliente
+  linhas.push('DADOS DO CLIENTE');
   linhas.push(`Nome: ${cliente.nome?.trim() || 'Não informado'}`);
   linhas.push(`Telefone: ${cliente.telefone?.trim() || 'Não informado'}`);
   linhas.push('');
 
-  // Itens do Pedido
-  linhas.push('MEU PEDIDO');
+  // 2. Itens do Pedido
+  linhas.push('ITENS DO PEDIDO');
   let subtotal = 0;
-  itens.forEach(item => {
-    const itemSubtotal = (item.preco || 0) * (item.quantidade || 1);
+
+  itens.forEach((item, index) => {
+    const precoUnit = typeof item.precoUnitario === 'number' ? item.precoUnitario : (item.preco || 0);
+    const itemSubtotal = precoUnit * (item.quantidade || 1);
     subtotal += itemSubtotal;
-    linhas.push(`${item.quantidade}x ${item.nome} — ${formatarPreco(itemSubtotal)}`);
+
+    if (item.tipo === 'pizza') {
+      const qtdSabores = item.sabores?.length || 1;
+      const sufixoSabores = qtdSabores === 1 ? '1 sabor' : `${qtdSabores} sabores`;
+      const nomeTamanho = item.tamanho?.nome || 'Pizza Grande';
+      
+      linhas.push(`${item.quantidade}x ${nomeTamanho} — ${sufixoSabores}`);
+      (item.sabores || []).forEach(s => {
+        linhas.push(`  • ${s.nome}`);
+      });
+      linhas.push(`Valor da pizza: ${formatarPreco(precoUnit)}`);
+      if (item.observacoes) {
+        linhas.push(`Obs: ${item.observacoes}`);
+      }
+    } else {
+      linhas.push(`${item.quantidade}x ${item.nome}`);
+      linhas.push(`Valor unitário: ${formatarPreco(precoUnit)}`);
+      linhas.push(`Subtotal: ${formatarPreco(itemSubtotal)}`);
+    }
+
+    if (index < itens.length - 1) {
+      linhas.push('');
+    }
   });
 
+  linhas.push('');
+
+  // 3. Resumo Financeiro
+  linhas.push('RESUMO FINANCEIRO');
   linhas.push(`Subtotal dos produtos: ${formatarPreco(subtotal)}`);
 
   if (modalidade === 'entrega') {
@@ -50,7 +79,7 @@ export function montarMensagemWhatsApp(dados) {
   }
   linhas.push('');
 
-  // Modalidade
+  // 4. Modalidade
   linhas.push('MODALIDADE');
   if (modalidade === 'entrega') {
     linhas.push('Entrega (delivery)');
@@ -79,7 +108,7 @@ export function montarMensagemWhatsApp(dados) {
   }
   linhas.push('');
 
-  // Pagamento
+  // 5. Pagamento
   linhas.push('PAGAMENTO');
   const nomeFormaPagamento = {
     pix: 'Pix',
@@ -94,12 +123,12 @@ export function montarMensagemWhatsApp(dados) {
     if (pagamento.precisaTroco === 'sim' && pagamento.trocoPara) {
       linhas.push(`Troco para: ${pagamento.trocoPara}`);
     } else {
-      linhas.push('Troco: Não precisa de troco');
+      linhas.push('Troco: Não preciso de troco');
     }
   }
   linhas.push('');
 
-  // Observações
+  // 6. Observações
   linhas.push('OBSERVAÇÕES');
   if (observacoes && observacoes.trim()) {
     linhas.push(observacoes.trim());
@@ -108,7 +137,7 @@ export function montarMensagemWhatsApp(dados) {
   }
   linhas.push('');
 
-  // Fechamento
+  // 7. Fechamento
   linhas.push('Aguardo a confirmação do pedido. Obrigado!');
 
   return linhas.join('\n');
@@ -121,7 +150,6 @@ export function gerarLinkWhatsAppPedido(config, dados) {
   const mensagem = montarMensagemWhatsApp(dados);
   const contato = config.contato || {};
   
-  // Número oficial limpo apenas com dígitos
   const numero = contato.whatsappNumeroComDDD || "5565992650139";
   const textoCodificado = encodeURIComponent(mensagem);
 

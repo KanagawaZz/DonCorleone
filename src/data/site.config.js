@@ -72,10 +72,29 @@ export const siteConfig = {
     cidade: "Cuiabá",
     estado: "MT",
     descricao: "Unidade Arena Cuiabá — Cuiabá/MT",
-    logradouro: null, // Endereço exato a ser confirmado
+    logradouro: null,
     bairro: null,
     cep: null,
     linkGoogleMaps: null
+  },
+
+  // Regras de Montagem e Personalização de Pizza
+  regrasPizza: {
+    maximoSabores: 3,
+    // Regra de preço para múltiplos sabores:
+    // - "sabor_mais_caro": Preço da pizza é igual ao sabor de maior valor (Padrão mais comum em pizzarias)
+    // - "media_proporcional": Preço da pizza é a média proporcional dos sabores
+    // - "preco_fixo": Preço fixo definido por tamanho
+    regraPreco: "sabor_mais_caro",
+    tamanhos: [
+      {
+        id: "grande",
+        nome: "Pizza Grande",
+        fatias: 8,
+        descricao: "8 fatias · até 3 sabores",
+        padrao: true
+      }
+    ]
   },
 
   // Regras Comerciais e Entrega
@@ -103,13 +122,14 @@ export const siteConfig = {
       ctaCardapio: "Explorar cardápio",
       features: [
         "Pizzas e esfihas",
+        "Monte com até 3 sabores",
         "Delivery ou retirada",
-        "Todos os dias, das 17h às 23h",
-        "Unidade Arena Cuiabá"
+        "Todos os dias, 17h às 23h"
       ]
     },
     marquee: [
       "Pizzas & Esfihas",
+      "Monte até 3 Sabores",
       "Delivery & Retirada",
       "Arena Cuiabá",
       "Todos os dias das 17h às 23h",
@@ -123,7 +143,7 @@ export const siteConfig = {
         {
           numero: "01",
           titulo: "Escolha seus sabores",
-          descricao: "Explore o cardápio e selecione o que deseja pedir."
+          descricao: "Monte sua pizza com até 3 sabores ou escolha suas esfihas no cardápio."
         },
         {
           numero: "02",
@@ -133,7 +153,7 @@ export const siteConfig = {
         {
           numero: "03",
           titulo: "Envie pelo WhatsApp",
-          descricao: "Confira o resumo e envie o pedido diretamente para a pizzaria."
+          descricao: "Confira o resumo completo e envie o pedido diretamente para a pizzaria."
         }
       ],
       nota: "O pedido será encaminhado pelo WhatsApp e a confirmação final depende do atendimento da pizzaria."
@@ -147,9 +167,9 @@ export const siteConfig = {
       ],
       destaques: [
         { rotulo: "Variedade", valor: "Pizzas & Esfihas" },
+        { rotulo: "Personalização", valor: "Até 3 Sabores" },
         { rotulo: "Praticidade", valor: "Delivery & Retirada" },
-        { rotulo: "Atendimento", valor: "17h às 23h" },
-        { rotulo: "Localização", valor: "Arena Cuiabá" }
+        { rotulo: "Atendimento", valor: "17h às 23h" }
       ]
     },
     cardapio: {

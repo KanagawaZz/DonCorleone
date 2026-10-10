@@ -25,7 +25,7 @@ export function renderCardapio(config, dadosCardapio) {
             ${cardapioTextos.fallbackMensagem || 'Consulte nosso cardápio completo e as novidades de hoje diretamente no WhatsApp.'}
           </p>
           <div class="fallback-actions">
-            <button type="button" class="btn btn--primary btn--abrir-pedido">
+            <button type="button" class="btn btn--primary btn--abrir-checkout">
               <span>${cardapioTextos.botaoFallback || 'Ver Cardápio no WhatsApp'}</span>
             </button>
           </div>
@@ -44,6 +44,8 @@ export function renderCardapio(config, dadosCardapio) {
 
   // Painéis com os cards gastronômicos
   const paineisHtml = categorias.map((cat, idx) => {
+    const isPizzaCategory = cat.id === 'pizzas-especiais' || cat.id === 'pizzas-tradicionais' || cat.id.includes('pizza');
+
     const itensGrid = (cat.itens || []).map(item => {
       const precoFormatado = item.preco ? formatarPreco(item.preco) : '';
       const itemJson = JSON.stringify(item).replace(/"/g, '&quot;');
@@ -64,14 +66,23 @@ export function renderCardapio(config, dadosCardapio) {
           ${item.descricao ? `<p class="cardapio-item-desc">${esc(item.descricao)}</p>` : ''}
           
           <div class="cardapio-item-footer">
-            <button type="button" class="btn btn--primary btn--pedir-item" data-item-data="${itemJson}">
-              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                <circle cx="9" cy="21" r="1"></circle>
-                <circle cx="20" cy="21" r="1"></circle>
-                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-              </svg>
-              <span>Pedir este sabor</span>
-            </button>
+            ${isPizzaCategory ? `
+              <button type="button" class="btn btn--primary btn--customizar-pizza" data-item-data="${itemJson}">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+                <span>Montar Pizza (Até 3 Sabores)</span>
+              </button>
+            ` : `
+              <button type="button" class="btn btn--primary btn--pedir-simples" data-item-data="${itemJson}">
+                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                  <circle cx="9" cy="21" r="1"></circle>
+                  <circle cx="20" cy="21" r="1"></circle>
+                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                </svg>
+                <span>Adicionar ao Carrinho</span>
+              </button>
+            `}
           </div>
         </div>
       </article>
@@ -94,12 +105,20 @@ export function renderCardapio(config, dadosCardapio) {
       <div class="text-center section-header-wrap">
         <span class="section-tag">${cardapioTextos.tituloItaliano || 'La Nostra Carta'}</span>
         <h2 id="cardapio-titulo" class="section-title">${cardapioTextos.titulo || 'Nosso Cardápio'}</h2>
-        <p class="section-subtitle mb-8">
+        <p class="section-subtitle mb-6">
           ${cardapioTextos.subtitulo || 'Pizzas especiais, tradicionais e esfihas preparadas com todo o carinho.'}
         </p>
+        
+        <!-- Banner de Destaque para Montagem com até 3 Sabores -->
+        <div class="cardapio-highlight-badge">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+          <span>Novidade: Monte sua pizza combinando <strong>até 3 sabores</strong> no mesmo pedido!</span>
+        </div>
       </div>
 
-      <div class="cardapio-tabs-wrapper">
+      <div class="cardapio-tabs-wrapper mt-8">
         <div class="cardapio-tabs" role="tablist" aria-label="Categorias do cardápio">
           ${abasHtml}
         </div>
@@ -111,9 +130,9 @@ export function renderCardapio(config, dadosCardapio) {
 
       <div class="cardapio-footer-banner text-center mt-12">
         <div class="banner-inner">
-          <p class="banner-text">Gostaria de tirar dúvidas ou fazer um pedido personalizado?</p>
-          <button type="button" class="btn btn--outline btn--gold btn--abrir-pedido">
-            <span>Iniciar Pedido pelo WhatsApp</span>
+          <p class="banner-text">Deseja conferir o resumo ou finalizar seu pedido agora?</p>
+          <button type="button" class="btn btn--outline btn--gold btn--abrir-checkout">
+            <span>Ver Meu Pedido no Carrinho</span>
           </button>
         </div>
       </div>
@@ -145,25 +164,39 @@ export function initCardapio(config) {
     });
   });
 
-  // Botões de pedido por item
-  document.querySelectorAll('.btn--pedir-item').forEach(btn => {
+  // Botões de customização de pizza
+  document.querySelectorAll('.btn--customizar-pizza').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
       try {
         const itemData = JSON.parse(btn.dataset.itemData);
-        carrinho.abrirModal(itemData);
+        carrinho.abrirModalPizza(itemData);
       } catch (err) {
-        console.error('Erro ao abrir item:', err);
-        carrinho.abrirModal();
+        console.error('Erro ao abrir personalizador de pizza:', err);
+        carrinho.abrirModalPizza();
       }
     });
   });
 
-  // Botões gerais de abrir pedido
-  document.querySelectorAll('.btn--abrir-pedido').forEach(btn => {
+  // Botões de itens simples (esfihas, sobremesas)
+  document.querySelectorAll('.btn--pedir-simples').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.preventDefault();
-      carrinho.abrirModal();
+      try {
+        const itemData = JSON.parse(btn.dataset.itemData);
+        carrinho.adicionarItemSimples(itemData, 1);
+        carrinho.abrirModalCheckout();
+      } catch (err) {
+        console.error('Erro ao adicionar item simples:', err);
+      }
+    });
+  });
+
+  // Botões de abrir checkout
+  document.querySelectorAll('.btn--abrir-checkout').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      carrinho.abrirModalCheckout();
     });
   });
 }

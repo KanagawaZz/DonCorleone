@@ -1,17 +1,23 @@
 /**
  * Gerenciador de Estado do Carrinho de Compras - Don Corleone
  * 
- * Permite adicionar produtos, alterar quantidades, remover itens e
- * sincronizar o estado em tempo real com todos os componentes da aplicação.
+ * Suporta:
+ * - Produtos simples (esfihas, sobremesas, bebidas)
+ * - Pizzas personalizadas com até 3 sabores e tamanhos
+ * - Edição de pizzas existentes no carrinho
+ * - Recálculo de subtotais e persistência
  */
 
-const STORAGE_KEY = 'don_corleone_cart_v1';
+import { calcularPrecoPizza } from './calculo-pizza.js';
+
+const STORAGE_KEY = 'don_corleone_cart_v2';
 
 class CarrinhoStore {
   constructor() {
     this.itens = [];
-    this.modalAberto = false;
-    this.itemPreSelecionado = null;
+    this.modalCheckoutAberto = false;
+    this.modalPizzaAberto = false;
+    this.pizzaEmEdicao = null;
     this.carregarDoStorage();
   }
 
@@ -21,7 +27,7 @@ class CarrinhoStore {
       if (salvo) {
         const parsed = JSON.parse(salvo);
         if (Array.isArray(parsed)) {
-          this.itens = parsed.filter(i => i && i.id && i.quantidade > 0 && typeof i.preco === 'number');
+          this.itens = parsed.filter(i => i && i.id && i.quantidade > 0);
         }
       }
     } catch (e) {
@@ -44,8 +50,7 @@ class CarrinhoStore {
       detail: {
         itens: this.obterItens(),
         quantidadeTotal: this.obterQuantidadeTotal(),
-        subtotal: this.obterSubtotal(),
-        modalAberto: this.modalAberto
+        subtotal: this.obterSubtotal()
       }
     });
     window.dispatchEvent(evento);
@@ -60,25 +65,75 @@ class CarrinhoStore {
   }
 
   obterSubtotal() {
-    return this.itens.reduce((total, item) => total + ((item.preco || 0) * (item.quantidade || 0)), 0);
+    return this.itens.reduce((total, item) => {
+      const precoUnit = typeof item.precoUnitario === 'number' ? item.precoUnitario : (item.preco || 0);
+      return total + (precoUnit * (item.quantidade || 0));
+    }, 0);
   }
 
-  adicionarItem(produto, quantidade = 1) {
+  /**
+   * Adiciona um produto simples ao carrinho (ex: Esfiha ou Sobremesa)
+   */
+  adicionarItemSimples(produto, quantidade = 1) {
     if (!produto || !produto.id) return;
 
-    const index = this.itens.findIndex(i => i.id === produto.id);
+    const index = this.itens.findIndex(i => i.tipo !== 'pizza' && i.idProduto === produto.id);
     if (index >= 0) {
       this.itens[index].quantidade += quantidade;
     } else {
       this.itens.push({
-        id: produto.id,
+        id: `item_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+        idProduto: produto.id,
+        tipo: 'simples',
         nome: produto.nome || 'Produto',
-        preco: Number(produto.preco) || 0,
+        precoUnitario: Number(produto.preco) || 0,
         foto: produto.foto || '/images/cardapio/calabresa-artesanal.jpg',
         descricao: produto.descricao || '',
         quantidade: Math.max(1, quantidade)
       });
     }
+
+    this.notificar();
+  }
+
+  /**
+   * Adiciona ou atualiza uma pizza personalizada no carrinho
+   */
+  salvarPizza(dadosPizza, idExistente = null) {
+    const { sabores = [], tamanho = null, quantidade = 1, observacoes = '' } = dadosPizza;
+    if (sabores.length === 0) return;
+
+    const precoUnitario = calcularPrecoPizza(sabores, tamanho);
+    const fotoCapa = sabores[0]?.foto || '/images/cardapio/calabresa-artesanal.png';
+
+    if (idExistente) {
+      const index = this.itens.findIndex(i => i.id === idExistente);
+      if (index >= 0) {
+        this.itens[index] = {
+          ...this.itens[index],
+          sabores: [...sabores],
+          tamanho: tamanho || this.itens[index].tamanho,
+          precoUnitario,
+          foto: fotoCapa,
+          quantidade: Math.max(1, quantidade),
+          observacoes: observacoes.trim()
+        };
+        this.notificar();
+        return;
+      }
+    }
+
+    // Cria nova pizza no carrinho
+    this.itens.push({
+      id: `pizza_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+      tipo: 'pizza',
+      tamanho: tamanho || { id: 'grande', nome: 'Pizza Grande', fatias: 8 },
+      sabores: [...sabores],
+      precoUnitario,
+      foto: fotoCapa,
+      quantidade: Math.max(1, quantidade),
+      observacoes: observacoes.trim()
+    });
 
     this.notificar();
   }
@@ -112,19 +167,30 @@ class CarrinhoStore {
     this.notificar();
   }
 
-  abrirModal(produtoParaAdicionar = null) {
-    if (produtoParaAdicionar) {
-      this.adicionarItem(produtoParaAdicionar, 1);
-    }
-    this.modalAberto = true;
-    window.dispatchEvent(new CustomEvent('abrir-modal-pedido', {
-      detail: { produto: produtoParaAdicionar }
+  // Controle do Modal de Montagem de Pizza
+  abrirModalPizza(saborInicial = null, itemPizzaParaEditar = null) {
+    this.pizzaEmEdicao = itemPizzaParaEditar || null;
+    this.modalPizzaAberto = true;
+    window.dispatchEvent(new CustomEvent('abrir-modal-pizza', {
+      detail: { saborInicial, itemParaEditar: itemPizzaParaEditar }
     }));
   }
 
-  fecharModal() {
-    this.modalAberto = false;
-    window.dispatchEvent(new CustomEvent('fechar-modal-pedido'));
+  fecharModalPizza() {
+    this.modalPizzaAberto = false;
+    this.pizzaEmEdicao = null;
+    window.dispatchEvent(new CustomEvent('fechar-modal-pizza'));
+  }
+
+  // Controle do Modal de Finalização do Pedido
+  abrirModalCheckout() {
+    this.modalCheckoutAberto = true;
+    window.dispatchEvent(new CustomEvent('abrir-modal-checkout'));
+  }
+
+  fecharModalCheckout() {
+    this.modalCheckoutAberto = false;
+    window.dispatchEvent(new CustomEvent('fechar-modal-checkout'));
   }
 }
 

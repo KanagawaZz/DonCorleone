@@ -186,12 +186,17 @@
   gap: 0.75rem;
 }
 
+.item-linha.pizza-item-card {
+  align-items: flex-start;
+}
+
 .item-thumb {
   width: 52px;
   height: 52px;
   border-radius: 8px;
   object-fit: cover;
   border: 1px solid rgba(200, 161, 90, 0.2);
+  flex-shrink: 0;
 }
 
 .item-detalhes {
@@ -204,14 +209,46 @@
   font-weight: 700;
   color: #F5EBE1;
   margin: 0 0 0.2rem 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+}
+
+.pizza-sabores-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-bottom: 0.4rem;
+}
+
+.pizza-sabor-pill {
+  font-size: 0.8125rem;
+  color: #D6CEC4;
+  line-height: 1.2;
+}
+
+.item-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .item-unitario {
   font-size: 0.8125rem;
   color: #A09A92;
+}
+
+.btn-editar-pizza-item {
+  background: transparent;
+  border: none;
+  color: var(--color-gold, #C8A15A);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.btn-editar-pizza-item:hover {
+  color: #E8C17A;
 }
 
 .item-qty-controles {
@@ -221,6 +258,7 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 20px;
   padding: 2px;
+  flex-shrink: 0;
 }
 
 .btn-qty {
@@ -259,6 +297,7 @@
   color: var(--color-gold, #C8A15A);
   min-width: 70px;
   text-align: right;
+  flex-shrink: 0;
 }
 
 .btn-item-remover {
@@ -272,6 +311,7 @@
   align-items: center;
   justify-content: center;
   transition: color 0.2s;
+  flex-shrink: 0;
 }
 
 .btn-item-remover:hover {
@@ -295,6 +335,24 @@
 .subtotal-valor {
   font-size: 1.125rem;
   font-weight: 800;
+  color: var(--color-gold, #C8A15A);
+}
+
+/* Destaque do Cardápio */
+.cardapio-highlight-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: 30px;
+  background: rgba(200, 161, 90, 0.12);
+  border: 1px solid rgba(200, 161, 90, 0.3);
+  color: #F5EBE1;
+  font-size: 0.875rem;
+  margin: 0 auto;
+}
+
+.cardapio-highlight-badge svg {
   color: var(--color-gold, #C8A15A);
 }
 
