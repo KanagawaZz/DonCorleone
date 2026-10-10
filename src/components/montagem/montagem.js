@@ -1,5 +1,4 @@
-import { gerarSvgPizzaMontagem } from './ingredientes-svg.js';
-import { inicializarTimelineMontagem } from './timeline.js';
+import { inicializarPizza3DInterativa } from './pizza-3d-interactive.js';
 import { renderStatusAberto } from '../status-aberto.js';
 import { gerarLinkWhatsApp } from '../../utils/whatsapp.js';
 import { rolarPara } from '../../utils/motion.js';
@@ -8,10 +7,9 @@ export function renderMontagem(config) {
   const hero = config.textos?.hero || {};
   const statusHtml = renderStatusAberto(config);
   const linkWhatsApp = gerarLinkWhatsApp(config, { modalidade: config.modalidades?.padrao || 'entrega' });
-  const svgPizza = gerarSvgPizzaMontagem();
 
   return `
-  <section id="montagem" class="secao-montagem" aria-label="Apresentação e montagem da pizza">
+  <section id="montagem" class="secao-montagem" aria-label="Apresentação 3D interativa da pizza">
     <div class="container montagem-container">
       
       <!-- Coluna de Conteúdo Hero -->
@@ -27,7 +25,7 @@ export function renderMontagem(config) {
         </h1>
 
         <p class="hero-subtitulo">
-          ${hero.subtitulo || 'Pizzas e esfihas artesanais preparadas com paixão. Peça para entrega ou retire na unidade Arena Cuiabá.'}
+          ${hero.subtitulo || 'Massa artesanal de fermentação lenta (48h), queijo fior di latte e forno a lenha ardente. Peça para entrega ou retire na unidade Arena Cuiabá.'}
         </p>
 
         <!-- Seletor de Modalidade -->
@@ -59,46 +57,18 @@ export function renderMontagem(config) {
           </a>
         </div>
 
-        <!-- Indicador de Rolagem / Legendas de Montagem -->
-        <div class="montagem-progresso-box">
-          <div class="scroll-cue">
-            <span class="scroll-cue-dot"></span>
-            <span class="scroll-cue-text">${hero.indicadorScroll || 'Role para montar a pizza'}</span>
-          </div>
-
-          <div class="legendas-lista" aria-live="polite">
-            <div class="legenda-item is-active" data-step="1">
-              <span class="legenda-num">1</span>
-              <span class="legenda-texto">La base · a massa</span>
-            </div>
-            <div class="legenda-item" data-step="2">
-              <span class="legenda-num">2</span>
-              <span class="legenda-texto">Il sugo · o molho</span>
-            </div>
-            <div class="legenda-item" data-step="3">
-              <span class="legenda-num">3</span>
-              <span class="legenda-texto">Il formaggio · o queijo</span>
-            </div>
-            <div class="legenda-item" data-step="4">
-              <span class="legenda-num">4</span>
-              <span class="legenda-texto">Gli ingredienti · as coberturas</span>
-            </div>
-            <div class="legenda-item" data-step="5">
-              <span class="legenda-num">5</span>
-              <span class="legenda-texto">Il tocco finale · o toque final</span>
-            </div>
-            <div class="legenda-item" data-step="6">
-              <span class="legenda-num">6</span>
-              <span class="legenda-texto">Pronta · Buon appetito</span>
-            </div>
-          </div>
+        <!-- Badge de Instrução 3D -->
+        <div class="interactive-3d-hint">
+          <span class="hint-icon">✨</span>
+          <span class="hint-text">Gire a pizza em 360° com o mouse</span>
         </div>
       </div>
 
-      <!-- Palco da Pizza Animada -->
+      <!-- Palco da Pizza 3D Interativa (WebGL Three.js) -->
       <div class="montagem-visual">
         <div class="montagem-stage">
-          ${svgPizza}
+          <div class="pizza-3d-canvas-container" id="pizza-3d-canvas-container"></div>
+          <div class="pizza-glow-overlay" aria-hidden="true"></div>
         </div>
       </div>
 
@@ -108,8 +78,8 @@ export function renderMontagem(config) {
 }
 
 export function initMontagem(config) {
-  // Inicializa a timeline master GSAP
-  inicializarTimelineMontagem();
+  // Inicializa o visualizador WebGL 3D Interativo
+  const pizza3d = inicializarPizza3DInterativa('#pizza-3d-canvas-container');
 
   // Tratamento do seletor Entrega / Retirada
   const botoesModalidade = document.querySelectorAll('.hero-modalidade-wrapper .modalidade-btn');
@@ -127,7 +97,6 @@ export function initMontagem(config) {
       btn.setAttribute('aria-pressed', 'true');
       modalidadeAtual = btn.dataset.modalidade;
 
-      // Dispara evento para sincronizar com barra inferior e atualizar links
       window.dispatchEvent(new CustomEvent('modalidade-alterada', { detail: { modalidade: modalidadeAtual } }));
 
       if (btnHeroOrder) {
@@ -136,7 +105,7 @@ export function initMontagem(config) {
     });
   });
 
-  // Botão "Ver cardápio" pula suavemente a animação para a seção #cardapio
+  // Botão "Ver cardápio"
   const btnMenu = document.querySelector('#btn-hero-menu');
   if (btnMenu) {
     btnMenu.addEventListener('click', (e) => {
@@ -144,4 +113,6 @@ export function initMontagem(config) {
       rolarPara('#cardapio', { offset: -20 });
     });
   }
+
+  return pizza3d;
 }
