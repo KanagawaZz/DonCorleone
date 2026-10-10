@@ -1,49 +1,104 @@
-/* Seção Sobre */
+/* Seção Sobre / A Casa — Don Corleone */
 
 .secao-sobre {
   position: relative;
   padding-block: var(--space-20);
-  background: radial-gradient(circle at 50% 50%, #1c1612 0%, #0C0A09 70%);
-  z-index: var(--z-base);
+  background: 
+    radial-gradient(circle at 10% 50%, rgba(200, 161, 90, 0.06) 0%, transparent 50%),
+    var(--color-bg-primary);
+  border-top: 1px solid var(--color-border-glass);
+  border-bottom: 1px solid var(--color-border-glass);
+}
+
+.sobre-container-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.15fr;
+  align-items: center;
+  gap: var(--space-12);
+}
+
+.sobre-visual-col {
+  position: relative;
+}
+
+.sobre-img-frame {
+  position: relative;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  border: 1px solid var(--color-border-glass);
+  box-shadow: var(--shadow-lg), 0 0 30px rgba(0, 0, 0, 0.8);
+}
+
+.sobre-img-main {
+  width: 100%;
+  height: 460px;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s var(--ease-smooth);
+}
+
+.sobre-img-frame:hover .sobre-img-main {
+  transform: scale(1.04);
+}
+
+.sobre-img-badge {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  background: rgba(16, 13, 11, 0.9);
+  border: 1px solid var(--color-gold);
+  border-radius: var(--radius-lg);
+  padding: 12px 20px;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.badge-number {
+  font-family: var(--font-serif);
+  font-size: var(--text-2xl);
+  font-weight: 800;
+  color: var(--color-gold);
+  line-height: 1;
+}
+
+.badge-text {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--color-text-secondary);
+  margin-top: 4px;
 }
 
 .sobre-ornamento-top {
   display: flex;
-  justify-content: center;
-  margin-bottom: var(--space-4);
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
 }
 
 .sobre-selo-img {
-  filter: drop-shadow(0 4px 16px rgba(200, 161, 90, 0.35));
-}
-
-.mb-6 {
-  margin-bottom: var(--space-6);
+  filter: drop-shadow(0 2px 8px rgba(200, 161, 90, 0.3));
 }
 
 .sobre-subtitulo-desc {
-  font-size: var(--text-xl);
+  font-size: var(--text-lg);
+  margin-bottom: var(--space-6);
+  font-family: var(--font-serif-italic);
 }
 
 .sobre-conteudo-box {
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border-glass);
-  border-radius: var(--radius-lg);
-  padding: var(--space-8) var(--space-6);
   margin-bottom: var(--space-8);
-  box-shadow: var(--shadow-md);
-  position: relative;
 }
 
 .sobre-paragrafo {
-  font-size: var(--text-base);
   color: var(--color-text-secondary);
-  line-height: 1.8;
+  font-size: var(--text-base);
+  line-height: 1.75;
   margin-bottom: var(--space-4);
-}
-
-.sobre-paragrafo:last-child {
-  margin-bottom: 0;
 }
 
 .sobre-badges-grid {
@@ -53,30 +108,47 @@
 }
 
 .sobre-badge-item {
-  background: rgba(200, 161, 90, 0.06);
+  background: var(--color-bg-card);
   border: 1px solid var(--color-border-glass);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   padding: var(--space-4);
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  text-align: center;
+  transition: all 0.3s ease;
+}
+
+.sobre-badge-item:hover {
+  border-color: var(--color-gold);
+  transform: translateY(-2px);
 }
 
 .sobre-badge-val {
+  display: block;
   font-family: var(--font-serif);
-  font-size: var(--text-base);
+  font-size: var(--text-lg);
   font-weight: 700;
   color: var(--color-gold-light);
+  margin-bottom: 2px;
 }
 
 .sobre-badge-label {
   font-size: var(--text-xs);
   color: var(--color-text-muted);
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 992px) {
+  .sobre-container-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-8);
+  }
+
+  .sobre-img-main {
+    height: 320px;
+  }
+}
+
+@media (max-width: 600px) {
   .sobre-badges-grid {
     grid-template-columns: 1fr;
   }

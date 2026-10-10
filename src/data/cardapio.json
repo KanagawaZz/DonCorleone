@@ -1,25 +1,138 @@
 {
   "categorias": [
     {
-      "id": "pizzas-tradicionais",
-      "nome": "Pizzas Tradicionais",
-      "descricao": "Massa artesanal no ponto perfeito com ingredientes selecionados.",
+      "id": "pizzas-especiais",
+      "nome": "Pizzas Especiais",
+      "descricao": "Nossas receitas autorais com fermentação lenta de 48h e ingredientes nobres importados.",
       "itens": [
         {
-          "id": "calabresa-artesanal",
-          "nome": "Calabresa Don Corleone",
-          "descricao": "Fatias de calabresa artesanal levemente douradas, cebola em rodelas finas, orégano e azeitonas pretas sobre queijo mussarela derretido.",
-          "preco": 62.00,
+          "id": "margherita-di-bufala",
+          "nome": "Margherita di Bufala D.O.P.",
+          "descricao": "Molho San Marzano autêntico, mozzarella de búfala fior di latte, manjericão fresco colhido no dia, flor de sal e fio de azeite extravirgem italiano.",
+          "preco": 68.00,
           "destaque": true,
+          "tag": "Mais Pedida",
+          "foto": "/images/cardapio/margherita-especial.jpg"
+        },
+        {
+          "id": "calabresa-don-corleone",
+          "nome": "Calabresa Don Corleone",
+          "descricao": "Calabresa artesanal premium tostada, queijo mozzarella fior di latte derretido, finos anéis de cebola roxa marinada e azeitonas pretas sicilianas.",
+          "preco": 64.00,
+          "destaque": true,
+          "tag": "Assinatura da Casa",
           "foto": "/images/cardapio/calabresa-artesanal.jpg"
         },
         {
+          "id": "parma-rucula",
+          "nome": "Parma & Rúcula Silvestre",
+          "descricao": "Prosciutto di Parma maturado 18 meses, folhas frescas de rúcula precoce, lascas generosas de Parmigiano Reggiano e redução balsâmica de Modena.",
+          "preco": 76.00,
+          "destaque": true,
+          "tag": "Chef Selection",
+          "foto": "/images/cardapio/parma-rucula.jpg"
+        },
+        {
+          "id": "quattro-formaggi",
+          "nome": "Quattro Formaggi D'Oro",
+          "descricao": "Harmonia equilibrada de Mozzarella Fior di Latte, Gorgonzola Dolce cremoso, Provolone defumado e finalização com Parmesão gratinado.",
+          "preco": 72.00,
+          "destaque": false,
+          "tag": "Especial",
+          "foto": "/images/cardapio/quatro-queijos.jpg"
+        }
+      ]
+    },
+    {
+      "id": "pizzas-tradicionais",
+      "nome": "Pizzas Tradicionais",
+      "descricao": "Os clássicos eternos da cantina italiana, preparados com massa leve e crocante.",
+      "itens": [
+        {
           "id": "mussarela-especial",
           "nome": "Mussarela Especial da Casa",
-          "descricao": "Generosa cobertura de queijo mussarela selecionado, molho de tomate artesanal, orégano fresco e fio de azeite extra virgem.",
+          "descricao": "Generosa cobertura de queijo mussarela selecionado, molho de tomate rústico, orégano aromático e azeitonas pretas.",
           "preco": 58.00,
           "destaque": false,
+          "tag": "Tradicional",
           "foto": "/images/cardapio/mussarela-especial.jpg"
+        },
+        {
+          "id": "frango-catupiry",
+          "nome": "Frango com Catupiry Legítimo",
+          "descricao": "Peito de frango desfiado suavemente temperado com ervas da horta e coberto com o autêntico requeijão cremoso Catupiry.",
+          "preco": 64.00,
+          "destaque": false,
+          "tag": "Clássico",
+          "foto": "/images/cardapio/frango-catupiry.jpg"
+        },
+        {
+          "id": "portuguesa-tradicional",
+          "nome": "Portuguesa Clássica",
+          "descricao": "Presunto cozido fatiado, ovos caipiras, cebola caramelizada, ervilhas frescas, mozzarella e azeitonas pretas no forno a lenha.",
+          "preco": 66.00,
+          "destaque": false,
+          "tag": "Tradicional",
+          "foto": "/images/cardapio/calabresa-artesanal.jpg"
+        }
+      ]
+    },
+    {
+      "id": "esfihas-artesanais",
+      "nome": "Esfihas Abertas",
+      "descricao": "Massa folhada artesanal de textura crocante com recheios generosos.",
+      "itens": [
+        {
+          "id": "esfiha-carne-especial",
+          "nome": "Esfiha de Carne com Especiarias",
+          "descricao": "Carne bovina de primeira temperada com tomate fresco, cebola, limão siciliano e mix secreto de especiarias árabes.",
+          "preco": 7.50,
+          "destaque": true,
+          "tag": "Favorita",
+          "foto": "/images/cardapio/esfiha-carne.jpg"
+        },
+        {
+          "id": "esfiha-queijo-derretido",
+          "nome": "Esfiha de Três Queijos",
+          "descricao": "Blend cremoso de mozzarella, queijo minas curado e requeijão da roça gratinado na hora.",
+          "preco": 7.90,
+          "destaque": false,
+          "tag": "Cremosa",
+          "foto": "/images/cardapio/esfiha-queijo.jpg"
+        },
+        {
+          "id": "esfiha-calabresa-catupiry",
+          "nome": "Esfiha de Calabresa com Catupiry",
+          "descricao": "Calabresa moída artesanal com toque de cebolinha e finalizada com Catupiry legítimo tostado.",
+          "preco": 8.50,
+          "destaque": false,
+          "tag": "Destaque",
+          "foto": "/images/cardapio/esfiha-calabresa.jpg"
+        }
+      ]
+    },
+    {
+      "id": "sobremesas",
+      "nome": "Doces & Sobremesas",
+      "descricao": "O fechamento perfeito para uma noite inesquecível.",
+      "itens": [
+        {
+          "id": "pizza-nutella-morango",
+          "nome": "Pizza Dolce Nutella & Morangos",
+          "descricao": "Creme de avelã Nutella genuíno, morangos frescos fatiados, lascas de amêndoas tostadas e leite em pó ninho polvilhado.",
+          "preco": 54.00,
+          "destaque": true,
+          "tag": "Irresistível",
+          "foto": "/images/cardapio/mussarela-especial.jpg"
+        },
+        {
+          "id": "pizza-banana-canela",
+          "nome": "Banana Flambada com Chocolate Branco",
+          "descricao": "Bananas selecionadas caramelizadas no forno a lenha, canela em pó, chocolate branco nobre derretido e leite condensado.",
+          "preco": 48.00,
+          "destaque": false,
+          "tag": "Doce da Casa",
+          "foto": "/images/cardapio/margherita-especial.jpg"
         }
       ]
     }
