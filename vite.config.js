@@ -1,8 +1,7 @@
-<<<<<<< HEAD
 /*
  * vite.config.js — Build do projeto. Injeta no HTML estático o SEO vindo de js/config.js
  * (título, descrição, Open Graph) e os caminhos de logo/imagem do hero, para que rastreadores
- * sem JavaScript enxerguem os metadados. Também copia assets/img para dist.
+ * sem JavaScript enxerguem os metadados. Também copia assets para dist.
  */
 import { defineConfig } from 'vite';
 import { cpSync, existsSync } from 'node:fs';
@@ -13,7 +12,6 @@ const esc = (s = '') => String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;')
 function seoFromConfig() {
   return {
     name: 'doncorleone-seo',
-    // 'post': roda depois do processamento do Vite, mantendo os caminhos de imagem como estão no config.
     transformIndexHtml: {
       order: 'post',
       handler(html) {
@@ -40,32 +38,21 @@ function seoFromConfig() {
           .replaceAll('%HERO_IMG%', esc(imagens.hero));
       },
     },
-    // Os caminhos de imagem são lidos de config.js em tempo de execução, então a pasta é copiada como está.
     closeBundle() {
-      if (existsSync('assets/img')) cpSync('assets/img', 'dist/assets/img', { recursive: true });
+      if (existsSync('assets')) cpSync('assets', 'dist/assets', { recursive: true });
     },
   };
 }
 
 export default defineConfig({
-  base: './', // caminhos relativos: funciona em Vercel, Netlify e GitHub Pages (subpasta)
+  base: './',
   plugins: [seoFromConfig()],
-  build: { target: 'es2020', chunkSizeWarningLimit: 700 },
-=======
-import { defineConfig } from 'vite';
-
-export default defineConfig({
-  root: './',
-  publicDir: 'public',
   build: {
-    outDir: 'dist',
-    emptyOutDir: true,
     target: 'es2020',
-    sourcemap: false
+    chunkSizeWarningLimit: 800
   },
   server: {
     port: 3000,
     open: false
   }
->>>>>>> b78a8338662fff7821a3b7b98d627b19063228f6
 });
