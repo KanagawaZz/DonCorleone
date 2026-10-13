@@ -1,4 +1,6 @@
 import { esc } from '../utils/dom.js';
+import { icone } from '../utils/icons.js';
+import { conectarBotoesInstalacao } from '../utils/pwa.js';
 
 export function renderFooter(config) {
   const anoAtual = new Date().getFullYear();
@@ -28,6 +30,14 @@ export function renderFooter(config) {
         ` : ''}
       </div>
 
+      <!-- Ação PWA Discreta -->
+      <div class="footer-pwa-wrap">
+        <button type="button" class="btn-instalar-app-footer" id="btn-instalar-app-footer" aria-label="Instalar App Don Corleone">
+          ${icone('celular', 15)}
+          <span class="btn-instalar-label">Instalar App Don Corleone</span>
+        </button>
+      </div>
+
       <!-- Wordmark Gigante Revelado -->
       <div class="footer-wordmark-container" aria-hidden="true">
         <span class="footer-wordmark-text">DON CORLEONE</span>
@@ -49,5 +59,5 @@ export function renderFooter(config) {
 }
 
 export function initFooter(config) {
-  // Inicialização do rodapé
+  conectarBotoesInstalacao();
 }

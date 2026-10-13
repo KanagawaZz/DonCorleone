@@ -1,0 +1,189 @@
+/* Estilos do Botão Discreto e Modal PWA - Don Corleone */
+
+.btn-instalar-app,
+.btn-instalar-app-footer {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.875rem;
+  background: rgba(200, 161, 90, 0.08);
+  border: 1px solid rgba(200, 161, 90, 0.25);
+  border-radius: 999px;
+  color: var(--color-gold, #C8A15A);
+  font-family: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-decoration: none;
+}
+
+.btn-instalar-app:hover,
+.btn-instalar-app-footer:hover {
+  background: rgba(200, 161, 90, 0.16);
+  border-color: var(--color-gold, #C8A15A);
+  color: var(--color-gold-light, #F0D59A);
+  transform: translateY(-1px);
+}
+
+.btn-instalar-app:active,
+.btn-instalar-app-footer:active {
+  transform: translateY(0);
+}
+
+.btn-instalar-app.app-ja-instalado,
+.btn-instalar-app-footer.app-ja-instalado {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.12);
+  color: #A09A92;
+  cursor: default;
+}
+
+/* No Menu Drawer Mobile */
+.btn-instalar-app-drawer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-top: 0.75rem;
+  background: rgba(200, 161, 90, 0.08);
+  border: 1px solid rgba(200, 161, 90, 0.25);
+  border-radius: 12px;
+  color: var(--color-gold, #C8A15A);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-instalar-app-drawer:hover {
+  background: rgba(200, 161, 90, 0.15);
+}
+
+/* Modal de Instruções PWA */
+.modal-pwa-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.modal-pwa-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-pwa-card {
+  position: relative;
+  background: #14110E;
+  border: 1px solid rgba(200, 161, 90, 0.3);
+  border-radius: 18px;
+  max-width: 440px;
+  width: 100%;
+  padding: 1.75rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.9);
+  color: #F5EBE1;
+  animation: modalPwaEntrada 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalPwaEntrada {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.modal-pwa-fechar {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  color: #A09A92;
+  font-size: 1.1rem;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 8px;
+  transition: color 0.15s;
+}
+
+.modal-pwa-fechar:hover {
+  color: #FFF;
+}
+
+.modal-pwa-icone {
+  color: var(--color-gold, #C8A15A);
+  margin-bottom: 0.875rem;
+}
+
+.modal-pwa-titulo {
+  font-family: var(--font-serif, 'Playfair Display', Georgia, serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #F5EBE1;
+  margin: 0 0 0.5rem 0;
+}
+
+.modal-pwa-subtitulo {
+  font-size: 0.875rem;
+  color: #C8BCAC;
+  margin: 0 0 1.25rem 0;
+  line-height: 1.45;
+}
+
+.modal-pwa-passos {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.25rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+}
+
+.modal-pwa-passos li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  color: #E6DCDE;
+  line-height: 1.45;
+}
+
+.modal-pwa-passos .passo-numero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  border-radius: 50%;
+  background: rgba(200, 161, 90, 0.15);
+  border: 1px solid var(--color-gold, #C8A15A);
+  color: var(--color-gold-light, #F0D59A);
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-top: 1px;
+}
+
+.modal-pwa-texto {
+  font-size: 0.9375rem;
+  color: #C8BCAC;
+  line-height: 1.5;
+  margin-bottom: 1.25rem;
+}

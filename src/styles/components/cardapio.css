@@ -819,3 +819,216 @@
     gap: 4px;
   }
 }
+
+/* ==========================================================================
+   BARRA DE BUSCA EM TEMPO REAL NO CARDÁPIO
+   ========================================================================== */
+.cardapio-busca-wrapper {
+  max-width: 780px;
+  margin-inline: auto;
+  margin-bottom: var(--space-8);
+}
+
+.cardapio-busca-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.cardapio-busca-input-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: rgba(20, 16, 13, 0.85);
+  border: 1px solid rgba(200, 161, 90, 0.35);
+  border-radius: var(--radius-pill, 9999px);
+  padding: 4px 8px 4px 18px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4), inset 0 1px 2px rgba(255, 255, 255, 0.05);
+  transition: all 0.25s ease;
+}
+
+.cardapio-busca-input-box:focus-within {
+  border-color: var(--color-gold, #C8A15A);
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.6), 0 0 0 3px rgba(200, 161, 90, 0.2);
+  background: #191410;
+}
+
+.busca-icon-lupa {
+  color: var(--color-gold, #C8A15A);
+  flex-shrink: 0;
+  margin-right: 12px;
+}
+
+.cardapio-busca-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #F5EBE1;
+  font-size: 0.9375rem;
+  padding: 10px 4px;
+  outline: none;
+  font-family: inherit;
+}
+
+.cardapio-busca-input::placeholder {
+  color: #8C847B;
+  font-size: 0.875rem;
+}
+
+.btn-limpar-busca {
+  background: rgba(255, 255, 255, 0.08);
+  border: none;
+  color: #C0B7AC;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+
+.btn-limpar-busca:hover {
+  background: rgba(200, 161, 90, 0.25);
+  color: #FFF;
+}
+
+/* Chips de Sugestão Rápida */
+.cardapio-busca-chips {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding-inline: 0.5rem;
+}
+
+.chips-label {
+  font-size: 0.75rem;
+  color: #8C847B;
+  font-weight: 500;
+}
+
+.busca-chip {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #C8BFB5;
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.busca-chip:hover {
+  background: rgba(200, 161, 90, 0.15);
+  border-color: rgba(200, 161, 90, 0.4);
+  color: var(--color-gold-light, #F0D59A);
+  transform: translateY(-1px);
+}
+
+.busca-chip.active {
+  background: var(--color-gold, #C8A15A);
+  color: #14110E;
+  font-weight: 700;
+  border-color: var(--color-gold, #C8A15A);
+}
+
+/* Barra de Status dos Resultados da Busca */
+.cardapio-busca-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  background: rgba(200, 161, 90, 0.1);
+  border: 1px solid rgba(200, 161, 90, 0.25);
+  border-radius: 12px;
+  margin-top: 1rem;
+  font-size: 0.84rem;
+  color: var(--color-gold-light, #F0D59A);
+}
+
+.btn-voltar-categorias {
+  background: transparent;
+  border: 1px solid rgba(200, 161, 90, 0.35);
+  color: #F5EBE1;
+  font-size: 0.75rem;
+  padding: 4px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-voltar-categorias:hover {
+  background: rgba(200, 161, 90, 0.2);
+  border-color: var(--color-gold, #C8A15A);
+  color: #FFF;
+}
+
+/* Painel de Resultados da Busca */
+.cardapio-busca-resultados {
+  margin-top: var(--space-8);
+}
+
+/* Empty State da Busca */
+.busca-vazia-box {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 1.5rem;
+  background: rgba(20, 16, 13, 0.6);
+  border: 1px dashed rgba(200, 161, 90, 0.3);
+  border-radius: 16px;
+  max-width: 580px;
+  margin-inline: auto;
+}
+
+.busca-vazia-box svg {
+  color: var(--color-gold, #C8A15A);
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+.busca-vazia-box h4 {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  color: #F5EBE1;
+  margin-bottom: 0.5rem;
+}
+
+.busca-vazia-box p {
+  color: #A09A92;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 640px) {
+  .cardapio-busca-input-box {
+    padding: 3px 6px 3px 14px;
+  }
+  
+  .cardapio-busca-input {
+    font-size: 0.85rem;
+  }
+
+  .cardapio-busca-chips {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 6px;
+    scrollbar-width: none;
+  }
+
+  .cardapio-busca-chips::-webkit-scrollbar {
+    display: none;
+  }
+
+  .busca-chip {
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+}

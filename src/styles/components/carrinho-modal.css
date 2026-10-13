@@ -786,6 +786,24 @@
   margin: 0;
 }
 
+.balcao-tempo-box {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.65rem 0.875rem;
+  background: rgba(200, 161, 90, 0.12);
+  border: 1px solid rgba(200, 161, 90, 0.35);
+  border-radius: 8px;
+  color: var(--color-gold-light, #F0D59A);
+  font-size: 0.84rem;
+  margin-top: 0.75rem;
+}
+
+.balcao-tempo-box svg {
+  color: var(--color-gold, #C8A15A);
+  flex-shrink: 0;
+}
+
 /* Pagamento Grid */
 .pagamento-options-grid {
   display: grid;
@@ -1416,4 +1434,182 @@
 .text-danger {
   color: #FF6B6B !important;
   font-weight: 700;
+}
+
+/* ========================================================
+   SEÇÃO COMPRE JUNTO / UPSELL RÁPIDO NO CARRINHO
+   ======================================================== */
+.secao-compre-junto {
+  background: rgba(200, 161, 90, 0.05);
+  border: 1px solid rgba(200, 161, 90, 0.2);
+  border-radius: 16px;
+  padding: 1rem 1rem 0.85rem;
+  margin-bottom: 1.5rem;
+}
+
+.compre-junto-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 0.85rem;
+  gap: 0.5rem;
+}
+
+.compre-junto-title-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.compre-junto-tag {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-gold, #C8A15A);
+  background: rgba(200, 161, 90, 0.12);
+  border-radius: 6px;
+  padding: 2px 7px;
+}
+
+.compre-junto-titulo {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #F5EBE1;
+  margin: 0;
+}
+
+.compre-junto-dica {
+  font-size: 0.72rem;
+  color: #A09A92;
+  white-space: nowrap;
+}
+
+.compre-junto-slider {
+  display: flex;
+  gap: 0.75rem;
+  overflow-x: auto;
+  padding-bottom: 0.4rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(200, 161, 90, 0.3) transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+.compre-junto-slider::-webkit-scrollbar {
+  height: 5px;
+}
+
+.compre-junto-slider::-webkit-scrollbar-thumb {
+  background: rgba(200, 161, 90, 0.3);
+  border-radius: 4px;
+}
+
+.compre-junto-card {
+  flex: 0 0 170px;
+  min-width: 170px;
+  max-width: 170px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.compre-junto-card:hover {
+  background: rgba(200, 161, 90, 0.08);
+  border-color: rgba(200, 161, 90, 0.3);
+  transform: translateY(-2px);
+}
+
+.compre-junto-card.ja-adicionado {
+  background: rgba(200, 161, 90, 0.09);
+  border-color: rgba(200, 161, 90, 0.45);
+}
+
+.compre-junto-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.4rem;
+}
+
+.compre-junto-badge-cat {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-gold-light, #F0D59A);
+}
+
+.compre-junto-icon {
+  color: var(--color-gold, #C8A15A);
+  display: flex;
+  align-items: center;
+}
+
+.compre-junto-card-nome {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: #F5EBE1;
+  margin: 0 0 2px 0;
+  line-height: 1.25;
+}
+
+.compre-junto-card-sub {
+  font-size: 0.6875rem;
+  color: #A09A92;
+  margin: 0 0 0.6rem 0;
+  line-height: 1.25;
+}
+
+.compre-junto-card-footer {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem;
+}
+
+.compre-junto-preco {
+  font-size: 0.8125rem;
+  font-weight: 800;
+  color: var(--color-gold, #C8A15A);
+  white-space: nowrap;
+}
+
+.btn-compre-junto-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 0.32rem 0.55rem;
+  background: var(--color-gold, #C8A15A);
+  color: #0C0A09;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-compre-junto-add:hover {
+  background: var(--color-gold-light, #F0D59A);
+  transform: scale(1.02);
+}
+
+.btn-compre-junto-add.is-added {
+  background: rgba(200, 161, 90, 0.2);
+  border: 1px solid var(--color-gold, #C8A15A);
+  color: var(--color-gold-light, #F0D59A);
+}
+
+.btn-compre-junto-add.is-added:hover {
+  background: var(--color-gold, #C8A15A);
+  color: #0C0A09;
 }

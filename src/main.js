@@ -5,6 +5,7 @@ import dadosCardapio from './data/cardapio.json';
 import dadosDepoimentos from './data/depoimentos.json';
 
 import { inicializarMotion } from './utils/motion.js';
+import { inicializarPWA } from './utils/pwa.js';
 
 // Componentes
 import { renderHeader, initHeader } from './components/header.js';
@@ -58,7 +59,7 @@ function montarAplicacao() {
   initStatusAberto(siteConfig);
   initMontagem(siteConfig);
   initMarquee(siteConfig);
-  initCardapio(siteConfig);
+  initCardapio(siteConfig, dadosCardapio);
   initPizzaCustomizerModal(siteConfig);
   initCarrinhoModal(siteConfig);
   initComoPedir(siteConfig);
@@ -68,6 +69,7 @@ function montarAplicacao() {
   initContato(siteConfig);
   initFooter(siteConfig);
   initBarraPedido(siteConfig);
+  inicializarPWA();
 }
 
 // Inicializa quando o DOM estiver pronto

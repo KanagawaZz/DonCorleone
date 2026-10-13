@@ -1,5 +1,6 @@
 import { rolarPara } from '../utils/motion.js';
 import { carrinho } from '../utils/carrinho.js';
+import { icone } from '../utils/icons.js';
 
 export function renderHeader(config) {
   const marca = config.marca || {};
@@ -75,6 +76,10 @@ export function renderHeader(config) {
       <div class="mobile-drawer-footer">
         <button type="button" class="btn btn--primary w-full" id="btn-drawer-order">
           Fazer Pedido no WhatsApp
+        </button>
+        <button type="button" class="btn-instalar-app-drawer" id="btn-instalar-app-drawer" aria-label="Instalar App Don Corleone">
+          ${icone('celular', 16)}
+          <span class="btn-instalar-label">Instalar App Don Corleone</span>
         </button>
       </div>
     </div>

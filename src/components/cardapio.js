@@ -2,8 +2,101 @@ import { formatarPreco, esc } from '../utils/dom.js';
 import { carrinho } from '../utils/carrinho.js';
 import { gsap, ScrollTrigger } from '../utils/motion.js';
 import { icone } from '../utils/icons.js';
+import dadosCardapioPadrao from '../data/cardapio.json';
 
-export function renderCardapio(config, dadosCardapio) {
+/**
+ * Renderiza o card individual de um produto com formatação de preço e botões de ação.
+ */
+export function renderizarCardItem(item, catId = '') {
+  const isPizzaCategory = catId === 'pizzas-salgadas' || catId === 'pizzas-doces' || item.tipo === 'pizza';
+  const isBordasCategory = catId === 'bordas-adicionais' || item.tipo === 'borda';
+
+  let precoExibido = '';
+  if (typeof item.preco === 'number' && item.preco > 0) {
+    precoExibido = formatarPreco(item.preco);
+  } else if (item.preco === 0) {
+    precoExibido = 'Sem adicional';
+  } else {
+    precoExibido = item.precoTexto || 'Sob consulta';
+  }
+
+  const itemJson = JSON.stringify({ ...item, categoriaId: item.categoriaId || catId }).replace(/"/g, '&quot;');
+
+  return `
+  <article class="cardapio-item-card" data-reveal>
+    <div class="cardapio-card-frame" aria-hidden="true"></div>
+
+    <div class="cardapio-item-img-wrap">
+      <img src="${item.foto || '/images/cardapio/calabresa-artesanal.jpg'}" alt="${esc(item.nome)}" loading="lazy" class="cardapio-item-img" />
+      
+      ${item.tag ? `
+        <span class="cardapio-item-tag">
+          <span class="tag-fire-icon">✦</span>
+          <span>${esc(item.tag)}</span>
+        </span>
+      ` : `
+        <span class="cardapio-item-tag-subtle">
+          <span>${esc(item.categoriaNome || 'Don Corleone')}</span>
+        </span>
+      `}
+      
+      <div class="cardapio-img-overlay"></div>
+      <div class="cardapio-ember-glow" aria-hidden="true"></div>
+    </div>
+    
+    <div class="cardapio-item-info">
+      <div class="cardapio-item-header">
+        <h3 class="cardapio-item-nome">${esc(item.nome)}</h3>
+        <span class="cardapio-item-preco ${!item.preco ? 'preco-consulta' : ''}">${precoExibido}</span>
+      </div>
+      
+      <div class="cardapio-ornament-line" aria-hidden="true"></div>
+
+      ${item.descricao ? `
+        <p class="cardapio-item-desc">${esc(item.descricao)}</p>
+      ` : ''}
+      
+      ${item.composicao ? `
+        <div class="cardapio-badge-composicao">
+          <strong>Composição:</strong> ${esc(item.composicao)}
+        </div>
+      ` : ''}
+
+      ${item.distribuicao ? `
+        <div class="cardapio-badge-composicao">
+          <strong>Distribuição:</strong> ${esc(item.distribuicao)}
+        </div>
+      ` : ''}
+
+      <div class="cardapio-item-footer">
+        ${isPizzaCategory ? `
+          <button type="button" class="btn btn--primary btn--customizar-pizza" data-item-data="${itemJson}">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            <span>Montar Pizza</span>
+          </button>
+        ` : isBordasCategory ? `
+          <button type="button" class="btn btn--outline btn--gold btn--abrir-montador-borda">
+            <span>Escolher ao Montar Pizza</span>
+          </button>
+        ` : `
+          <button type="button" class="btn btn--primary btn--pedir-simples" data-item-data="${itemJson}">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+            <span>${item.preco ? 'Adicionar ao Carrinho' : 'Adicionar ao Pedido (A Confirmar)'}</span>
+          </button>
+        `}
+      </div>
+    </div>
+  </article>
+  `;
+}
+
+export function renderCardapio(config, dadosCardapio = dadosCardapioPadrao) {
   const cardapioTextos = config.textos?.cardapio || {};
   const categorias = dadosCardapio?.categorias || [];
   const pedidoMinimo = config.pagamento?.pedidoMinimo || 22.00;
@@ -80,94 +173,7 @@ export function renderCardapio(config, dadosCardapio) {
 
   // 3. PAINÉIS DE CATEGORIAS
   const paineisHtml = categorias.map((cat, idx) => {
-    const isPizzaCategory = cat.id === 'pizzas-salgadas' || cat.id === 'pizzas-doces';
-    const isBordasCategory = cat.id === 'bordas-adicionais';
-
-    const itensGrid = (cat.itens || []).map(item => {
-      let precoExibido = '';
-      if (typeof item.preco === 'number' && item.preco > 0) {
-        precoExibido = formatarPreco(item.preco);
-      } else if (item.preco === 0) {
-        precoExibido = 'Sem adicional';
-      } else {
-        precoExibido = item.precoTexto || 'Sob consulta';
-      }
-
-      const itemJson = JSON.stringify(item).replace(/"/g, '&quot;');
-
-      return `
-      <article class="cardapio-item-card" data-reveal>
-        <div class="cardapio-card-frame" aria-hidden="true"></div>
-
-        <div class="cardapio-item-img-wrap">
-          <img src="${item.foto || '/images/cardapio/calabresa-artesanal.jpg'}" alt="${esc(item.nome)}" loading="lazy" class="cardapio-item-img" />
-          
-          ${item.tag ? `
-            <span class="cardapio-item-tag">
-              <span class="tag-fire-icon">✦</span>
-              <span>${esc(item.tag)}</span>
-            </span>
-          ` : `
-            <span class="cardapio-item-tag-subtle">
-              <span>Don Corleone</span>
-            </span>
-          `}
-          
-          <div class="cardapio-img-overlay"></div>
-          <div class="cardapio-ember-glow" aria-hidden="true"></div>
-        </div>
-        
-        <div class="cardapio-item-info">
-          <div class="cardapio-item-header">
-            <h3 class="cardapio-item-nome">${esc(item.nome)}</h3>
-            <span class="cardapio-item-preco ${!item.preco ? 'preco-consulta' : ''}">${precoExibido}</span>
-          </div>
-          
-          <div class="cardapio-ornament-line" aria-hidden="true"></div>
-
-          ${item.descricao ? `
-            <p class="cardapio-item-desc">${esc(item.descricao)}</p>
-          ` : ''}
-          
-          ${item.composicao ? `
-            <div class="cardapio-badge-composicao">
-              <strong>Composição:</strong> ${esc(item.composicao)}
-            </div>
-          ` : ''}
-
-          ${item.distribuicao ? `
-            <div class="cardapio-badge-composicao">
-              <strong>Distribuição:</strong> ${esc(item.distribuicao)}
-            </div>
-          ` : ''}
-
-          <div class="cardapio-item-footer">
-            ${isPizzaCategory ? `
-              <button type="button" class="btn btn--primary btn--customizar-pizza" data-item-data="${itemJson}">
-                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                </svg>
-                <span>Montar Pizza</span>
-              </button>
-            ` : isBordasCategory ? `
-              <button type="button" class="btn btn--outline btn--gold btn--abrir-montador-borda">
-                <span>Escolher ao Montar Pizza</span>
-              </button>
-            ` : `
-              <button type="button" class="btn btn--primary btn--pedir-simples" data-item-data="${itemJson}">
-                <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
-                  <circle cx="9" cy="21" r="1"></circle>
-                  <circle cx="20" cy="21" r="1"></circle>
-                  <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                </svg>
-                <span>${item.preco ? 'Adicionar ao Carrinho' : 'Adicionar ao Pedido (A Confirmar)'}</span>
-              </button>
-            `}
-          </div>
-        </div>
-      </article>
-      `;
-    }).join('');
+    const itensGrid = (cat.itens || []).map(item => renderizarCardItem(item, cat.id)).join('');
 
     return `
     <div role="tabpanel" class="tab-panel ${idx === 0 ? 'active' : ''}" id="panel-${idx}" aria-labelledby="tab-${idx}">
@@ -226,6 +232,55 @@ export function renderCardapio(config, dadosCardapio) {
         </div>
       </div>
 
+      <!-- BARRA DE BUSCA EM TEMPO REAL POR PRODUTO E SABOR -->
+      <div class="cardapio-busca-wrapper" id="cardapio-busca-wrapper">
+        <div class="cardapio-busca-inner">
+          <div class="cardapio-busca-input-box">
+            <svg class="busca-icon-lupa" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input 
+              type="text" 
+              id="input-busca-cardapio" 
+              class="cardapio-busca-input" 
+              placeholder="Pesquisar pizza, esfiha, sabor, ingrediente... (ex: Calabresa, Frango, Carne, Doce)" 
+              autocomplete="off"
+              aria-label="Pesquisar no cardápio"
+            />
+            <button type="button" class="btn-limpar-busca" id="btn-limpar-busca-cardapio" style="display: none;" title="Limpar busca" aria-label="Limpar pesquisa">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Atalhos Rápidos (Chips) -->
+          <div class="cardapio-busca-chips">
+            <span class="chips-label">Sugestões:</span>
+            <button type="button" class="busca-chip" data-termo="Calabresa">Calabresa</button>
+            <button type="button" class="busca-chip" data-termo="Frango">Frango</button>
+            <button type="button" class="busca-chip" data-termo="Queijo">Queijo</button>
+            <button type="button" class="busca-chip" data-termo="Esfiha">Esfihas</button>
+            <button type="button" class="busca-chip" data-termo="Combo">Combos</button>
+            <button type="button" class="busca-chip" data-termo="Chocolate">Doces</button>
+            <button type="button" class="busca-chip" data-termo="Bebida">Bebidas</button>
+          </div>
+        </div>
+
+        <!-- Indicador de Status da Busca (exibido quando usuário digita) -->
+        <div class="cardapio-busca-status" id="cardapio-busca-status" style="display: none;">
+          <span id="cardapio-busca-contador"></span>
+          <button type="button" class="btn-voltar-categorias" id="btn-voltar-categorias">Ver todas as categorias</button>
+        </div>
+      </div>
+
+      <!-- PAINEL EXCLUSIVO DE RESULTADOS DA BUSCA -->
+      <div class="cardapio-busca-resultados" id="cardapio-busca-resultados" style="display: none;">
+        <div class="cardapio-grid" id="cardapio-busca-grid"></div>
+      </div>
+
       <!-- NAVEGAÇÃO RÁPIDA POR CATEGORIAS (STICKY NO SCROLL) -->
       <div class="cardapio-tabs-wrapper-sticky" id="cardapio-nav-sticky">
         <div class="cardapio-tabs-scroll-container">
@@ -236,7 +291,7 @@ export function renderCardapio(config, dadosCardapio) {
       </div>
 
       <!-- PAINÉIS DO CARDÁPIO COMPLETO -->
-      <div class="cardapio-paineis mt-8">
+      <div class="cardapio-paineis mt-8" id="cardapio-paineis-container">
         ${paineisHtml}
       </div>
 
@@ -255,9 +310,39 @@ export function renderCardapio(config, dadosCardapio) {
   `;
 }
 
-export function initCardapio(config) {
+export function initCardapio(config, dadosCardapio = dadosCardapioPadrao) {
   const tabs = document.querySelectorAll('.cardapio-tabs .tab-btn');
   const panels = document.querySelectorAll('.cardapio-paineis .tab-panel');
+  const inputBusca = document.querySelector('#input-busca-cardapio');
+  const btnLimparBusca = document.querySelector('#btn-limpar-busca-cardapio');
+  const chips = document.querySelectorAll('.busca-chip');
+  const buscaStatus = document.querySelector('#cardapio-busca-status');
+  const buscaContador = document.querySelector('#cardapio-busca-contador');
+  const btnVoltarCategorias = document.querySelector('#btn-voltar-categorias');
+  const painelResultados = document.querySelector('#cardapio-busca-resultados');
+  const gridResultados = document.querySelector('#cardapio-busca-grid');
+  const navTabsSticky = document.querySelector('#cardapio-nav-sticky');
+  const paineisContainer = document.querySelector('#cardapio-paineis-container');
+
+  // Coleta todos os itens do cardápio em um array único para busca instantânea
+  const todosItens = [];
+  (dadosCardapio?.categorias || []).forEach(cat => {
+    (cat.itens || []).forEach(item => {
+      todosItens.push({
+        ...item,
+        categoriaId: cat.id,
+        categoriaNome: cat.nome
+      });
+    });
+  });
+
+  const normalizar = (str) => {
+    return (str || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
+  };
 
   const animarCascataCards = (painel) => {
     if (!painel) return;
@@ -290,6 +375,7 @@ export function initCardapio(config) {
     });
   }
 
+  // Navegação por abas
   tabs.forEach((tab, index) => {
     tab.addEventListener('click', () => {
       tabs.forEach(t => {
@@ -313,46 +399,175 @@ export function initCardapio(config) {
     });
   });
 
-  // Botões de customização de pizza
-  document.querySelectorAll('.btn--customizar-pizza').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      try {
-        const itemData = JSON.parse(btn.dataset.itemData);
-        carrinho.abrirModalPizza(itemData);
-      } catch (err) {
-        carrinho.abrirModalPizza();
+  // ==========================================================================
+  // LÓGICA DA BARRA DE BUSCA EM TEMPO REAL
+  // ==========================================================================
+  const executarBusca = (termo) => {
+    const termoLimpo = termo.trim();
+    const termoNorm = normalizar(termoLimpo);
+
+    if (!termoNorm) {
+      limparBusca();
+      return;
+    }
+
+    if (btnLimparBusca) btnLimparBusca.style.display = 'flex';
+
+    const encontrados = todosItens.filter(item => {
+      const nomeNorm = normalizar(item.nome);
+      const descNorm = normalizar(item.descricao);
+      const tagNorm = normalizar(item.tag);
+      const compNorm = normalizar(item.composicao);
+      const distNorm = normalizar(item.distribuicao);
+      const catNorm = normalizar(item.categoriaNome);
+
+      return nomeNorm.includes(termoNorm) || 
+             descNorm.includes(termoNorm) || 
+             tagNorm.includes(termoNorm) ||
+             compNorm.includes(termoNorm) ||
+             distNorm.includes(termoNorm) ||
+             catNorm.includes(termoNorm);
+    });
+
+    // Oculta visualização padrão por abas
+    if (navTabsSticky) navTabsSticky.style.display = 'none';
+    if (paineisContainer) paineisContainer.style.display = 'none';
+
+    // Exibe painel de resultados e status
+    if (buscaStatus) buscaStatus.style.display = 'flex';
+    if (painelResultados) painelResultados.style.display = 'block';
+
+    if (encontrados.length > 0) {
+      if (buscaContador) {
+        buscaContador.innerHTML = `Encontramos <strong>${encontrados.length}</strong> produto(s) para "${esc(termoLimpo)}"`;
+      }
+      if (gridResultados) {
+        gridResultados.innerHTML = encontrados.map(item => renderizarCardItem(item, item.categoriaId)).join('');
+        animarCascataCards(gridResultados);
+      }
+    } else {
+      if (buscaContador) {
+        buscaContador.innerHTML = `Nenhum resultado para "${esc(termoLimpo)}"`;
+      }
+      if (gridResultados) {
+        gridResultados.innerHTML = `
+          <div class="busca-vazia-box">
+            <svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <h4>Nenhum produto encontrado para "${esc(termoLimpo)}"</h4>
+            <p>Tente buscar por outro sabor ou ingrediente, como Calabresa, Catupiry, Carne, Chocolate ou Coca-Cola.</p>
+            <button type="button" class="btn btn--outline btn--gold" id="btn-limpar-busca-vazio">
+              <span>Ver Todo o Cardápio</span>
+            </button>
+          </div>
+        `;
+
+        document.querySelector('#btn-limpar-busca-vazio')?.addEventListener('click', limparBusca);
+      }
+    }
+  };
+
+  const limparBusca = () => {
+    if (inputBusca) inputBusca.value = '';
+    if (btnLimparBusca) btnLimparBusca.style.display = 'none';
+    if (buscaStatus) buscaStatus.style.display = 'none';
+    if (painelResultados) painelResultados.style.display = 'none';
+    if (gridResultados) gridResultados.innerHTML = '';
+    
+    // Restaura visualização por abas
+    if (navTabsSticky) navTabsSticky.style.display = 'block';
+    if (paineisContainer) paineisContainer.style.display = 'block';
+
+    // Desmarca chips ativos
+    chips.forEach(c => c.classList.remove('active'));
+
+    const painelAtivo = document.querySelector('.cardapio-paineis .tab-panel.active');
+    if (painelAtivo) animarCascataCards(painelAtivo);
+  };
+
+  // Digitação em tempo real
+  inputBusca?.addEventListener('input', (e) => {
+    const digitado = e.target.value;
+    chips.forEach(c => c.classList.remove('active'));
+    executarBusca(digitado);
+  });
+
+  // Botões de limpar busca
+  btnLimparBusca?.addEventListener('click', () => {
+    limparBusca();
+    inputBusca?.focus();
+  });
+
+  btnVoltarCategorias?.addEventListener('click', () => {
+    limparBusca();
+  });
+
+  // Chips de atalho rápido
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const termo = chip.dataset.termo || '';
+      const jaAtivo = chip.classList.contains('active');
+
+      chips.forEach(c => c.classList.remove('active'));
+
+      if (jaAtivo) {
+        limparBusca();
+      } else {
+        chip.classList.add('active');
+        if (inputBusca) inputBusca.value = termo;
+        executarBusca(termo);
       }
     });
   });
 
-  // Botão de abrir modal de pizza a partir da aba de bordas
-  document.querySelectorAll('.btn--abrir-montador-borda').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.preventDefault();
-      carrinho.abrirModalPizza();
-    });
-  });
-
-  // Botões de itens simples (combos, esfihas, kits, bebidas)
-  document.querySelectorAll('.btn--pedir-simples').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+  // ==========================================================================
+  // DELEGAÇÃO DE EVENTOS DE AÇÃO DO CARDÁPIO (BOTÕES DE MONTAGEM E ADIÇÃO)
+  // ==========================================================================
+  const secaoCardapio = document.querySelector('#cardapio');
+  secaoCardapio?.addEventListener('click', (e) => {
+    // 1. Botão de Montar Pizza
+    const btnCustomizar = e.target.closest('.btn--customizar-pizza');
+    if (btnCustomizar) {
       e.preventDefault();
       try {
-        const itemData = JSON.parse(btn.dataset.itemData);
+        const itemData = JSON.parse(btnCustomizar.dataset.itemData);
+        carrinho.abrirModalPizza(itemData);
+      } catch (err) {
+        carrinho.abrirModalPizza();
+      }
+      return;
+    }
+
+    // 2. Botão de Escolher Borda (abre montador de pizza)
+    const btnBorda = e.target.closest('.btn--abrir-montador-borda');
+    if (btnBorda) {
+      e.preventDefault();
+      carrinho.abrirModalPizza();
+      return;
+    }
+
+    // 3. Botão de Pedir Item Simples (Esfihas, Combos, Bebidas)
+    const btnSimples = e.target.closest('.btn--pedir-simples');
+    if (btnSimples) {
+      e.preventDefault();
+      try {
+        const itemData = JSON.parse(btnSimples.dataset.itemData);
         carrinho.adicionarItemSimples(itemData, 1);
         carrinho.abrirModalCheckout();
       } catch (err) {
         console.error('Erro ao adicionar item simples:', err);
       }
-    });
-  });
+      return;
+    }
 
-  // Botões de abrir checkout
-  document.querySelectorAll('.btn--abrir-checkout').forEach(btn => {
-    btn.addEventListener('click', (e) => {
+    // 4. Botão de Abrir Checkout
+    const btnCheckout = e.target.closest('.btn--abrir-checkout');
+    if (btnCheckout) {
       e.preventDefault();
       carrinho.abrirModalCheckout();
-    });
+      return;
+    }
   });
 }

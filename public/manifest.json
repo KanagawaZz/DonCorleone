@@ -1,0 +1,26 @@
+{
+  "name": "Don Corleone — Cantina & Pizzaria",
+  "short_name": "Don Corleone",
+  "description": "Pizzas e esfihas artesanais na Cidade Alta (Cuiabá/MT). Sabor incomparável, delivery e retirada.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0C0A09",
+  "theme_color": "#0C0A09",
+  "categories": ["food", "shopping"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "48x48 72x72 96x96 144x144 192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/brand/brasao.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

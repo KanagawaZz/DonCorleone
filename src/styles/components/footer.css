@@ -48,6 +48,13 @@
   font-weight: 600;
 }
 
+.footer-pwa-wrap {
+  margin-top: calc(-1 * var(--space-6));
+  margin-bottom: var(--space-8);
+  display: flex;
+  justify-content: center;
+}
+
 /* Wordmark de Assinatura Don Corleone */
 .footer-wordmark-container {
   width: 100%;

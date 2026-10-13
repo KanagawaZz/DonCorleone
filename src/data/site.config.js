@@ -92,7 +92,14 @@ export const siteConfig = {
       avisoInstrucao: "Seu pedido entra em preparo assim que enviarmos a confirmação do comprovante. Envie o comprovante no WhatsApp."
     },
     bandeirasCartao: ["Visa", "Mastercard", "American Express", "Elo"],
-    tempoMedioEspera: "40 min"
+    tempoMedioEspera: "40 min",
+    tempoMedioRetirada: "20 a 35 min"
+  },
+
+  // Prazos e Tempos Operacionais
+  operacional: {
+    tempoRetirada: "20 a 35 min",
+    tempoEntrega: "40 a 60 min"
   },
 
   // Campanhas e Promoções Ativas (Sem promoções fictícias)

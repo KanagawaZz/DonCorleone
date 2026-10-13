@@ -22,10 +22,13 @@ import { calcularTaxaEntrega } from '../utils/entrega.js';
 import { gerarCodigoPedido } from '../utils/codigo-pedido.js';
 import { obterStatusFuncionamento } from '../utils/horario.js';
 import { obterPromocaoAtiva } from '../utils/promocao.js';
+import { ITENS_COMPRE_JUNTO } from '../data/compre-junto.js';
 
 const STORAGE_CLIENTE_KEY = 'don_corleone_cliente_v1';
 
 export function renderCarrinhoModal(config) {
+  const tempoRetirada = config?.operacional?.tempoRetirada || config?.pagamento?.tempoMedioRetirada || '20 a 35 min';
+
   return `
   <div class="pedido-modal-overlay" id="pedido-modal-overlay" data-lenis-prevent="true" aria-hidden="true">
     <div class="pedido-modal-container" id="pedido-modal-container" data-lenis-prevent="true" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
@@ -97,6 +100,21 @@ export function renderCarrinhoModal(config) {
             <div class="pedido-subtotal-bar">
               <span class="subtotal-label">Subtotal dos produtos:</span>
               <span class="subtotal-valor" id="subtotal-produtos-display">R$ 0,00</span>
+            </div>
+          </section>
+
+          <!-- SEÇÃO COMPRE JUNTO / UPSELL -->
+          <section class="pedido-secao secao-compre-junto" id="secao-compre-junto">
+            <div class="compre-junto-header">
+              <div class="compre-junto-title-wrap">
+                <span class="compre-junto-tag">Compre Junto</span>
+                <h4 class="compre-junto-titulo">Bebidas e Sobremesas Rápidas</h4>
+              </div>
+              <span class="compre-junto-dica">Adicione com 1 clique</span>
+            </div>
+            
+            <div class="compre-junto-slider" id="compre-junto-slider" tabindex="0" aria-label="Sugestões de bebidas e sobremesas">
+              <!-- Renderizado dinamicamente -->
             </div>
           </section>
 
@@ -176,7 +194,7 @@ export function renderCarrinhoModal(config) {
                   </div>
                   <div class="modalidade-textos">
                     <span class="modalidade-titulo">Retirada no Balcão</span>
-                    <span class="modalidade-desc">Unidade Cidade Alta (Taxa R$ 0)</span>
+                    <span class="modalidade-desc">Unidade Cidade Alta (Taxa R$ 0) · ${tempoRetirada}</span>
                   </div>
                   <div class="modalidade-check-indicator"></div>
                 </div>
@@ -301,6 +319,13 @@ export function renderCarrinhoModal(config) {
                 <h4>Unidade Cidade Alta</h4>
                 <p><strong>Endereço:</strong> Avenida Brasil, 2055, Cidade Alta, Cuiabá - MT (CEP 78030-409)</p>
                 <p class="mt-1"><strong>Expediente:</strong> Seg a Qui: 17h30 às 23h00 · Sex e Dom: 17h30 às 23h15 · Sáb: 17h30 às 23h30</p>
+                <div class="balcao-tempo-box">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                  <span><strong>Tempo médio até ficar pronto:</strong> ${tempoRetirada}</span>
+                </div>
                 <div class="form-campo mt-3">
                   <label for="retirada-horario" class="form-label">Horário pretendido para retirada (opcional)</label>
                   <input type="text" id="retirada-horario" name="retirada_horario" class="form-input" placeholder="Ex: Em 30 minutos / Às 20:30" />
@@ -534,6 +559,7 @@ export function initCarrinhoModal(config) {
   const footerTotalValor = document.querySelector('#footer-total-valor');
   const footerTaxaAviso = document.querySelector('#footer-taxa-aviso');
   const revisaoBox = document.querySelector('#revisao-card-box');
+  const sliderCompreJunto = document.querySelector('#compre-junto-slider');
 
   // Elementos do Bloqueio de Horário
   const avisoFechado = document.querySelector('#aviso-fechado-checkout');
@@ -622,26 +648,36 @@ export function initCarrinhoModal(config) {
     }
   }
 
-  function salvarDadosCliente(dados) {
+  function salvarDadosCliente(dadosParam) {
     if (!checkLembrarDados?.checked) return;
     try {
+      const dados = dadosParam || (typeof obterDadosFormulario === 'function' ? obterDadosFormulario() : null);
       const paraSalvar = {
-        nome: dados.cliente.nome,
-        telefone: dados.cliente.telefone,
-        rua: dados.endereco.logradouro,
-        numero: dados.endereco.numero,
+        nome: dados?.cliente?.nome || inputNome?.value?.trim() || '',
+        telefone: dados?.cliente?.telefone || inputTelefone?.value?.trim() || '',
+        rua: dados?.endereco?.logradouro || inputRua?.value?.trim() || '',
+        numero: dados?.endereco?.numero || inputNumero?.value?.trim() || '',
         bairro: inputBairroHidden?.value || inputBairroBusca?.value || '',
         bairroOutro: inputOutroBairro?.value?.trim() || '',
-        complemento: dados.endereco.complemento,
-        referencia: dados.endereco.referencia,
-        cep: dados.endereco.cep
+        complemento: dados?.endereco?.complemento || inputComplemento?.value?.trim() || '',
+        referencia: dados?.endereco?.referencia || inputReferencia?.value?.trim() || '',
+        cep: dados?.endereco?.cep || inputCep?.value?.trim() || ''
       };
-      localStorage.setItem(STORAGE_CLIENTE_KEY, JSON.stringify(paraSalvar));
-      if (btnLimparDados) btnLimparDados.style.display = 'inline-block';
+
+      const temDado = Object.values(paraSalvar).some(v => Boolean(v));
+      if (temDado) {
+        localStorage.setItem(STORAGE_CLIENTE_KEY, JSON.stringify(paraSalvar));
+        if (btnLimparDados) btnLimparDados.style.display = 'inline-block';
+      }
     } catch (e) {
       console.warn('Não foi possível salvar dados no localStorage:', e);
     }
   }
+
+  // Auto-salvar dados do cliente e endereço conforme o usuário preenche
+  [inputNome, inputTelefone, inputCep, inputRua, inputNumero, inputComplemento, inputReferencia, inputOutroBairro].forEach(el => {
+    el?.addEventListener('change', () => salvarDadosCliente());
+  });
 
   // Botão Limpar Dados
   btnLimparDados?.addEventListener('click', () => {
@@ -784,6 +820,7 @@ export function initCarrinhoModal(config) {
     if (elErro) elErro.textContent = '';
     fecharDropdownBairros();
     atualizarRevisao();
+    salvarDadosCliente();
   }
 
   function desbloquearModoBairro() {
@@ -840,6 +877,7 @@ export function initCarrinhoModal(config) {
     if (elErro) elErro.textContent = '';
     fecharDropdownBairros();
     atualizarRevisao();
+    salvarDadosCliente();
   }
 
   function renderizarOpcoesBairro(filtro = '') {
@@ -1075,6 +1113,7 @@ export function initCarrinhoModal(config) {
       }
 
       atualizarRevisao();
+      salvarDadosCliente();
     } catch (err) {
       console.warn('Erro ao consultar ViaCEP:', err);
       if (cepFeedbackMsg) {
@@ -1299,7 +1338,52 @@ export function initCarrinhoModal(config) {
     }
 
     if (subtotalDisplay) subtotalDisplay.textContent = formatarPreco(subtotal);
+    renderizarCompreJunto();
     atualizarRevisao();
+  }
+
+  // 5.1 RENDERIZAÇÃO DA SEÇÃO COMPRE JUNTO (UPSELL RÁPIDO)
+  function renderizarCompreJunto() {
+    if (!sliderCompreJunto) return;
+    const itensCarrinho = carrinho.obterItens();
+
+    sliderCompreJunto.innerHTML = ITENS_COMPRE_JUNTO.map(item => {
+      const itemNoCarrinho = itensCarrinho.find(i => i.idProduto === item.id || (i.tipo === 'simples' && i.nome === item.nome));
+      const qtdNoCarrinho = itemNoCarrinho ? itemNoCarrinho.quantidade : 0;
+      const jaAdicionado = qtdNoCarrinho > 0;
+
+      const btnLabel = jaAdicionado ? `+1 Mais (${qtdNoCarrinho})` : '+ Adicionar';
+      const btnClass = jaAdicionado ? 'btn-compre-junto-add is-added' : 'btn-compre-junto-add';
+
+      return `
+      <div class="compre-junto-card ${jaAdicionado ? 'ja-adicionado' : ''}" data-produto-id="${item.id}">
+        <div class="compre-junto-card-top">
+          <span class="compre-junto-badge-cat">${esc(item.categoriaLabel)}</span>
+          <span class="compre-junto-icon">${icone(item.icone, 16)}</span>
+        </div>
+        <h5 class="compre-junto-card-nome">${esc(item.nome)}</h5>
+        <p class="compre-junto-card-sub">${esc(item.subtitulo)}</p>
+        <div class="compre-junto-card-footer">
+          <span class="compre-junto-preco">${formatarPreco(item.preco)}</span>
+          <button type="button" class="${btnClass}" data-action="quick-add" data-id="${item.id}" aria-label="Adicionar ${esc(item.nome)} ao pedido">
+            ${jaAdicionado ? icone('check', 13) : icone('mais', 13)}
+            <span>${btnLabel}</span>
+          </button>
+        </div>
+      </div>
+      `;
+    }).join('');
+
+    sliderCompreJunto.querySelectorAll('[data-action="quick-add"]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const idProd = btn.dataset.id;
+        const produto = ITENS_COMPRE_JUNTO.find(p => p.id === idProd);
+        if (produto) {
+          carrinho.adicionarItemSimples(produto, 1);
+        }
+      });
+    });
   }
 
   // 6. EXTRAÇÃO DOS DADOS DO FORMULÁRIO COM TAXA E PROMOÇÃO
@@ -1353,6 +1437,7 @@ export function initCarrinhoModal(config) {
       },
       retirada: {
         unidade: 'Avenida Brasil, 2055, Cidade Alta, Cuiabá - MT',
+        tempoEstimado: config.operacional?.tempoRetirada || config.pagamento?.tempoMedioRetirada || '20 a 35 min',
         horarioPretendido: inputRetiradaHorario?.value?.trim() || ''
       },
       pagamento: {
@@ -1372,11 +1457,12 @@ export function initCarrinhoModal(config) {
     const desconto = dados.promocaoInfo.desconto || 0;
     const subtotalComDesconto = Math.max(0, subtotal - desconto);
     const pedidoMinimo = config.pagamento?.pedidoMinimo || 22.00;
+    const tempoRetiradaPadrao = config.operacional?.tempoRetirada || config.pagamento?.tempoMedioRetirada || '20 a 35 min';
 
     // Texto dinâmico de taxa
     if (avisoTaxaDinamica) {
       if (dados.modalidade === 'retirada') {
-        avisoTaxaDinamica.innerHTML = '<strong>Retirada no balcão:</strong> sem taxa de entrega (R$ 0,00).';
+        avisoTaxaDinamica.innerHTML = `<strong>Retirada no balcão:</strong> sem taxa de entrega (R$ 0,00) · <strong>Tempo médio:</strong> ${tempoRetiradaPadrao}.`;
       } else {
         if (dados.entregaInfo.statusTaxa === 'definida') {
           avisoTaxaDinamica.innerHTML = `<strong>Taxa para ${esc(dados.entregaInfo.bairro)}:</strong> ${formatarPreco(dados.entregaInfo.taxa)}`;
@@ -1426,6 +1512,10 @@ export function initCarrinhoModal(config) {
         <div class="rev-linha">
           <span class="rev-label">Modalidade:</span>
           <span class="rev-val">Retirada no balcão (Cidade Alta)</span>
+        </div>
+        <div class="rev-linha">
+          <span class="rev-label">Tempo médio de preparo:</span>
+          <span class="rev-val text-gold">${tempoRetiradaPadrao}</span>
         </div>
       `;
       taxaLinhaHtml = `
@@ -1480,7 +1570,7 @@ export function initCarrinhoModal(config) {
 
     if (dados.modalidade === 'retirada') {
       totalDisplayTexto = formatarPreco(subtotalComDesconto);
-      footerAvisoTexto = temItensSobConsulta ? 'Retirada · + itens a confirmar' : 'Retirada no balcão';
+      footerAvisoTexto = temItensSobConsulta ? `Retirada (${tempoRetiradaPadrao}) · + itens a confirmar` : `Retirada no balcão · Pronto em ${tempoRetiradaPadrao}`;
     } else if (dados.entregaInfo.statusTaxa === 'definida') {
       const totalComTaxa = subtotalComDesconto + dados.entregaInfo.taxa;
       totalDisplayTexto = formatarPreco(totalComTaxa);
@@ -1711,7 +1801,10 @@ export function initCarrinhoModal(config) {
       if (posPixCard) posPixCard.style.display = 'none';
       if (posOutrosCard) posOutrosCard.style.display = 'block';
       if (posOutrosMsg) {
-        posOutrosMsg.textContent = `Pedido enviado! A atendente vai confirmar em instantes. Tempo médio: ${config.pagamento?.tempoMedioEspera || '40 min'}.`;
+        const tempoMsg = dados.modalidade === 'retirada'
+          ? (config.operacional?.tempoRetirada || config.pagamento?.tempoMedioRetirada || '20 a 35 min')
+          : (config.pagamento?.tempoMedioEspera || '40 min');
+        posOutrosMsg.textContent = `Pedido enviado! A cantina vai confirmar em instantes. Tempo médio: ${tempoMsg}.`;
       }
     }
 

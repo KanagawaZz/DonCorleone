@@ -181,6 +181,8 @@ export function montarMensagemWhatsApp(dados = {}) {
   } else {
     linhas.push('RETIRADA NO BALCÃO');
     linhas.push(`Local: ${retirada.unidade || 'Avenida Brasil, 2055, Cidade Alta, Cuiabá - MT'}`);
+    const tempoRetiradaTxt = retirada.tempoEstimado || '20 a 35 min';
+    linhas.push(`Tempo médio de preparo: ${tempoRetiradaTxt}`);
     if (retirada.horarioPretendido?.trim()) {
       linhas.push(`Horário pretendido: ${retirada.horarioPretendido.trim()}`);
     }
