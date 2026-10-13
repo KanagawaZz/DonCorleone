@@ -18,7 +18,7 @@ import { formatarTituloPizza } from '../utils/calculo-pizza.js';
 import { gerarLinkWhatsAppPedido, montarMensagemWhatsApp } from '../utils/whatsapp-order.js';
 import { pararLenis, retomarLenis } from '../utils/motion.js';
 import bairrosLista from '../data/bairros.json';
-import { calcularTaxaEntrega, obterBairrosAgrupadosPorCidade } from '../utils/entrega.js';
+import { calcularTaxaEntrega } from '../utils/entrega.js';
 import { gerarCodigoPedido } from '../utils/codigo-pedido.js';
 import { obterStatusFuncionamento } from '../utils/horario.js';
 import { obterPromocaoAtiva } from '../utils/promocao.js';
@@ -26,16 +26,6 @@ import { obterPromocaoAtiva } from '../utils/promocao.js';
 const STORAGE_CLIENTE_KEY = 'don_corleone_cliente_v1';
 
 export function renderCarrinhoModal(config) {
-  const bairrosAgrupados = obterBairrosAgrupadosPorCidade(bairrosLista);
-  
-  // Opções do Select de Bairro agrupadas por cidade
-  const optgroupsHtml = Object.entries(bairrosAgrupados).map(([cidade, lista]) => {
-    const options = lista.map(b => `
-      <option value="${esc(b.bairro)}" data-taxa="${b.taxa}">${esc(b.bairro)} — ${formatarPreco(b.taxa)}</option>
-    `).join('');
-    return `<optgroup label="${esc(cidade)}">${options}</optgroup>`;
-  }).join('');
-
   return `
   <div class="pedido-modal-overlay" id="pedido-modal-overlay" data-lenis-prevent="true" aria-hidden="true">
     <div class="pedido-modal-container" id="pedido-modal-container" data-lenis-prevent="true" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
@@ -196,36 +186,73 @@ export function renderCarrinhoModal(config) {
             <!-- Bloco Condicional: Campos de Endereço para Entrega -->
             <div class="condicional-bloco" id="bloco-endereco-entrega">
               
-              <!-- Alerta Dinâmico da Taxa do Bairro -->
-              <div class="aviso-taxa-entrega" id="aviso-taxa-dinamica">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <line x1="12" y1="8" x2="12" y2="12"></line>
-                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                </svg>
-                <span id="texto-taxa-dinamica"><strong>Taxa de entrega:</strong> selecione seu bairro abaixo para calcular.</span>
+              <!-- CEP com Busca Automática no ViaCEP -->
+              <div class="form-campo form-campo-cep mb-3">
+                <label for="entrega-cep" class="form-label">
+                  CEP <span class="campo-dica">(preenche rua e bairro automaticamente)</span>
+                </label>
+                <div class="cep-input-group">
+                  <input 
+                    type="tel" 
+                    id="entrega-cep" 
+                    name="entrega_cep" 
+                    class="form-input" 
+                    placeholder="Ex: 78030-409" 
+                    maxlength="9" 
+                    autocomplete="postal-code" 
+                  />
+                  <button type="button" class="btn-cep-consultar" id="btn-cep-consultar" title="Buscar endereço pelo CEP">
+                    <svg class="cep-icon-search" viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    <span id="cep-status-texto">Buscar</span>
+                  </button>
+                </div>
+                <span class="form-cep-feedback" id="cep-feedback-msg"></span>
               </div>
 
-              <!-- Seleção de Bairro agrupado por cidade -->
-              <div class="form-campo mt-3">
-                <label for="entrega-bairro-select" class="form-label">
+              <!-- Bairro de Entrega com Busca por Digitação (Searchable Combobox) -->
+              <div class="form-campo mt-3 bairro-search-wrapper" id="bairro-search-wrapper">
+                <label for="entrega-bairro-input" class="form-label">
                   Bairro de Entrega <span class="campo-obrigatorio">*</span>
                 </label>
-                <select id="entrega-bairro-select" name="entrega_bairro_select" class="form-input form-select" required>
-                  <option value="">Selecione o bairro de entrega...</option>
-                  ${optgroupsHtml}
-                  <option value="outro">Outro bairro (a confirmar com a atendente)</option>
-                </select>
+                <div class="bairro-input-container">
+                  <input 
+                    type="text" 
+                    id="entrega-bairro-input" 
+                    name="entrega_bairro_input" 
+                    class="form-input" 
+                    placeholder="Digite seu bairro (ex: Cidade Alta, Goiabeiras...)" 
+                    autocomplete="off" 
+                    required 
+                  />
+                  <button type="button" class="btn-dropdown-arrow" id="btn-dropdown-arrow" aria-label="Abrir lista de bairros">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  </button>
+                </div>
+
+                <!-- Dropdown Flutuante de Bairros Filtrados -->
+                <div class="bairros-dropdown-list" id="bairros-dropdown-list" style="display: none;"></div>
+
+                <input type="hidden" id="entrega-bairro-hidden" value="" />
                 <span class="form-erro" id="erro-entrega-bairro"></span>
               </div>
 
               <!-- Campo que aparece se o usuário escolher "Outro bairro" -->
               <div class="form-campo mt-2" id="campo-outro-bairro" style="display: none;">
                 <label for="entrega-bairro-outro" class="form-label">
-                  Qual é o seu bairro? <span class="campo-obrigatorio">*</span>
+                  Nome do seu bairro <span class="campo-obrigatorio">*</span>
                 </label>
                 <input type="text" id="entrega-bairro-outro" name="entrega_bairro_outro" class="form-input" placeholder="Digite o nome do seu bairro..." />
                 <span class="form-help-subtle">A taxa para este bairro será confirmada pela atendente via WhatsApp.</span>
+              </div>
+
+              <!-- Alerta Dinâmico da Taxa do Bairro -->
+              <div class="aviso-taxa-entrega mt-3" id="aviso-taxa-dinamica">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <span id="texto-taxa-dinamica"><strong>Taxa de entrega:</strong> informe o CEP ou digite seu bairro acima para calcular.</span>
               </div>
 
               <div class="form-grid-3 mt-3">
@@ -258,16 +285,9 @@ export function renderCarrinhoModal(config) {
                 </div>
               </div>
 
-              <div class="form-grid-2 mt-3">
-                <div class="form-campo">
-                  <label for="entrega-cidade" class="form-label">Cidade</label>
-                  <input type="text" id="entrega-cidade" name="entrega_cidade" class="form-input" value="Cuiabá / Várzea Grande — MT" readonly />
-                </div>
-
-                <div class="form-campo">
-                  <label for="entrega-cep" class="form-label">CEP (opcional)</label>
-                  <input type="text" id="entrega-cep" name="entrega_cep" class="form-input" placeholder="Ex: 78030-409" />
-                </div>
+              <div class="form-campo mt-3">
+                <label for="entrega-cidade" class="form-label">Cidade / Região</label>
+                <input type="text" id="entrega-cidade" name="entrega_cidade" class="form-input" value="Cuiabá / Várzea Grande — MT" readonly />
               </div>
             </div>
 
@@ -517,7 +537,13 @@ export function initCarrinhoModal(config) {
   const avisoFechadoMensagem = document.querySelector('#aviso-fechado-mensagem');
 
   // Elementos de Endereço & Bairros
-  const selectBairro = document.querySelector('#entrega-bairro-select');
+  const inputCep = document.querySelector('#entrega-cep');
+  const btnCepConsultar = document.querySelector('#btn-cep-consultar');
+  const cepFeedbackMsg = document.querySelector('#cep-feedback-msg');
+  const inputBairroBusca = document.querySelector('#entrega-bairro-input');
+  const inputBairroHidden = document.querySelector('#entrega-bairro-hidden');
+  const btnBairroArrow = document.querySelector('#btn-dropdown-arrow');
+  const dropdownBairros = document.querySelector('#bairros-dropdown-list');
   const campoOutroBairro = document.querySelector('#campo-outro-bairro');
   const inputOutroBairro = document.querySelector('#entrega-bairro-outro');
   const avisoTaxaDinamica = document.querySelector('#texto-taxa-dinamica');
@@ -535,7 +561,6 @@ export function initCarrinhoModal(config) {
   const inputNumero = document.querySelector('#entrega-numero');
   const inputComplemento = document.querySelector('#entrega-complemento');
   const inputReferencia = document.querySelector('#entrega-referencia');
-  const inputCep = document.querySelector('#entrega-cep');
   const inputRetiradaHorario = document.querySelector('#retirada-horario');
 
   const radiosPagamento = document.querySelectorAll('input[name="forma_pagamento"]');
@@ -576,9 +601,10 @@ export function initCarrinhoModal(config) {
           if (dados.referencia && inputReferencia) inputReferencia.value = dados.referencia;
           if (dados.cep && inputCep) inputCep.value = dados.cep;
 
-          if (dados.bairro && selectBairro) {
-            selectBairro.value = dados.bairro;
-            if (selectBairro.value === 'outro') {
+          if (dados.bairro) {
+            if (inputBairroBusca) inputBairroBusca.value = dados.bairro;
+            if (inputBairroHidden) inputBairroHidden.value = dados.bairro;
+            if (dados.bairro === 'outro' || dados.bairroOutro) {
               if (campoOutroBairro) campoOutroBairro.style.display = 'block';
               if (inputOutroBairro && dados.bairroOutro) inputOutroBairro.value = dados.bairroOutro;
             }
@@ -600,7 +626,7 @@ export function initCarrinhoModal(config) {
         telefone: dados.cliente.telefone,
         rua: dados.endereco.logradouro,
         numero: dados.endereco.numero,
-        bairro: selectBairro?.value || '',
+        bairro: inputBairroHidden?.value || inputBairroBusca?.value || '',
         bairroOutro: inputOutroBairro?.value?.trim() || '',
         complemento: dados.endereco.complemento,
         referencia: dados.endereco.referencia,
@@ -624,9 +650,14 @@ export function initCarrinhoModal(config) {
       if (inputComplemento) inputComplemento.value = '';
       if (inputReferencia) inputReferencia.value = '';
       if (inputCep) inputCep.value = '';
-      if (selectBairro) selectBairro.value = '';
+      if (inputBairroBusca) inputBairroBusca.value = '';
+      if (inputBairroHidden) inputBairroHidden.value = '';
       if (inputOutroBairro) inputOutroBairro.value = '';
       if (campoOutroBairro) campoOutroBairro.style.display = 'none';
+      if (cepFeedbackMsg) {
+        cepFeedbackMsg.textContent = '';
+        cepFeedbackMsg.className = 'form-cep-feedback';
+      }
 
       btnLimparDados.style.display = 'none';
       atualizarRevisao();
@@ -696,21 +727,271 @@ export function initCarrinhoModal(config) {
     });
   }
 
-  // 4. TAXA DE ENTREGA POR BAIRRO (TAREFA 1)
-  selectBairro?.addEventListener('change', () => {
-    const val = selectBairro.value;
-    if (val === 'outro') {
-      if (campoOutroBairro) campoOutroBairro.style.display = 'block';
-    } else {
-      if (campoOutroBairro) campoOutroBairro.style.display = 'none';
+  // 4. NORMALIZAÇÃO E BUSCA INTELIGENTE DE BAIRROS
+  function normalizarTexto(str) {
+    return (str || '')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
+  }
+
+  function encontrarBairroCorrespondente(termo) {
+    const tNorm = normalizarTexto(termo);
+    if (!tNorm) return null;
+
+    let encontrado = bairrosLista.find(b => normalizarTexto(b.bairro) === tNorm);
+    if (encontrado) return encontrado;
+
+    encontrado = bairrosLista.find(b => {
+      const bNorm = normalizarTexto(b.bairro);
+      return bNorm.includes(tNorm) || tNorm.includes(bNorm);
+    });
+    return encontrado || null;
+  }
+
+  function renderizarOpcoesBairro(filtro = '') {
+    if (!dropdownBairros) return;
+    const filtroNorm = normalizarTexto(filtro);
+
+    let filtrados = bairrosLista;
+    if (filtroNorm) {
+      filtrados = bairrosLista.filter(b => {
+        const bNorm = normalizarTexto(b.bairro);
+        const cNorm = normalizarTexto(b.cidade);
+        return bNorm.includes(filtroNorm) || cNorm.includes(filtroNorm);
+      });
     }
-    atualizarRevisao();
+
+    let html = '';
+
+    if (filtrados.length === 0) {
+      html += `
+        <div class="bairro-sem-resultado">
+          Nenhum bairro cadastrado encontrado para "<strong>${esc(filtro)}</strong>".
+        </div>
+      `;
+    } else {
+      html += filtrados.map(b => `
+        <div class="bairro-dropdown-item" data-bairro="${esc(b.bairro)}" data-taxa="${b.taxa}">
+          <div class="bairro-item-info">
+            <span class="bairro-item-nome">${esc(b.bairro)}</span>
+            <span class="bairro-item-cidade">${esc(b.cidade)}</span>
+          </div>
+          <span class="bairro-item-taxa">${formatarPreco(b.taxa)}</span>
+        </div>
+      `).join('');
+    }
+
+    html += `
+      <div class="bairro-dropdown-item bairro-item-outro" data-bairro="outro">
+        <div class="bairro-item-info">
+          <span class="bairro-item-nome">Outro bairro não listado...</span>
+          <span class="bairro-item-cidade">Cuiabá / Várzea Grande</span>
+        </div>
+        <span class="bairro-item-taxa" style="font-size: 0.72rem;">A confirmar</span>
+      </div>
+    `;
+
+    dropdownBairros.innerHTML = html;
+
+    dropdownBairros.querySelectorAll('.bairro-dropdown-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const bNome = item.dataset.bairro;
+        if (bNome === 'outro') {
+          if (inputBairroBusca) inputBairroBusca.value = 'Outro bairro';
+          if (inputBairroHidden) inputBairroHidden.value = 'outro';
+          if (campoOutroBairro) {
+            campoOutroBairro.style.display = 'block';
+            inputOutroBairro?.focus();
+          }
+        } else {
+          if (inputBairroBusca) inputBairroBusca.value = bNome;
+          if (inputBairroHidden) inputBairroHidden.value = bNome;
+          if (campoOutroBairro) campoOutroBairro.style.display = 'none';
+        }
+        fecharDropdownBairros();
+        atualizarRevisao();
+      });
+    });
+  }
+
+  function abrirDropdownBairros(filtro = '') {
+    renderizarOpcoesBairro(filtro);
+    if (dropdownBairros) dropdownBairros.style.display = 'block';
+    btnBairroArrow?.classList.add('is-open');
+  }
+
+  function fecharDropdownBairros() {
+    if (dropdownBairros) dropdownBairros.style.display = 'none';
+    btnBairroArrow?.classList.remove('is-open');
+  }
+
+  // Ouvintes da Busca de Bairro por Digitação
+  if (inputBairroBusca) {
+    inputBairroBusca.addEventListener('input', (e) => {
+      const digitado = e.target.value;
+      if (inputBairroHidden) inputBairroHidden.value = '';
+      abrirDropdownBairros(digitado);
+
+      // Se coincidir exatamente com algum bairro
+      const encontrado = encontrarBairroCorrespondente(digitado);
+      if (encontrado && normalizarTexto(encontrado.bairro) === normalizarTexto(digitado)) {
+        if (inputBairroHidden) inputBairroHidden.value = encontrado.bairro;
+      }
+      atualizarRevisao();
+    });
+
+    inputBairroBusca.addEventListener('focus', () => {
+      abrirDropdownBairros(inputBairroBusca.value);
+    });
+
+    inputBairroBusca.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        const primeiroItem = dropdownBairros?.querySelector('.bairro-dropdown-item');
+        if (primeiroItem) {
+          primeiroItem.click();
+        } else {
+          fecharDropdownBairros();
+        }
+      } else if (e.key === 'Escape') {
+        fecharDropdownBairros();
+      }
+    });
+  }
+
+  btnBairroArrow?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    if (dropdownBairros?.style.display === 'block') {
+      fecharDropdownBairros();
+    } else {
+      abrirDropdownBairros(inputBairroBusca?.value || '');
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('#bairro-search-wrapper')) {
+      fecharDropdownBairros();
+    }
   });
 
   inputOutroBairro?.addEventListener('input', atualizarRevisao);
 
+  // 5. CONSULTA AUTOMÁTICA DE CEP (VIACEP)
+  async function consultarCep(cepValor) {
+    const cepLimpo = (cepValor || '').replace(/\D/g, '');
+    if (cepLimpo.length !== 8) {
+      if (cepFeedbackMsg) {
+        cepFeedbackMsg.className = 'form-cep-feedback erro';
+        cepFeedbackMsg.textContent = 'Informe um CEP válido com 8 números.';
+      }
+      return;
+    }
+
+    if (btnCepConsultar) {
+      btnCepConsultar.disabled = true;
+      const statusTxt = btnCepConsultar.querySelector('#cep-status-texto');
+      if (statusTxt) statusTxt.textContent = 'Buscando...';
+    }
+    if (cepFeedbackMsg) {
+      cepFeedbackMsg.className = 'form-cep-feedback buscando';
+      cepFeedbackMsg.textContent = 'Consultando CEP no ViaCEP...';
+    }
+
+    try {
+      const resp = await fetch(`https://viacep.com.br/ws/${cepLimpo}/json/`);
+      const dados = await resp.json();
+
+      if (dados.erro) {
+        if (cepFeedbackMsg) {
+          cepFeedbackMsg.className = 'form-cep-feedback erro';
+          cepFeedbackMsg.textContent = 'CEP não encontrado. Preencha os campos abaixo manualmente.';
+        }
+        return;
+      }
+
+      // Preenche Rua / Avenida
+      if (inputRua && dados.logradouro) {
+        inputRua.value = dados.logradouro;
+        inputRua.classList.remove('input-invalido');
+      }
+
+      // Preenche Cidade
+      const inputCidade = document.querySelector('#entrega-cidade');
+      if (inputCidade && dados.localidade) {
+        inputCidade.value = `${dados.localidade} — ${dados.uf || 'MT'}`;
+      }
+
+      // Preenche Bairro e sincroniza com a taxa
+      if (dados.bairro) {
+        const correspondente = encontrarBairroCorrespondente(dados.bairro);
+        if (correspondente) {
+          if (inputBairroBusca) inputBairroBusca.value = correspondente.bairro;
+          if (inputBairroHidden) inputBairroHidden.value = correspondente.bairro;
+          if (campoOutroBairro) campoOutroBairro.style.display = 'none';
+        } else {
+          if (inputBairroBusca) inputBairroBusca.value = dados.bairro;
+          if (inputBairroHidden) inputBairroHidden.value = 'outro';
+          if (inputOutroBairro) inputOutroBairro.value = dados.bairro;
+          if (campoOutroBairro) campoOutroBairro.style.display = 'block';
+        }
+      }
+
+      if (cepFeedbackMsg) {
+        cepFeedbackMsg.className = 'form-cep-feedback sucesso';
+        cepFeedbackMsg.textContent = `✓ Endereço carregado: ${dados.logradouro ? dados.logradouro + ', ' : ''}${dados.bairro} (${dados.localidade})`;
+      }
+
+      // Direciona o foco para o número
+      if (inputNumero && !inputNumero.value) {
+        inputNumero.focus();
+      }
+
+      atualizarRevisao();
+    } catch (err) {
+      console.warn('Erro ao consultar ViaCEP:', err);
+      if (cepFeedbackMsg) {
+        cepFeedbackMsg.className = 'form-cep-feedback erro';
+        cepFeedbackMsg.textContent = 'Não foi possível consultar o CEP no momento. Preencha manualmente.';
+      }
+    } finally {
+      if (btnCepConsultar) {
+        btnCepConsultar.disabled = false;
+        const statusTxt = btnCepConsultar.querySelector('#cep-status-texto');
+        if (statusTxt) statusTxt.textContent = 'Buscar';
+      }
+    }
+  }
+
+  // Ouvintes do CEP
+  if (inputCep) {
+    inputCep.addEventListener('input', (e) => {
+      let v = e.target.value.replace(/\D/g, '');
+      if (v.length > 8) v = v.slice(0, 8);
+      if (v.length > 5) {
+        v = `${v.slice(0, 5)}-${v.slice(5)}`;
+      }
+      e.target.value = v;
+
+      const limpo = v.replace(/\D/g, '');
+      if (limpo.length === 8) {
+        consultarCep(limpo);
+      } else if (cepFeedbackMsg && limpo.length === 0) {
+        cepFeedbackMsg.textContent = '';
+        cepFeedbackMsg.className = 'form-cep-feedback';
+      }
+      atualizarRevisao();
+    });
+  }
+
+  btnCepConsultar?.addEventListener('click', () => {
+    consultarCep(inputCep?.value || '');
+  });
+
   // Ouvintes nos demais inputs para reatividade
-  [inputNome, inputRua, inputNumero, inputComplemento, inputReferencia, inputRetiradaHorario, inputObs, inputCep].forEach(input => {
+  [inputNome, inputRua, inputNumero, inputComplemento, inputReferencia, inputRetiradaHorario, inputObs].forEach(input => {
     input?.addEventListener('input', atualizarRevisao);
   });
 
@@ -902,14 +1183,15 @@ export function initCarrinhoModal(config) {
     const formaPag = document.querySelector('input[name="forma_pagamento"]:checked')?.value || 'pix';
     const precisaTroco = document.querySelector('input[name="precisa_troco"]:checked')?.value || 'nao';
 
-    const bairroSel = selectBairro?.value || '';
-    let bairroFinal = bairroSel;
-    if (bairroSel === 'outro') {
-      bairroFinal = inputOutroBairro?.value?.trim() || 'Outro bairro (a confirmar)';
+    const bairroInputVal = inputBairroBusca?.value?.trim() || '';
+    const bairroHiddenVal = inputBairroHidden?.value?.trim() || '';
+    let bairroFinal = bairroHiddenVal || bairroInputVal;
+    if (bairroHiddenVal === 'outro' || !bairroFinal) {
+      bairroFinal = inputOutroBairro?.value?.trim() || bairroInputVal || 'Outro bairro (a confirmar)';
     }
 
-    const entregaInfo = calcularTaxaEntrega(modalidade, bairroSel, bairrosLista);
-    if (bairroSel === 'outro' && inputOutroBairro?.value?.trim()) {
+    const entregaInfo = calcularTaxaEntrega(modalidade, bairroFinal, bairrosLista);
+    if ((bairroHiddenVal === 'outro' || entregaInfo.statusTaxa === 'a_confirmar') && inputOutroBairro?.value?.trim()) {
       entregaInfo.bairro = inputOutroBairro.value.trim();
     }
 
@@ -973,10 +1255,11 @@ export function initCarrinhoModal(config) {
       } else {
         if (dados.entregaInfo.statusTaxa === 'definida') {
           avisoTaxaDinamica.innerHTML = `<strong>Taxa para ${esc(dados.entregaInfo.bairro)}:</strong> ${formatarPreco(dados.entregaInfo.taxa)}`;
-        } else if (selectBairro?.value === 'outro') {
-          avisoTaxaDinamica.innerHTML = '<strong>Outro bairro:</strong> taxa a confirmar com a atendente via WhatsApp.';
+        } else if (dados.entregaInfo.statusTaxa === 'a_confirmar' && (inputBairroBusca?.value?.trim() || inputOutroBairro?.value?.trim())) {
+          const bNomeAviso = inputOutroBairro?.value?.trim() || inputBairroBusca?.value?.trim() || 'Outro bairro';
+          avisoTaxaDinamica.innerHTML = `<strong>${esc(bNomeAviso)}:</strong> taxa a confirmar com a atendente via WhatsApp.`;
         } else {
-          avisoTaxaDinamica.innerHTML = '<strong>Taxa de entrega:</strong> selecione seu bairro acima para calcular.';
+          avisoTaxaDinamica.innerHTML = '<strong>Taxa de entrega:</strong> informe o CEP ou digite seu bairro acima para calcular.';
         }
       }
     }
@@ -1161,9 +1444,10 @@ export function initCarrinhoModal(config) {
     // Validar Endereço se modalidade for Entrega
     const modalidade = document.querySelector('input[name="modalidade_tipo"]:checked')?.value;
     if (modalidade === 'entrega') {
-      if (!selectBairro?.value) {
-        marcarErro(selectBairro, 'erro-entrega-bairro', 'Selecione o bairro para cálculo da entrega.');
-      } else if (selectBairro.value === 'outro' && !inputOutroBairro?.value?.trim()) {
+      const bairroDigitado = inputBairroBusca?.value?.trim();
+      if (!bairroDigitado) {
+        marcarErro(inputBairroBusca, 'erro-entrega-bairro', 'Informe ou selecione seu bairro para entrega.');
+      } else if (inputBairroHidden?.value === 'outro' && !inputOutroBairro?.value?.trim()) {
         marcarErro(inputOutroBairro, 'erro-entrega-bairro', 'Informe o nome do seu bairro.');
       }
 

@@ -438,6 +438,203 @@
   min-height: 14px;
 }
 
+/* ==========================================================================
+   CEP COM BUSCA AUTOMÁTICA E FEEDBACK VISUAL
+   ========================================================================== */
+.campo-dica {
+  font-size: 0.72rem;
+  font-weight: 400;
+  color: var(--color-gold, #C8A15A);
+  margin-left: 0.25rem;
+}
+
+.cep-input-group {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.cep-input-group .form-input {
+  flex: 1;
+}
+
+.btn-cep-consultar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.65rem 1.1rem;
+  background: rgba(200, 161, 90, 0.15);
+  border: 1px solid rgba(200, 161, 90, 0.35);
+  border-radius: 8px;
+  color: var(--color-gold-light, #F0D59A);
+  font-size: 0.8125rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-cep-consultar:hover {
+  background: var(--color-gold, #C8A15A);
+  color: #120E0B;
+}
+
+.btn-cep-consultar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-cep-feedback {
+  font-size: 0.76rem;
+  min-height: 16px;
+  line-height: 1.35;
+  display: block;
+  margin-top: 2px;
+}
+
+.form-cep-feedback.sucesso {
+  color: #6FCF97;
+  font-weight: 600;
+}
+
+.form-cep-feedback.erro {
+  color: #E63946;
+}
+
+.form-cep-feedback.buscando {
+  color: var(--color-gold, #C8A15A);
+}
+
+/* ==========================================================================
+   COMBOBOX DE BAIRRO: BUSCA POR DIGITAÇÃO & DROPDOWN RÁPIDO
+   ========================================================================== */
+.bairro-search-wrapper {
+  position: relative;
+}
+
+.bairro-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.bairro-input-container .form-input {
+  width: 100%;
+  padding-right: 2.75rem;
+}
+
+.btn-dropdown-arrow {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: var(--color-gold, #C8A15A);
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, color 0.2s ease;
+  border-radius: 6px;
+}
+
+.btn-dropdown-arrow:hover {
+  color: #FFF;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.btn-dropdown-arrow.is-open svg {
+  transform: rotate(180deg);
+}
+
+/* Dropdown Flutuante de Bairros */
+.bairros-dropdown-list {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: #191410;
+  border: 1px solid rgba(200, 161, 90, 0.35);
+  border-radius: 10px;
+  max-height: 240px;
+  overflow-y: auto;
+  margin-top: 4px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.85);
+  scrollbar-width: thin;
+}
+
+.bairros-dropdown-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.bairros-dropdown-list::-webkit-scrollbar-thumb {
+  background: rgba(200, 161, 90, 0.3);
+  border-radius: 4px;
+}
+
+.bairro-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.875rem;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  transition: background 0.15s ease;
+}
+
+.bairro-dropdown-item:last-child {
+  border-bottom: none;
+}
+
+.bairro-dropdown-item:hover,
+.bairro-dropdown-item.ativo {
+  background: rgba(200, 161, 90, 0.18);
+}
+
+.bairro-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: left;
+}
+
+.bairro-item-nome {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #F5EBE1;
+}
+
+.bairro-item-cidade {
+  font-size: 0.72rem;
+  color: #A09A92;
+}
+
+.bairro-item-taxa {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--color-gold-light, #F0D59A);
+  background: rgba(200, 161, 90, 0.12);
+  padding: 2px 8px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.bairro-item-outro {
+  background: rgba(255, 255, 255, 0.02);
+  font-style: italic;
+}
+
+.bairro-sem-resultado {
+  padding: 0.85rem;
+  text-align: center;
+  font-size: 0.8125rem;
+  color: #A09A92;
+}
+
 /* Modalidade Selector */
 .modalidade-selector {
   display: grid;
