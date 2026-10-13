@@ -524,6 +524,43 @@
   padding-right: 2.75rem;
 }
 
+.bairro-input-container.is-bloqueado .form-input,
+.bairro-input-bloqueado {
+  padding-right: 6.25rem !important;
+  background-color: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(200, 161, 90, 0.45) !important;
+  color: var(--color-gold-light, #F0D59A) !important;
+  font-weight: 600;
+  cursor: default;
+}
+
+.btn-trocar-bairro {
+  position: absolute;
+  right: 36px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(200, 161, 90, 0.16);
+  border: 1px solid rgba(200, 161, 90, 0.4);
+  color: var(--color-gold-light, #F0D59A);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  padding: 4px 9px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-trocar-bairro:hover {
+  background: rgba(200, 161, 90, 0.35);
+  border-color: var(--color-gold, #C8A15A);
+  color: #FFF;
+}
+
 .btn-dropdown-arrow {
   position: absolute;
   right: 6px;

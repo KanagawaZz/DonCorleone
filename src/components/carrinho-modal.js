@@ -214,7 +214,7 @@ export function renderCarrinhoModal(config) {
                 <label for="entrega-bairro-input" class="form-label">
                   Bairro de Entrega <span class="campo-obrigatorio">*</span>
                 </label>
-                <div class="bairro-input-container">
+                <div class="bairro-input-container" id="bairro-input-container">
                   <input 
                     type="text" 
                     id="entrega-bairro-input" 
@@ -224,6 +224,9 @@ export function renderCarrinhoModal(config) {
                     autocomplete="off" 
                     required 
                   />
+                  <button type="button" class="btn-trocar-bairro" id="btn-trocar-bairro" style="display: none;" title="Trocar bairro">
+                    Trocar
+                  </button>
                   <button type="button" class="btn-dropdown-arrow" id="btn-dropdown-arrow" aria-label="Abrir lista de bairros">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
                   </button>
@@ -543,6 +546,8 @@ export function initCarrinhoModal(config) {
   const inputBairroBusca = document.querySelector('#entrega-bairro-input');
   const inputBairroHidden = document.querySelector('#entrega-bairro-hidden');
   const btnBairroArrow = document.querySelector('#btn-dropdown-arrow');
+  const btnTrocarBairro = document.querySelector('#btn-trocar-bairro');
+  const bairroInputContainer = document.querySelector('#bairro-input-container');
   const dropdownBairros = document.querySelector('#bairros-dropdown-list');
   const campoOutroBairro = document.querySelector('#campo-outro-bairro');
   const inputOutroBairro = document.querySelector('#entrega-bairro-outro');
@@ -602,11 +607,10 @@ export function initCarrinhoModal(config) {
           if (dados.cep && inputCep) inputCep.value = dados.cep;
 
           if (dados.bairro) {
-            if (inputBairroBusca) inputBairroBusca.value = dados.bairro;
-            if (inputBairroHidden) inputBairroHidden.value = dados.bairro;
-            if (dados.bairro === 'outro' || dados.bairroOutro) {
-              if (campoOutroBairro) campoOutroBairro.style.display = 'block';
-              if (inputOutroBairro && dados.bairroOutro) inputOutroBairro.value = dados.bairroOutro;
+            if (dados.bairro === 'outro' || dados.bairro.toLowerCase() === 'outro bairro' || dados.bairroOutro) {
+              bloquearModoOutroBairro(dados.bairroOutro || '');
+            } else {
+              selecionarBairroCadastrado(dados.bairro);
             }
           }
 
@@ -727,7 +731,7 @@ export function initCarrinhoModal(config) {
     });
   }
 
-  // 4. NORMALIZAÇÃO E BUSCA INTELIGENTE DE BAIRROS
+  // 4. NORMALIZAÇÃO E GESTÃO INTELIGENTE DE BAIRROS (AUTOCOMPLETE & OUTRO BAIRRO)
   function normalizarTexto(str) {
     return (str || '')
       .normalize('NFD')
@@ -750,6 +754,94 @@ export function initCarrinhoModal(config) {
     return encontrado || null;
   }
 
+  function bloquearModoOutroBairro(nomeBairro = '') {
+    if (inputBairroBusca) {
+      inputBairroBusca.value = 'Outro Bairro';
+      inputBairroBusca.readOnly = true;
+      inputBairroBusca.classList.add('bairro-input-bloqueado');
+      inputBairroBusca.classList.remove('input-invalido');
+    }
+    if (inputBairroHidden) {
+      inputBairroHidden.value = 'outro';
+    }
+    if (bairroInputContainer) {
+      bairroInputContainer.classList.add('is-bloqueado');
+    }
+    if (btnTrocarBairro) {
+      btnTrocarBairro.style.display = 'inline-flex';
+    }
+    if (campoOutroBairro) {
+      campoOutroBairro.style.display = 'block';
+    }
+    if (inputOutroBairro) {
+      inputOutroBairro.disabled = false;
+      const bNomeLimpo = (nomeBairro || '').trim();
+      if (bNomeLimpo && bNomeLimpo.toLowerCase() !== 'outro' && bNomeLimpo.toLowerCase() !== 'outro bairro') {
+        inputOutroBairro.value = bNomeLimpo;
+      }
+    }
+    const elErro = document.querySelector('#erro-entrega-bairro');
+    if (elErro) elErro.textContent = '';
+    fecharDropdownBairros();
+    atualizarRevisao();
+  }
+
+  function desbloquearModoBairro() {
+    if (inputBairroBusca) {
+      inputBairroBusca.readOnly = false;
+      inputBairroBusca.classList.remove('bairro-input-bloqueado');
+      inputBairroBusca.value = '';
+    }
+    if (inputBairroHidden) {
+      inputBairroHidden.value = '';
+    }
+    if (bairroInputContainer) {
+      bairroInputContainer.classList.remove('is-bloqueado');
+    }
+    if (btnTrocarBairro) {
+      btnTrocarBairro.style.display = 'none';
+    }
+    if (campoOutroBairro) {
+      campoOutroBairro.style.display = 'none';
+    }
+    if (inputOutroBairro) {
+      inputOutroBairro.value = '';
+      inputOutroBairro.classList.remove('input-invalido');
+    }
+    abrirDropdownBairros('');
+    inputBairroBusca?.focus();
+    atualizarRevisao();
+  }
+
+  function selecionarBairroCadastrado(bNome) {
+    if (inputBairroBusca) {
+      inputBairroBusca.readOnly = false;
+      inputBairroBusca.classList.remove('bairro-input-bloqueado');
+      inputBairroBusca.value = bNome;
+      inputBairroBusca.classList.remove('input-invalido');
+    }
+    if (inputBairroHidden) {
+      inputBairroHidden.value = bNome;
+    }
+    if (bairroInputContainer) {
+      bairroInputContainer.classList.remove('is-bloqueado');
+    }
+    if (btnTrocarBairro) {
+      btnTrocarBairro.style.display = 'none';
+    }
+    if (campoOutroBairro) {
+      campoOutroBairro.style.display = 'none';
+    }
+    if (inputOutroBairro) {
+      inputOutroBairro.value = '';
+      inputOutroBairro.classList.remove('input-invalido');
+    }
+    const elErro = document.querySelector('#erro-entrega-bairro');
+    if (elErro) elErro.textContent = '';
+    fecharDropdownBairros();
+    atualizarRevisao();
+  }
+
   function renderizarOpcoesBairro(filtro = '') {
     if (!dropdownBairros) return;
     const filtroNorm = normalizarTexto(filtro);
@@ -770,6 +862,13 @@ export function initCarrinhoModal(config) {
         <div class="bairro-sem-resultado">
           Nenhum bairro cadastrado encontrado para "<strong>${esc(filtro)}</strong>".
         </div>
+        <div class="bairro-dropdown-item bairro-item-outro" data-bairro="outro" data-custom="${esc(filtro)}">
+          <div class="bairro-item-info">
+            <span class="bairro-item-nome">Usar "${esc(filtro)}" como Outro Bairro</span>
+            <span class="bairro-item-cidade">Bairro não listado</span>
+          </div>
+          <span class="bairro-item-taxa" style="font-size: 0.72rem;">A confirmar</span>
+        </div>
       `;
     } else {
       html += filtrados.map(b => `
@@ -781,17 +880,17 @@ export function initCarrinhoModal(config) {
           <span class="bairro-item-taxa">${formatarPreco(b.taxa)}</span>
         </div>
       `).join('');
-    }
 
-    html += `
-      <div class="bairro-dropdown-item bairro-item-outro" data-bairro="outro">
-        <div class="bairro-item-info">
-          <span class="bairro-item-nome">Outro bairro não listado...</span>
-          <span class="bairro-item-cidade">Cuiabá / Várzea Grande</span>
+      html += `
+        <div class="bairro-dropdown-item bairro-item-outro" data-bairro="outro" data-custom="">
+          <div class="bairro-item-info">
+            <span class="bairro-item-nome">Outro bairro não listado...</span>
+            <span class="bairro-item-cidade">Cuiabá / Várzea Grande</span>
+          </div>
+          <span class="bairro-item-taxa" style="font-size: 0.72rem;">A confirmar</span>
         </div>
-        <span class="bairro-item-taxa" style="font-size: 0.72rem;">A confirmar</span>
-      </div>
-    `;
+      `;
+    }
 
     dropdownBairros.innerHTML = html;
 
@@ -800,19 +899,12 @@ export function initCarrinhoModal(config) {
         e.stopPropagation();
         const bNome = item.dataset.bairro;
         if (bNome === 'outro') {
-          if (inputBairroBusca) inputBairroBusca.value = 'Outro bairro';
-          if (inputBairroHidden) inputBairroHidden.value = 'outro';
-          if (campoOutroBairro) {
-            campoOutroBairro.style.display = 'block';
-            inputOutroBairro?.focus();
-          }
+          const custom = item.dataset.custom || (inputBairroBusca?.value?.trim() !== 'Outro Bairro' ? inputBairroBusca?.value?.trim() : '');
+          bloquearModoOutroBairro(custom);
+          inputOutroBairro?.focus();
         } else {
-          if (inputBairroBusca) inputBairroBusca.value = bNome;
-          if (inputBairroHidden) inputBairroHidden.value = bNome;
-          if (campoOutroBairro) campoOutroBairro.style.display = 'none';
+          selecionarBairroCadastrado(bNome);
         }
-        fecharDropdownBairros();
-        atualizarRevisao();
       });
     });
   }
@@ -831,11 +923,12 @@ export function initCarrinhoModal(config) {
   // Ouvintes da Busca de Bairro por Digitação
   if (inputBairroBusca) {
     inputBairroBusca.addEventListener('input', (e) => {
+      if (inputBairroBusca.readOnly) return;
       const digitado = e.target.value;
       if (inputBairroHidden) inputBairroHidden.value = '';
       abrirDropdownBairros(digitado);
 
-      // Se coincidir exatamente com algum bairro
+      // Se coincidir exatamente com algum bairro cadastrado
       const encontrado = encontrarBairroCorrespondente(digitado);
       if (encontrado && normalizarTexto(encontrado.bairro) === normalizarTexto(digitado)) {
         if (inputBairroHidden) inputBairroHidden.value = encontrado.bairro;
@@ -844,26 +937,62 @@ export function initCarrinhoModal(config) {
     });
 
     inputBairroBusca.addEventListener('focus', () => {
+      if (inputBairroBusca.readOnly) return;
       abrirDropdownBairros(inputBairroBusca.value);
     });
 
     inputBairroBusca.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
+        const itemOutro = dropdownBairros?.querySelector('.bairro-dropdown-item[data-custom]');
         const primeiroItem = dropdownBairros?.querySelector('.bairro-dropdown-item');
-        if (primeiroItem) {
+        if (itemOutro) {
+          itemOutro.click();
+        } else if (primeiroItem) {
           primeiroItem.click();
         } else {
-          fecharDropdownBairros();
+          const digitado = inputBairroBusca.value.trim();
+          if (digitado && digitado !== 'Outro Bairro') {
+            bloquearModoOutroBairro(digitado);
+            inputOutroBairro?.focus();
+          } else {
+            fecharDropdownBairros();
+          }
         }
       } else if (e.key === 'Escape') {
         fecharDropdownBairros();
       }
     });
+
+    inputBairroBusca.addEventListener('blur', () => {
+      setTimeout(() => {
+        if (inputBairroBusca.readOnly) return;
+        const digitado = inputBairroBusca.value.trim();
+        if (!digitado || digitado === 'Outro Bairro') return;
+
+        if (!inputBairroHidden?.value) {
+          const correspondente = encontrarBairroCorrespondente(digitado);
+          if (correspondente) {
+            selecionarBairroCadastrado(correspondente.bairro);
+          } else {
+            bloquearModoOutroBairro(digitado);
+          }
+        }
+      }, 250);
+    });
   }
+
+  btnTrocarBairro?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    desbloquearModoBairro();
+  });
 
   btnBairroArrow?.addEventListener('click', (e) => {
     e.stopPropagation();
+    if (inputBairroBusca?.readOnly) {
+      desbloquearModoBairro();
+      return;
+    }
     if (dropdownBairros?.style.display === 'block') {
       fecharDropdownBairros();
     } else {
@@ -928,14 +1057,10 @@ export function initCarrinhoModal(config) {
       if (dados.bairro) {
         const correspondente = encontrarBairroCorrespondente(dados.bairro);
         if (correspondente) {
-          if (inputBairroBusca) inputBairroBusca.value = correspondente.bairro;
-          if (inputBairroHidden) inputBairroHidden.value = correspondente.bairro;
-          if (campoOutroBairro) campoOutroBairro.style.display = 'none';
+          selecionarBairroCadastrado(correspondente.bairro);
         } else {
-          if (inputBairroBusca) inputBairroBusca.value = dados.bairro;
-          if (inputBairroHidden) inputBairroHidden.value = 'outro';
-          if (inputOutroBairro) inputOutroBairro.value = dados.bairro;
-          if (campoOutroBairro) campoOutroBairro.style.display = 'block';
+          // Bairro NÃO listado: bloqueia com "Outro Bairro" e habilita "Nome do seu bairro"
+          bloquearModoOutroBairro(dados.bairro);
         }
       }
 
@@ -1447,8 +1572,8 @@ export function initCarrinhoModal(config) {
       const bairroDigitado = inputBairroBusca?.value?.trim();
       if (!bairroDigitado) {
         marcarErro(inputBairroBusca, 'erro-entrega-bairro', 'Informe ou selecione seu bairro para entrega.');
-      } else if (inputBairroHidden?.value === 'outro' && !inputOutroBairro?.value?.trim()) {
-        marcarErro(inputOutroBairro, 'erro-entrega-bairro', 'Informe o nome do seu bairro.');
+      } else if ((inputBairroHidden?.value === 'outro' || bairroDigitado.toLowerCase() === 'outro bairro') && !inputOutroBairro?.value?.trim()) {
+        marcarErro(inputOutroBairro, 'erro-entrega-bairro', 'Informe o nome do seu bairro no campo abaixo.');
       }
 
       if (!inputRua?.value?.trim()) {
