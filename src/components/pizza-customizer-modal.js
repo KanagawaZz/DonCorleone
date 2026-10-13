@@ -1,26 +1,47 @@
 /**
  * Modal de Personalização de Pizza (Até 3 Sabores) - Don Corleone
  * 
- * Permite ao cliente escolher o tamanho da pizza, selecionar de 1 a 3 sabores,
- * visualizar a prévia dos sabores e do preço em tempo real e adicionar/editar no carrinho.
+ * Regras Oficiais do Anota.ai:
+ * - Pizza Grande (35 cm): até 3 sabores, 8 fatias, preços de R$ 76,90 e R$ 86,90, bordas recheadas disponíveis (máx 1).
+ * - Pizza Média (30 cm): até 2 sabores, 6 fatias, preço sob consulta.
+ * - Pizza Pequena (25 cm): até 2 sabores, 4 fatias, preço sob consulta.
+ * - Bordas recheadas associadas à Pizza Grande de 35 cm (máximo 1 borda).
  */
 
 import { carrinho } from '../utils/carrinho.js';
 import { formatarPreco, esc } from '../utils/dom.js';
-import { calcularPrecoPizza, formatarTituloPizza } from '../utils/calculo-pizza.js';
+import { icone } from '../utils/icons.js';
+import { calcularPrecoPizza } from '../utils/calculo-pizza.js';
+import { pararLenis, retomarLenis } from '../utils/motion.js';
 import dadosCardapio from '../data/cardapio.json';
 
 export function renderPizzaCustomizerModal(config) {
+  const tamanhos = config.regrasPizza?.tamanhos || [
+    { id: 'pequena', nome: 'Pizza Pequena', diametro: '25 cm', fatias: 4, maxSabores: 2, preco: null, precoInfo: 'Preço sob consulta' },
+    { id: 'media', nome: 'Pizza Média', diametro: '30 cm', fatias: 6, maxSabores: 2, preco: null, precoInfo: 'Preço sob consulta' },
+    { id: 'grande', nome: 'Pizza Grande', diametro: '35 cm', fatias: 8, maxSabores: 3, preco: 76.90, precoInfo: 'A partir de R$ 76,90', padrao: true }
+  ];
+
+  const bordas = config.regrasPizza?.bordas || [
+    { id: "sem-borda", nome: "Sem Borda", preco: 0.00, descricao: "Massa crocante tradicional" },
+    { id: "borda-catupiry", nome: "Borda de Catupiry", preco: null, precoTexto: "Sob consulta / Inclusa em combos", descricao: "Requeijão tipo catupiry cremoso" },
+    { id: "borda-chocolate", nome: "Borda de Chocolate", preco: 9.90, descricao: "Chocolate nobre cremoso" },
+    { id: "borda-goiabada", nome: "Borda de Goiabada", preco: 9.90, descricao: "Goiabada cremosa especial" },
+    { id: "borda-mussarela", nome: "Borda de Mussarela", preco: 9.90, descricao: "Queijo mussarela derretido" },
+    { id: "borda-requeijao-cremoso", nome: "Borda de Requeijão Cremoso", preco: 9.90, descricao: "Requeijão especial cremoso" },
+    { id: "borda-cheddar", nome: "Borda de Cheddar", preco: 9.90, descricao: "Cheddar cremoso marcante" }
+  ];
+
   return `
-  <div class="pizza-modal-overlay" id="pizza-modal-overlay" aria-hidden="true">
-    <div class="pizza-modal-container" id="pizza-modal-container" role="dialog" aria-modal="true" aria-labelledby="pizza-modal-titulo">
+  <div class="pizza-modal-overlay" id="pizza-modal-overlay" data-lenis-prevent="true" aria-hidden="true">
+    <div class="pizza-modal-container" id="pizza-modal-container" data-lenis-prevent="true" role="dialog" aria-modal="true" aria-labelledby="pizza-modal-titulo">
       
       <!-- Cabeçalho do Personalizador -->
       <header class="pizza-modal-header">
         <div class="pizza-modal-title-wrap">
-          <span class="pizza-modal-tag">Personalização Artesanal</span>
+          <span class="pizza-modal-tag">Montagem Artesanal</span>
           <h2 id="pizza-modal-titulo" class="pizza-modal-title">Monte Sua Pizza</h2>
-          <p class="pizza-modal-subtitle">Escolha de 1 a 3 sabores em uma única pizza.</p>
+          <p class="pizza-modal-subtitle">Escolha o tamanho, sabores e borda recheada da sua preferência.</p>
         </div>
         <button type="button" class="pizza-modal-close" id="btn-fechar-pizza-modal" aria-label="Fechar janela de montagem">
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
@@ -31,12 +52,48 @@ export function renderPizzaCustomizerModal(config) {
       </header>
 
       <!-- Corpo com Scroll -->
-      <div class="pizza-modal-body">
+      <div class="pizza-modal-body" id="pizza-modal-body" data-lenis-prevent="true" tabindex="0">
         
-        <!-- Status de Sabores Escolhidos -->
+        <!-- Palco de Prévia Visual das Fatias -->
+        <div class="pizza-visual-preview-stage" id="pizza-visual-preview-stage">
+          <div class="pizza-stone-plate">
+            <div class="pizza-dough-disc">
+              <div class="pizza-slices-container" id="pizza-slices-container">
+                <!-- Renderizado dinamicamente com 1, 2 ou 3 sabores -->
+              </div>
+              <div class="pizza-center-cutter-seal" aria-hidden="true">
+                <span class="cutter-seal-icon">✦</span>
+              </div>
+            </div>
+          </div>
+          <div class="pizza-preview-caption" id="pizza-preview-caption">
+            Carregando montagem artesanal...
+          </div>
+        </div>
+
+        <!-- SEÇÃO 1: Escolha do Tamanho Oficial -->
+        <div class="tamanho-secao mb-4" id="tamanho-secao">
+          <label class="secao-label-bold">1. Escolha o Tamanho da Pizza:</label>
+          <div class="tamanho-radios-grid" id="tamanho-radios-grid">
+            ${tamanhos.map(t => {
+              const isGrande = t.id === 'grande';
+              return `
+              <div class="tamanho-chip ${isGrande ? 'active' : ''}" data-tamanho-id="${t.id}" role="button" tabindex="0">
+                <div class="tamanho-chip-header">
+                  <span class="tamanho-chip-nome">${esc(t.nome)} (${t.diametro})</span>
+                  <span class="tamanho-chip-preco-badge">${t.preco ? formatarPreco(t.preco) : 'Sob consulta'}</span>
+                </div>
+                <span class="tamanho-chip-desc">${t.fatias} fatias · até ${t.maxSabores} sabores</span>
+              </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+
+        <!-- SEÇÃO 2: Status e Contador de Sabores -->
         <div class="sabores-status-card">
           <div class="sabores-status-header">
-            <span class="sabores-status-label">Sabores selecionados:</span>
+            <span class="sabores-status-label">2. Sabores selecionados:</span>
             <span class="sabores-counter-badge" id="sabores-counter-badge">1 de 3</span>
           </div>
 
@@ -50,33 +107,51 @@ export function renderPizzaCustomizerModal(config) {
               <line x1="12" y1="16" x2="12" y2="12"></line>
               <line x1="12" y1="8" x2="12.01" y2="8"></line>
             </svg>
-            <span>Preço da pizza calculado pelo sabor de maior valor selecionado.</span>
+            <span id="regra-preco-texto">Preço da pizza grande calculado pelo sabor de maior valor selecionado.</span>
           </div>
         </div>
 
-        <!-- Seletor de Tamanho (Se configurado) -->
-        <div class="tamanho-secao" id="tamanho-secao">
-          <label class="secao-label-bold">Tamanho da Pizza:</label>
-          <div class="tamanho-radios-grid" id="tamanho-radios-grid">
-            <div class="tamanho-chip active">
-              <span class="tamanho-chip-nome">Pizza Grande</span>
-              <span class="tamanho-chip-desc">8 fatias · até 3 sabores</span>
+        <!-- SEÇÃO 3: Filtro e Catálogo de Sabores (Salgadas & Doces) -->
+        <div class="lista-sabores-secao">
+          <div class="sabores-filtro-bar mb-3">
+            <span class="secao-label-bold">Escolha os Sabores:</span>
+            <div class="sabores-tabs-chips" role="tablist">
+              <button type="button" class="filtro-chip active" data-categoria-filtro="todas">Todos (25)</button>
+              <button type="button" class="filtro-chip" data-categoria-filtro="pizzas-salgadas">Salgadas (20)</button>
+              <button type="button" class="filtro-chip" data-categoria-filtro="pizzas-doces">Doces (5)</button>
             </div>
           </div>
-        </div>
-
-        <!-- Lista de Sabores Disponíveis para Escolha -->
-        <div class="lista-sabores-secao">
-          <label class="secao-label-bold mb-3">Escolha os Sabores:</label>
           <div class="sabores-grid-selector" id="sabores-grid-selector">
-            <!-- Renderizado dinamicamente a partir do catálogo de pizzas -->
+            <!-- Renderizado dinamicamente a partir de cardapio.json -->
           </div>
         </div>
 
-        <!-- Observações da Pizza -->
+        <!-- SEÇÃO 4: Borda Recheada (Máx 1 Borda) -->
+        <div class="borda-secao mt-4" id="borda-secao">
+          <div class="borda-secao-header mb-2">
+            <label class="secao-label-bold">4. Escolha a Borda Recheada (opcional · máx 1):</label>
+            <span class="borda-regra-info" id="borda-regra-info">Válida para Pizza Grande 35 cm</span>
+          </div>
+          <div class="borda-radios-grid" id="borda-radios-grid">
+            ${bordas.map((b, idx) => `
+              <label class="borda-radio-card ${idx === 0 ? 'active' : ''}" data-borda-id="${b.id}">
+                <input type="radio" name="pizza_borda_opcao" value="${b.id}" ${idx === 0 ? 'checked' : ''} class="sr-only" />
+                <div class="borda-card-body">
+                  <div class="borda-card-top">
+                    <span class="borda-nome">${esc(b.nome)}</span>
+                    <span class="borda-preco">${b.preco === 0 ? 'Inclusa' : (b.preco ? `+${formatarPreco(b.preco)}` : (b.precoTexto || 'Sob consulta'))}</span>
+                  </div>
+                  <span class="borda-desc">${esc(b.descricao || '')}</span>
+                </div>
+              </label>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- SEÇÃO 5: Observações da Pizza -->
         <div class="pizza-obs-secao mt-4">
-          <label for="pizza-obs-input" class="secao-label-bold">Observações desta pizza (opcional):</label>
-          <input type="text" id="pizza-obs-input" class="form-input" placeholder="Ex: Sem cebola em metade da pizza..." />
+          <label for="pizza-obs-input" class="secao-label-bold">5. Observações desta pizza (opcional):</label>
+          <input type="text" id="pizza-obs-input" class="form-input" placeholder="Ex: Sem cebola em metade da pizza, bem assada..." />
         </div>
 
       </div>
@@ -90,7 +165,7 @@ export function renderPizzaCustomizerModal(config) {
             <button type="button" class="btn-qty-p" id="btn-pizza-qty-plus" aria-label="Aumentar quantidade">+</button>
           </div>
           <div class="pizza-preco-total-box">
-            <span class="preco-unit-label">Valor da pizza:</span>
+            <span class="preco-unit-label" id="preco-unit-label">Valor da pizza:</span>
             <span class="pizza-preco-total" id="pizza-preco-total">R$ 0,00</span>
           </div>
         </div>
@@ -123,15 +198,41 @@ export function initPizzaCustomizerModal(config) {
   const qtyDisplay = document.querySelector('#pizza-qty-display');
   const btnAddCart = document.querySelector('#btn-add-pizza-cart');
   const btnAddLabel = document.querySelector('#btn-add-pizza-label');
+  const slicesContainer = document.querySelector('#pizza-slices-container');
+  const previewCaption = document.querySelector('#pizza-preview-caption');
+  const regraPrecoTexto = document.querySelector('#regra-preco-texto');
+  const bordaSecao = document.querySelector('#borda-secao');
+  const bordaRadios = document.querySelectorAll('.borda-radio-card');
+  const tamanhoChips = document.querySelectorAll('.tamanho-chip');
+  const filtroChips = document.querySelectorAll('.filtro-chip');
 
-  const maxSabores = config.regrasPizza?.maximoSabores || 3;
+  const listaTamanhos = config.regrasPizza?.tamanhos || [
+    { id: 'pequena', nome: 'Pizza Pequena', diametro: '25 cm', fatias: 4, maxSabores: 2, preco: null },
+    { id: 'media', nome: 'Pizza Média', diametro: '30 cm', fatias: 6, maxSabores: 2, preco: null },
+    { id: 'grande', nome: 'Pizza Grande', diametro: '35 cm', fatias: 8, maxSabores: 3, preco: 76.90 }
+  ];
+
+  const listaBordas = config.regrasPizza?.bordas || [
+    { id: "sem-borda", nome: "Sem Borda", preco: 0.00 },
+    { id: "borda-catupiry", nome: "Borda de Catupiry", preco: null, precoTexto: "Sob consulta / Inclusa em combos" },
+    { id: "borda-chocolate", nome: "Borda de Chocolate", preco: 9.90 },
+    { id: "borda-goiabada", nome: "Borda de Goiabada", preco: 9.90 },
+    { id: "borda-mussarela", nome: "Borda de Mussarela", preco: 9.90 },
+    { id: "borda-requeijao-cremoso", nome: "Borda de Requeijão Cremoso", preco: 9.90 },
+    { id: "borda-cheddar", nome: "Borda de Cheddar", preco: 9.90 }
+  ];
+
+  let tamanhoSelecionado = listaTamanhos.find(t => t.id === 'grande') || listaTamanhos[0];
+  let bordaSelecionada = listaBordas[0];
+  let maxSabores = tamanhoSelecionado.maxSabores || 3;
   let saboresSelecionados = [];
   let quantidade = 1;
   let itemEditandoId = null;
+  let filtroCategoriaAtivo = 'todas';
 
-  // Extrai todos os sabores de pizza cadastrados no catálogo
+  // Extrai todos os 25 sabores de pizza de cardapio.json (salgadas + doces)
   const categoriasPizza = (dadosCardapio.categorias || []).filter(c => 
-    c.id === 'pizzas-especiais' || c.id === 'pizzas-tradicionais' || c.id.includes('pizza')
+    c.id === 'pizzas-salgadas' || c.id === 'pizzas-doces'
   );
 
   const todosSaboresPizza = [];
@@ -142,8 +243,9 @@ export function initPizzaCustomizerModal(config) {
           id: item.id,
           nome: item.nome,
           descricao: item.descricao,
-          preco: Number(item.preco) || 0,
+          preco: typeof item.preco === 'number' ? item.preco : null,
           foto: item.foto || '/images/cardapio/calabresa-artesanal.png',
+          categoriaId: cat.id,
           categoriaNome: cat.nome
         });
       }
@@ -153,10 +255,16 @@ export function initPizzaCustomizerModal(config) {
   function renderizarListaSabores() {
     if (!gridSabores) return;
 
-    gridSabores.innerHTML = todosSaboresPizza.map(sabor => {
+    const saboresFiltrados = todosSaboresPizza.filter(s => {
+      if (filtroCategoriaAtivo === 'todas') return true;
+      return s.categoriaId === filtroCategoriaAtivo;
+    });
+
+    gridSabores.innerHTML = saboresFiltrados.map(sabor => {
       const estaSelecionado = saboresSelecionados.some(s => s.id === sabor.id);
       const atingiuLimite = saboresSelecionados.length >= maxSabores;
       const desabilitado = !estaSelecionado && atingiuLimite;
+      const precoTxt = sabor.preco ? formatarPreco(sabor.preco) : 'Sob consulta';
 
       return `
       <div class="sabor-item-card ${estaSelecionado ? 'selecionado' : ''} ${desabilitado ? 'desabilitado' : ''}" data-sabor-id="${sabor.id}">
@@ -171,7 +279,7 @@ export function initPizzaCustomizerModal(config) {
         <div class="sabor-card-content">
           <div class="sabor-card-header">
             <h4 class="sabor-card-nome">${esc(sabor.nome)}</h4>
-            <span class="sabor-card-preco">${formatarPreco(sabor.preco)}</span>
+            <span class="sabor-card-preco">${precoTxt}</span>
           </div>
           <p class="sabor-card-desc">${esc(sabor.descricao || '')}</p>
         </div>
@@ -179,7 +287,7 @@ export function initPizzaCustomizerModal(config) {
       `;
     }).join('');
 
-    // Adiciona ouvintes de clique nos cards de sabores
+    // Ouvintes de clique nos cards de sabores
     gridSabores.querySelectorAll('.sabor-item-card').forEach(card => {
       card.addEventListener('click', () => {
         const saborId = card.dataset.saborId;
@@ -188,10 +296,8 @@ export function initPizzaCustomizerModal(config) {
 
         const index = saboresSelecionados.findIndex(s => s.id === saborId);
         if (index >= 0) {
-          // Desmarca
           saboresSelecionados.splice(index, 1);
         } else {
-          // Marca se não atingiu o limite
           if (saboresSelecionados.length < maxSabores) {
             saboresSelecionados.push(saborObj);
           }
@@ -203,6 +309,13 @@ export function initPizzaCustomizerModal(config) {
   }
 
   function atualizarInterface() {
+    maxSabores = tamanhoSelecionado.maxSabores || (tamanhoSelecionado.id === 'grande' ? 3 : 2);
+
+    // Ajusta sabores selecionados se ultrapassar o limite do tamanho atual
+    if (saboresSelecionados.length > maxSabores) {
+      saboresSelecionados = saboresSelecionados.slice(0, maxSabores);
+    }
+
     // 1. Contador
     if (counterBadge) {
       counterBadge.textContent = `${saboresSelecionados.length} de ${maxSabores}`;
@@ -216,9 +329,9 @@ export function initPizzaCustomizerModal(config) {
     // 2. Tags dos sabores selecionados
     if (tagsContainer) {
       if (saboresSelecionados.length === 0) {
-        tagsContainer.innerHTML = `<span class="tag-vazio-aviso">Selecione de 1 a 3 sabores abaixo</span>`;
+        tagsContainer.innerHTML = `<span class="tag-vazio-aviso">Selecione até ${maxSabores} sabores abaixo</span>`;
       } else {
-        tagsContainer.innerHTML = saboresSelecionados.map((s, idx) => `
+        tagsContainer.innerHTML = saboresSelecionados.map((s) => `
           <div class="sabor-tag-item">
             <span class="sabor-tag-fracao">1/${saboresSelecionados.length}</span>
             <span class="sabor-tag-nome">${esc(s.nome)}</span>
@@ -237,19 +350,41 @@ export function initPizzaCustomizerModal(config) {
       }
     }
 
-    // 3. Preço e Subtotal
-    const precoUnitario = calcularPrecoPizza(saboresSelecionados, null, config);
-    const subtotal = precoUnitario * quantidade;
+    // 3. Regra de Borda Recheada (disponível para Pizza Grande)
+    const isGrande = tamanhoSelecionado.id === 'grande';
+    if (bordaSecao) {
+      if (!isGrande) {
+        bordaSecao.classList.add('borda-desabilitada');
+        bordaSelecionada = listaBordas[0]; // Sem borda
+      } else {
+        bordaSecao.classList.remove('borda-desabilitada');
+      }
+    }
+
+    // 4. Preço e Subtotal
+    if (regraPrecoTexto) {
+      if (isGrande) {
+        regraPrecoTexto.textContent = 'Preço da pizza grande calculado pelo sabor de maior valor selecionado + borda.';
+      } else {
+        regraPrecoTexto.textContent = `Pizzas de tamanho ${tamanhoSelecionado.nome} têm valor sob consulta com a cantina.`;
+      }
+    }
 
     if (precoTotalDisplay) {
-      precoTotalDisplay.textContent = formatarPreco(subtotal);
+      if (isGrande) {
+        const precoUnitario = calcularPrecoPizza(saboresSelecionados, tamanhoSelecionado, bordaSelecionada, config);
+        const subtotal = precoUnitario * quantidade;
+        precoTotalDisplay.textContent = formatarPreco(subtotal);
+      } else {
+        precoTotalDisplay.textContent = 'Sob consulta';
+      }
     }
 
     if (qtyDisplay) {
       qtyDisplay.textContent = quantidade;
     }
 
-    // 4. Estado do botão principal
+    // 5. Botão de Adicionar
     if (btnAddCart) {
       if (saboresSelecionados.length === 0) {
         btnAddCart.disabled = true;
@@ -260,28 +395,157 @@ export function initPizzaCustomizerModal(config) {
       }
     }
 
-    // 5. Re-renderiza o estado ativo/desabilitado dos cards de sabor
+    // 6. Prévia Visual
+    if (slicesContainer && previewCaption) {
+      if (saboresSelecionados.length === 0) {
+        slicesContainer.innerHTML = `
+          <div class="slice-placeholder-dough">
+            <span class="placeholder-dough-icon">${icone('pizza', 36)}</span>
+            <span class="placeholder-dough-text">Selecione até ${maxSabores} sabores abaixo</span>
+          </div>
+        `;
+        previewCaption.textContent = `Monte sua ${tamanhoSelecionado.nome} (${tamanhoSelecionado.diametro})`;
+      } else if (saboresSelecionados.length === 1) {
+        const s1 = saboresSelecionados[0];
+        slicesContainer.innerHTML = `
+          <div class="pizza-slice-part slice-full">
+            <img src="${s1.foto}" alt="${esc(s1.nome)}" class="slice-full-img" />
+            <div class="slice-relief-overlay"></div>
+            <span class="slice-badge-tag">100% · ${esc(s1.nome)}</span>
+          </div>
+        `;
+        previewCaption.innerHTML = `<strong>${esc(tamanhoSelecionado.nome)}:</strong> ${esc(s1.nome)}`;
+      } else if (saboresSelecionados.length === 2) {
+        const s1 = saboresSelecionados[0];
+        const s2 = saboresSelecionados[1];
+        slicesContainer.innerHTML = `
+          <div class="pizza-slice-part slice-half slice-left">
+            <img src="${s1.foto}" alt="${esc(s1.nome)}" class="slice-half-img" />
+            <div class="slice-relief-overlay"></div>
+            <span class="slice-badge-tag">1/2 · ${esc(s1.nome)}</span>
+          </div>
+          <div class="pizza-slice-part slice-half slice-right">
+            <img src="${s2.foto}" alt="${esc(s2.nome)}" class="slice-half-img" />
+            <div class="slice-relief-overlay"></div>
+            <span class="slice-badge-tag">1/2 · ${esc(s2.nome)}</span>
+          </div>
+          <div class="slice-divide-ridge vertical" aria-hidden="true"></div>
+        `;
+        previewCaption.innerHTML = `<strong>Meio a Meio:</strong> 1/2 ${esc(s1.nome)} + 1/2 ${esc(s2.nome)}`;
+      } else {
+        const s1 = saboresSelecionados[0];
+        const s2 = saboresSelecionados[1];
+        const s3 = saboresSelecionados[2];
+        slicesContainer.innerHTML = `
+          <div class="pizza-slice-part slice-third slice-third-1">
+            <img src="${s1.foto}" alt="${esc(s1.nome)}" class="slice-third-img" />
+            <div class="slice-relief-overlay"></div>
+            <span class="slice-badge-tag">1/3 · ${esc(s1.nome)}</span>
+          </div>
+          <div class="pizza-slice-part slice-third slice-third-2">
+            <img src="${s2.foto}" alt="${esc(s2.nome)}" class="slice-third-img" />
+            <div class="slice-relief-overlay"></div>
+            <span class="slice-badge-tag">1/3 · ${esc(s2.nome)}</span>
+          </div>
+          <div class="pizza-slice-part slice-third slice-third-3">
+            <img src="${s3.foto}" alt="${esc(s3.nome)}" class="slice-third-img" />
+            <div class="slice-relief-overlay"></div>
+            <span class="slice-badge-tag">1/3 · ${esc(s3.nome)}</span>
+          </div>
+          <div class="slice-divide-tri-ridges" aria-hidden="true"></div>
+        `;
+        previewCaption.innerHTML = `<strong>Trio Artesanal:</strong> 1/3 ${esc(s1.nome)} + 1/3 ${esc(s2.nome)} + 1/3 ${esc(s3.nome)}`;
+      }
+    }
+
     renderizarListaSabores();
   }
 
+  // Ouvintes para Seleção de Tamanho
+  tamanhoChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      const tId = chip.dataset.tamanhoId;
+      const tObj = listaTamanhos.find(t => t.id === tId);
+      if (!tObj) return;
+
+      tamanhoChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      tamanhoSelecionado = tObj;
+
+      atualizarInterface();
+    });
+  });
+
+  // Ouvintes para Seleção de Borda (Máx 1)
+  bordaRadios.forEach(card => {
+    card.addEventListener('click', () => {
+      if (tamanhoSelecionado.id !== 'grande') return;
+      const bId = card.dataset.bordaId;
+      const bObj = listaBordas.find(b => b.id === bId);
+      if (!bObj) return;
+
+      bordaRadios.forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      const radioInput = card.querySelector('input[type="radio"]');
+      if (radioInput) radioInput.checked = true;
+
+      bordaSelecionada = bObj;
+      atualizarInterface();
+    });
+  });
+
+  // Filtro de Categorias (Todas, Salgadas, Doces)
+  filtroChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      filtroChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      filtroCategoriaAtivo = chip.dataset.categoriaFiltro || 'todas';
+      renderizarListaSabores();
+    });
+  });
+
   function abrir(saborInicial = null, itemParaEditar = null) {
+    pararLenis();
     overlay?.classList.add('is-open');
     overlay?.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
 
     if (itemParaEditar) {
-      // Modo de Edição
       itemEditandoId = itemParaEditar.id;
       saboresSelecionados = [...(itemParaEditar.sabores || [])];
       quantidade = itemParaEditar.quantidade || 1;
+      tamanhoSelecionado = itemParaEditar.tamanho || listaTamanhos.find(t => t.id === 'grande') || listaTamanhos[0];
+      bordaSelecionada = itemParaEditar.borda || listaBordas[0];
       if (inputObs) inputObs.value = itemParaEditar.observacoes || '';
       if (btnAddLabel) btnAddLabel.textContent = 'Salvar Alterações';
+
+      // Atualiza chips ativos de tamanho e borda
+      tamanhoChips.forEach(c => {
+        c.classList.toggle('active', c.dataset.tamanhoId === tamanhoSelecionado.id);
+      });
+      bordaRadios.forEach(c => {
+        const isThis = c.dataset.bordaId === bordaSelecionada.id;
+        c.classList.toggle('active', isThis);
+        const radio = c.querySelector('input[type="radio"]');
+        if (radio) radio.checked = isThis;
+      });
     } else {
-      // Nova Pizza
       itemEditandoId = null;
       quantidade = 1;
+      tamanhoSelecionado = listaTamanhos.find(t => t.id === 'grande') || listaTamanhos[0];
+      bordaSelecionada = listaBordas[0];
       if (inputObs) inputObs.value = '';
       if (btnAddLabel) btnAddLabel.textContent = 'Adicionar ao Carrinho';
+
+      tamanhoChips.forEach(c => {
+        c.classList.toggle('active', c.dataset.tamanhoId === tamanhoSelecionado.id);
+      });
+      bordaRadios.forEach(c => {
+        const isThis = c.dataset.bordaId === bordaSelecionada.id;
+        c.classList.toggle('active', isThis);
+        const radio = c.querySelector('input[type="radio"]');
+        if (radio) radio.checked = isThis;
+      });
 
       if (saborInicial) {
         const saborAchado = todosSaboresPizza.find(s => s.id === saborInicial.id) || saborInicial;
@@ -299,6 +563,15 @@ export function initPizzaCustomizerModal(config) {
     overlay?.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
     itemEditandoId = null;
+    retomarLenis();
+  }
+
+  // Permite rolagem nativa com o mouse dentro do corpo do modal de pizza
+  const modalPizzaBody = document.querySelector('#pizza-modal-body');
+  if (modalPizzaBody) {
+    modalPizzaBody.addEventListener('wheel', (e) => {
+      e.stopPropagation();
+    }, { passive: true });
   }
 
   // Controles de Quantidade
@@ -335,14 +608,13 @@ export function initPizzaCustomizerModal(config) {
 
     carrinho.salvarPizza({
       sabores: saboresSelecionados,
-      tamanho: { id: 'grande', nome: 'Pizza Grande', fatias: 8 },
+      tamanho: tamanhoSelecionado,
+      borda: bordaSelecionada,
       quantidade,
       observacoes: inputObs?.value?.trim() || ''
     }, itemEditandoId);
 
     fechar();
-
-    // Abre o carrinho para visualização imediata
     carrinho.abrirModalCheckout();
   });
 

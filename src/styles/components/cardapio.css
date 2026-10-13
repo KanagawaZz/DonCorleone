@@ -47,44 +47,429 @@
 .cardapio-tabs-wrapper {
   display: flex;
   justify-content: center;
-  margin-bottom: var(--space-10);
+  margin-bottom: var(--space-8);
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   padding-bottom: var(--space-2);
+  scrollbar-width: none;
+  width: 100%;
+}
+
+.cardapio-tabs-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.cardapio-highlight-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  border-radius: var(--radius-pill);
+  background: rgba(200, 161, 90, 0.12);
+  border: 1px solid rgba(200, 161, 90, 0.3);
+  color: #F5EBE1;
+  font-size: var(--text-xs);
+  margin: 0 auto;
+  max-width: 100%;
+  line-height: 1.4;
+  text-align: left;
+}
+
+.cardapio-highlight-badge svg {
+  color: var(--color-gold);
+  flex-shrink: 0;
+}
+
+/* Banner de Informações Oficiais e Tamanhos */
+.cardapio-info-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  background: rgba(20, 16, 13, 0.85);
+  border: 1px solid rgba(200, 161, 90, 0.28);
+  border-radius: 14px;
+  padding: 0.875rem 1.5rem;
+  margin-top: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  flex-wrap: wrap;
+}
+
+.info-banner-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  text-align: left;
+}
+
+.info-banner-icon {
+  font-size: 1.35rem;
+  flex-shrink: 0;
+}
+
+.info-banner-text {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8125rem;
+  line-height: 1.35;
+  color: #D8CEBE;
+}
+
+.info-banner-text strong {
+  color: var(--color-gold);
+  font-size: 0.8125rem;
+}
+
+.info-banner-divider {
+  width: 1px;
+  height: 28px;
+  background: rgba(200, 161, 90, 0.2);
+}
+
+.preco-consulta {
+  font-size: 0.8125rem !important;
+  color: var(--color-gold) !important;
+  background: rgba(200, 161, 90, 0.12);
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(200, 161, 90, 0.25);
+  white-space: nowrap;
+}
+
+.cardapio-badge-composicao {
+  font-size: 0.75rem;
+  color: #C8BCAC;
+  background: rgba(255, 255, 255, 0.04);
+  border-left: 2px solid var(--color-gold);
+  padding: 4px 8px;
+  border-radius: 0 6px 6px 0;
+  margin-bottom: 0.75rem;
+  line-height: 1.3;
+}
+
+.cardapio-badge-composicao strong {
+  color: var(--color-gold);
+}
+
+/* ==========================================================================
+   SEÇÃO DE DESTAQUES & COMBOS (MOSTRAR PRIMEIRO OS DESTAQUES - REF. IMAGEM 2)
+   ========================================================================== */
+.cardapio-destaques-secao {
+  margin-top: var(--space-8);
+  margin-bottom: var(--space-10);
+  padding: var(--space-6) var(--space-6) var(--space-8);
+  background: radial-gradient(circle at 50% 0%, rgba(200, 161, 90, 0.08) 0%, rgba(18, 14, 11, 0.6) 100%);
+  border: 1px solid rgba(200, 161, 90, 0.2);
+  border-radius: var(--radius-2xl);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.destaques-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-6);
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.destaques-title-wrap {
+  text-align: left;
+}
+
+.destaques-badge-fire {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-gold);
+  background: rgba(200, 161, 90, 0.12);
+  border: 1px solid rgba(200, 161, 90, 0.25);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 0.4rem;
+}
+
+.destaques-section-title {
+  font-family: var(--font-serif);
+  font-size: clamp(1.4rem, 4vw, 1.85rem);
+  color: var(--color-text-primary);
+  line-height: 1.2;
+  margin-bottom: 0.25rem;
+}
+
+.destaques-section-sub {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+/* Grid / Carrossel Horizontal de Destaques */
+.destaques-horizontal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-5);
+}
+
+/* Card Mini Destaque (Inspirado no App Mobile - Ref. Imagem 2) */
+.destaque-card-mini {
+  background: rgba(24, 19, 16, 0.95);
+  border: 1px solid rgba(200, 161, 90, 0.24);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.25s var(--ease-smooth), border-color 0.25s ease, box-shadow 0.25s ease;
+  position: relative;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.destaque-card-mini:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-gold);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7), 0 0 20px rgba(200, 161, 90, 0.2);
+}
+
+.destaque-card-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 160px;
+  overflow: hidden;
+  background: #110E0C;
+}
+
+.destaque-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.destaque-card-mini:hover .destaque-card-img {
+  transform: scale(1.05);
+}
+
+.destaque-pill-tag {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(12, 10, 9, 0.85);
+  border: 1px solid rgba(200, 161, 90, 0.4);
+  backdrop-filter: blur(8px);
+  color: var(--color-gold-light);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.destaque-card-info {
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.destaque-card-title {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 0.35rem;
+  line-height: 1.25;
+}
+
+.destaque-card-desc {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  line-height: 1.45;
+  margin-bottom: var(--space-4);
+  flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.destaque-card-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: var(--space-3);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.destaque-card-price {
+  font-family: var(--font-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--color-gold-light);
+}
+
+.preco-consulta-mini {
+  font-size: 0.78rem;
+  color: var(--color-gold);
+  background: rgba(200, 161, 90, 0.12);
+  padding: 3px 7px;
+  border-radius: 6px;
+  border: 1px solid rgba(200, 161, 90, 0.25);
+}
+
+.btn-mini-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(135deg, #C8A15A 0%, #A8823E 100%);
+  color: #120E0B;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(200, 161, 90, 0.25);
+}
+
+.btn-mini-action:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #DEC085 0%, #C8A15A 100%);
+  box-shadow: 0 6px 16px rgba(200, 161, 90, 0.4);
+}
+
+.btn-mini-action:active {
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   NAVEGAÇÃO RÁPIDA POR CATEGORIAS (STICKY NO SCROLL)
+   ========================================================================== */
+.cardapio-tabs-wrapper-sticky {
+  position: sticky;
+  top: 68px;
+  z-index: 15;
+  padding: 0.6rem 0;
+  margin-bottom: var(--space-8);
+  background: rgba(12, 10, 9, 0.92);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-top: 1px solid rgba(200, 161, 90, 0.15);
+  border-bottom: 1px solid rgba(200, 161, 90, 0.15);
+  width: 100%;
+}
+
+.cardapio-tabs-scroll-container {
+  display: flex;
+  justify-content: flex-start;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding: 0 1rem;
+  scroll-padding-inline: 1rem;
+}
+
+.cardapio-tabs-scroll-container::-webkit-scrollbar {
+  display: none;
 }
 
 .cardapio-tabs {
   display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-inline: auto;
+  flex-shrink: 0;
+  max-width: 100%;
   background: rgba(23, 19, 16, 0.9);
   border: 1px solid var(--color-border-glass);
-  border-radius: var(--radius-pill);
-  padding: 6px;
-  gap: 6px;
+  border-radius: 22px;
+  padding: 5px;
+  gap: 5px;
   backdrop-filter: blur(12px);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
+.tab-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-gold);
+}
+
+.tab-btn.active .tab-btn-icon {
+  color: inherit;
+}
+
+@media (max-width: 900px) {
+  /* No celular: trilho horizontal deslizante com bordas esmaecidas */
+  .cardapio-tabs-scroll-container {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 18px, #000 calc(100% - 28px), transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 18px, #000 calc(100% - 28px), transparent 100%);
+  }
+
+  .cardapio-tabs {
+    flex-wrap: nowrap;
+    max-width: none;
+    margin-inline: 0;
+    border-radius: var(--radius-pill);
+  }
+}
+
 .tab-btn {
-  padding: 10px 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 8px 18px;
   border-radius: var(--radius-pill);
   font-size: var(--text-sm);
   font-weight: 600;
   color: var(--color-text-secondary);
   background: transparent;
-  border: none;
+  border: 1px solid transparent;
   cursor: pointer;
-  transition: all 0.25s var(--ease-smooth);
+  transition: all 0.22s var(--ease-smooth);
   white-space: nowrap;
 }
 
 .tab-btn:hover {
   color: var(--color-gold-light);
+  border-color: rgba(200, 161, 90, 0.3);
+  background: rgba(200, 161, 90, 0.08);
 }
 
 .tab-btn.active {
   background: linear-gradient(135deg, #C8A15A 0%, #9E782E 100%);
   color: var(--color-bg-primary);
   font-weight: 700;
+  border-color: var(--color-gold);
   box-shadow: 0 4px 15px rgba(200, 161, 90, 0.35);
+}
+
+.tab-btn-icon {
+  font-size: 0.95rem;
+}
+
+.tab-btn-label {
+  font-size: 0.85rem;
+}
+
+.tab-btn-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  background: rgba(0, 0, 0, 0.3);
+  color: inherit;
+  border-radius: var(--radius-pill);
+  padding: 1px 6px;
+  min-width: 18px;
 }
 
 /* Painéis */
@@ -119,20 +504,35 @@
 
 .cardapio-item-card {
   background: var(--color-bg-card);
-  border: 1px solid var(--color-border-glass);
+  border: 1px solid rgba(200, 161, 90, 0.22);
   border-radius: var(--radius-xl);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: all 0.35s var(--ease-smooth);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7), 0 0 20px rgba(226, 109, 43, 0.08);
   position: relative;
+}
+
+/* Moldura Clássica Interna Fina em Ouro Velho (Inspirada no Retro Clássico) */
+.cardapio-card-frame {
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(200, 161, 90, 0.16);
+  border-radius: calc(var(--radius-xl) - 4px);
+  pointer-events: none;
+  z-index: 4;
+  transition: border-color 0.3s ease;
+}
+
+.cardapio-item-card:hover .cardapio-card-frame {
+  border-color: rgba(200, 161, 90, 0.38);
 }
 
 .cardapio-item-card:hover {
   transform: translateY(-6px);
   border-color: var(--color-gold);
-  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.7), 0 0 25px rgba(200, 161, 90, 0.2);
+  box-shadow: 0 22px 50px rgba(0, 0, 0, 0.88), 0 0 35px rgba(226, 109, 43, 0.22), 0 0 18px rgba(200, 161, 90, 0.25);
 }
 
 /* Imagem e Badge de Destaque */
@@ -160,6 +560,19 @@
   inset: 0;
   background: linear-gradient(180deg, transparent 40%, rgba(16, 13, 11, 0.95) 100%);
   pointer-events: none;
+  z-index: 2;
+}
+
+/* Brilho Quente de Brasas sob as Fotos das Pizzas (Hyperrealism & Forno a Lenha) */
+.cardapio-ember-glow {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 45%;
+  background: radial-gradient(ellipse at 50% 100%, rgba(226, 109, 43, 0.28) 0%, rgba(200, 161, 90, 0.1) 40%, transparent 75%);
+  pointer-events: none;
+  z-index: 3;
 }
 
 .cardapio-item-tag {
@@ -167,7 +580,7 @@
   top: 14px;
   left: 14px;
   padding: 5px 14px;
-  background: rgba(12, 10, 9, 0.85);
+  background: rgba(12, 10, 9, 0.9);
   border: 1px solid var(--color-gold);
   border-radius: var(--radius-pill);
   font-size: 0.72rem;
@@ -176,8 +589,31 @@
   letter-spacing: 0.12em;
   color: var(--color-gold-light);
   backdrop-filter: blur(8px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  z-index: 2;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.tag-fire-icon {
+  font-size: 11px;
+}
+
+.cardapio-item-tag-subtle {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 4px 12px;
+  background: rgba(12, 10, 9, 0.8);
+  border: 1px solid rgba(200, 161, 90, 0.3);
+  border-radius: var(--radius-pill);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--color-text-secondary);
+  backdrop-filter: blur(8px);
+  z-index: 5;
 }
 
 /* Informações do Item */
@@ -187,6 +623,8 @@
   flex-direction: column;
   flex-grow: 1;
   justify-content: space-between;
+  position: relative;
+  z-index: 3;
 }
 
 .cardapio-item-header {
@@ -209,31 +647,58 @@
   font-family: var(--font-serif);
   font-size: var(--text-lg);
   font-weight: 800;
-  color: var(--color-gold);
+  color: var(--color-gold-light);
   white-space: nowrap;
+}
+
+/* Linha Ornamental Divisória Fina */
+.cardapio-ornament-line {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(90deg, rgba(200, 161, 90, 0.35) 0%, rgba(200, 161, 90, 0.08) 60%, transparent 100%);
+  margin-bottom: var(--space-3);
 }
 
 .cardapio-item-desc {
   font-size: var(--text-sm);
   color: var(--color-text-secondary);
-  line-height: 1.6;
-  margin-bottom: var(--space-6);
+  line-height: 1.5;
+  margin-bottom: var(--space-4);
   flex-grow: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .cardapio-item-footer {
   margin-top: auto;
 }
 
-.btn--item-order {
+/* Botão com sensação tátil de latão escovado e relevo */
+.cardapio-item-footer .btn--primary {
   width: 100%;
-  padding: 0.75rem 1.2rem;
+  padding: 0.85rem 1.25rem;
   font-size: var(--text-sm);
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-2);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.3), 0 6px 18px rgba(168, 42, 34, 0.45);
+  transition: all 0.2s var(--ease-smooth);
+}
+
+.cardapio-item-footer .btn--primary:hover {
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.4), 0 8px 24px rgba(168, 42, 34, 0.6);
+  transform: translateY(-2px);
+}
+
+.cardapio-item-footer .btn--primary:active {
+  transform: translateY(1px);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 /* Banner Inferior */
@@ -254,16 +719,103 @@
 
 .btn--gold {
   border-color: var(--color-gold);
-  color: var(--color-gold-light);
+  color: #1A120B;
+  font-weight: 800;
+  text-shadow: 0 1px 0 rgba(255, 236, 196, 0.35);
 }
 
 .btn--gold:hover {
-  background: var(--color-gold);
-  color: var(--color-bg-primary);
+  background: linear-gradient(135deg, #F3D594 0%, #D4AD63 50%, #A07A32 100%);
+  color: #0C0A09;
+}
+
+.btn--abrir-checkout {
+  padding: 0.95rem 2rem;
+  font-size: var(--text-base);
+  letter-spacing: 0.01em;
+}
+
+@media (max-width: 768px) {
+  .cardapio-destaques-secao {
+    padding: var(--space-5) var(--space-4) var(--space-6);
+    margin-inline: -0.5rem;
+    border-radius: var(--radius-xl);
+  }
+
+  .destaques-horizontal-grid {
+    display: flex;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    gap: var(--space-4);
+    padding-bottom: var(--space-3);
+    scrollbar-width: none;
+  }
+
+  .destaques-horizontal-grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .destaque-card-mini {
+    flex: 0 0 260px;
+    scroll-snap-align: start;
+  }
+
+  .cardapio-tabs-scroll-container {
+    justify-content: flex-start;
+  }
 }
 
 @media (max-width: 600px) {
+  .secao-cardapio {
+    padding-block: var(--space-12);
+  }
+
+  .section-title {
+    font-size: clamp(1.8rem, 6.5vw, 2.3rem);
+  }
+
+  .cardapio-tabs-wrapper {
+    justify-content: flex-start;
+    padding-inline: var(--space-4);
+  }
+
   .cardapio-grid {
     grid-template-columns: 1fr;
+    gap: var(--space-6);
+  }
+
+  .cardapio-item-img-wrap {
+    height: 190px;
+  }
+
+  .cardapio-item-info {
+    padding: var(--space-4);
+  }
+
+  .cardapio-item-nome {
+    font-size: var(--text-lg);
+  }
+
+  .cardapio-item-preco {
+    font-size: var(--text-base);
+  }
+
+  .cardapio-item-desc {
+    font-size: 0.8125rem;
+    margin-bottom: var(--space-4);
+  }
+}
+
+@media (max-width: 380px) {
+  .tab-btn {
+    padding: 8px 16px;
+    font-size: var(--text-xs);
+  }
+
+  .cardapio-item-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
   }
 }

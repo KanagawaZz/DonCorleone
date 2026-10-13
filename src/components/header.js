@@ -8,6 +8,9 @@ export function renderHeader(config) {
 
   return `
   <header class="site-header" id="site-header">
+    <!-- Linha Dourada de Progresso do Scroll (2px) -->
+    <div class="header-scroll-progress" id="header-scroll-progress" aria-hidden="true"></div>
+
     <div class="container header-container">
       
       <!-- Logotipo & Nome da Marca -->
@@ -89,14 +92,26 @@ export function initHeader(config) {
   const btnOrder = document.querySelector('#btn-header-order');
   const btnDrawerOrder = document.querySelector('#btn-drawer-order');
 
-  // Efeito de sombra e blur no scroll
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 40) {
+  const progressBar = document.querySelector('#header-scroll-progress');
+
+  // Efeito de sombra, blur e barra de progresso dourada no scroll
+  const onScroll = () => {
+    const scrollY = window.scrollY;
+    if (scrollY > 40) {
       header?.classList.add('header--scrolled');
     } else {
       header?.classList.remove('header--scrolled');
     }
-  }, { passive: true });
+
+    if (progressBar) {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = maxScroll > 0 ? Math.min(1, Math.max(0, scrollY / maxScroll)) : 0;
+      progressBar.style.transform = `scaleX(${progress})`;
+    }
+  };
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 
   // Toggle Menu Mobile
   if (toggleBtn && drawer) {

@@ -53,4 +53,16 @@ export function rolarPara(alvo, opcoes = {}) {
   }
 }
 
-export { gsap, ScrollTrigger };
+export function pararLenis() {
+  if (lenisInstance) {
+    lenisInstance.stop();
+  }
+}
+
+export function retomarLenis() {
+  if (lenisInstance) {
+    lenisInstance.start();
+  }
+}
+
+export { gsap, ScrollTrigger, lenisInstance };

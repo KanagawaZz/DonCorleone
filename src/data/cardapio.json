@@ -1,138 +1,560 @@
 {
   "categorias": [
     {
-      "id": "pizzas-especiais",
-      "nome": "Pizzas Especiais",
-      "descricao": "Nossas receitas autorais com fermentação lenta de 48h e ingredientes nobres importados.",
+      "id": "pizzas-salgadas",
+      "nome": "Pizzas Salgadas",
+      "descricao": "Massa artesanal assada no ponto perfeito com ingredientes selecionados.",
       "itens": [
         {
-          "id": "margherita-di-bufala",
-          "nome": "Margherita di Bufala D.O.P.",
-          "descricao": "Molho San Marzano autêntico, mozzarella de búfala fior di latte, manjericão fresco colhido no dia, flor de sal e fio de azeite extravirgem italiano.",
-          "preco": 68.00,
+          "id": "pizza-calabresa",
+          "nome": "Calabresa",
+          "descricao": "Molho de tomate, mussarela, calabresa em fatias finas, cebola em rodelas e orégano.",
+          "preco": 76.90,
           "destaque": true,
-          "tag": "Mais Pedida",
-          "foto": "/images/cardapio/margherita-especial.jpg"
-        },
-        {
-          "id": "calabresa-don-corleone",
-          "nome": "Calabresa Don Corleone",
-          "descricao": "Calabresa artesanal premium tostada, queijo mozzarella fior di latte derretido, finos anéis de cebola roxa marinada e azeitonas pretas sicilianas.",
-          "preco": 64.00,
-          "destaque": true,
-          "tag": "Assinatura da Casa",
+          "tag": "Clássica",
           "foto": "/images/cardapio/calabresa-artesanal.png"
         },
         {
-          "id": "parma-rucula",
-          "nome": "Parma & Rúcula Silvestre",
-          "descricao": "Prosciutto di Parma maturado 18 meses, folhas frescas de rúcula precoce, lascas generosas de Parmigiano Reggiano e redução balsâmica de Modena.",
-          "preco": 76.00,
+          "id": "pizza-frango-catupiry",
+          "nome": "Frango com Catupiry",
+          "descricao": "Molho de tomate, mussarela, filé de frango desfiado, requeijão cremoso e orégano.",
+          "preco": 76.90,
+          "destaque": true,
+          "tag": "Mais Pedida",
+          "foto": "/images/cardapio/frango-catupiry.jpg"
+        },
+        {
+          "id": "pizza-tres-queijos",
+          "nome": "Três Queijos",
+          "descricao": "Molho de tomate, mussarela, requeijão cremoso, provolone e orégano.",
+          "preco": 76.90,
+          "destaque": false,
+          "tag": "Cremosa",
+          "foto": "/images/cardapio/quatro-queijos.jpg"
+        },
+        {
+          "id": "pizza-lombo-requeijao",
+          "nome": "Lombo com Requeijão",
+          "descricao": "Molho de tomate, mussarela, lombo, requeijão cremoso e orégano.",
+          "preco": 76.90,
+          "destaque": false,
+          "tag": "Especial",
+          "foto": "/images/cardapio/calabresa-artesanal.jpg"
+        },
+        {
+          "id": "pizza-baiana-apimentada",
+          "nome": "Baiana Apimentada",
+          "descricao": "Molho de tomate, mussarela, calabresa, ovo, pimentão, cebola, pimenta e orégano.",
+          "preco": 76.90,
+          "destaque": false,
+          "tag": "Picante",
+          "foto": "/images/cardapio/calabresa-artesanal.jpg"
+        },
+        {
+          "id": "pizza-mafiosa",
+          "nome": "Mafiosa",
+          "descricao": "Molho de tomate, mussarela, lombo, milho, ovo, cebola e orégano.",
+          "preco": 76.90,
+          "destaque": false,
+          "tag": "Don Corleone",
+          "foto": "/images/cardapio/calabresa-artesanal.png"
+        },
+        {
+          "id": "pizza-presunto-queijo",
+          "nome": "Presunto e Queijo",
+          "descricao": "Molho de tomate, mussarela, presunto, tomate em rodelas e orégano.",
+          "preco": 76.90,
+          "destaque": false,
+          "tag": "Tradicional",
+          "foto": "/images/cardapio/mussarela-especial.jpg"
+        },
+        {
+          "id": "pizza-genovesa",
+          "nome": "Genovesa",
+          "descricao": "Molho de tomate, mussarela, ervilha, calabresa, presunto, creme de leite e orégano.",
+          "preco": 76.90,
+          "destaque": false,
+          "tag": "Receita da Casa",
+          "foto": "/images/cardapio/parma-rucula.jpg"
+        },
+        {
+          "id": "pizza-moda-da-casa",
+          "nome": "Moda da Casa",
+          "descricao": "Molho de tomate, mussarela, presunto ralado, frango, ervilha, creme de leite, tomate e orégano.",
+          "preco": 76.90,
+          "destaque": true,
+          "tag": "Assinatura",
+          "foto": "/images/cardapio/frango-catupiry.jpg"
+        },
+        {
+          "id": "pizza-portuguesa",
+          "nome": "Portuguesa",
+          "descricao": "Molho de tomate, mussarela, presunto ralado, calabresa, ovo fatiado, ervilhas, cebola em rodelas e orégano.",
+          "preco": 76.90,
+          "destaque": true,
+          "tag": "Favorita",
+          "foto": "/images/cardapio/calabresa-artesanal.jpg"
+        },
+        {
+          "id": "pizza-dom-camilo",
+          "nome": "Dom Camilo",
+          "descricao": "Molho de tomate, mussarela, calabresa, presunto, creme de leite e orégano.",
+          "preco": 76.90,
+          "destaque": false,
+          "tag": "Especial",
+          "foto": "/images/cardapio/calabresa-artesanal.png"
+        },
+        {
+          "id": "pizza-calabresa-catupiry",
+          "nome": "Calabresa com Catupiry",
+          "descricao": "Molho de tomate, mussarela, calabresa, requeijão cremoso e orégano.",
+          "preco": 76.90,
+          "destaque": false,
+          "tag": "Clássica",
+          "foto": "/images/cardapio/calabresa-artesanal.jpg"
+        },
+        {
+          "id": "pizza-goiana",
+          "nome": "Goiana",
+          "descricao": "Molho de tomate, mussarela, frango desfiado, milho, creme de leite e orégano.",
+          "preco": 76.90,
+          "destaque": false,
+          "tag": "Sabor Regional",
+          "foto": "/images/cardapio/frango-catupiry.jpg"
+        },
+        {
+          "id": "pizza-mussarela",
+          "nome": "Mussarela",
+          "descricao": "Molho de tomate, mussarela, tomates frescos e orégano.",
+          "preco": 76.90,
+          "destaque": false,
+          "tag": "Tradicional",
+          "foto": "/images/cardapio/mussarela-especial.jpg"
+        },
+        {
+          "id": "pizza-milho",
+          "nome": "Milho",
+          "descricao": "Molho de tomate, mussarela, milho e orégano.",
+          "preco": 76.90,
+          "destaque": false,
+          "tag": "Leve",
+          "foto": "/images/cardapio/mussarela-especial.jpg"
+        },
+        {
+          "id": "pizza-palmito",
+          "nome": "Palmito",
+          "descricao": "Molho de tomate, mussarela, palmito em cubos e orégano.",
+          "preco": 76.90,
+          "destaque": false,
+          "tag": "Vegetariana",
+          "foto": "/images/cardapio/margherita-especial.jpg"
+        },
+        {
+          "id": "pizza-strogonoff-frango",
+          "nome": "Strogonoff de Frango",
+          "descricao": "Molho de tomate, mussarela, strogonoff cremoso de frango e batata palha.",
+          "preco": 86.90,
+          "destaque": true,
+          "tag": "Especial da Casa",
+          "foto": "/images/cardapio/frango-catupiry.jpg"
+        },
+        {
+          "id": "pizza-americana",
+          "nome": "Americana",
+          "descricao": "Molho de tomate, mussarela, frango desfiado, bacon coberto por cheddar e orégano.",
+          "preco": 86.90,
+          "destaque": true,
+          "tag": "Premium",
+          "foto": "/images/cardapio/parma-rucula.jpg"
+        },
+        {
+          "id": "pizza-moda-do-chef",
+          "nome": "Moda do Chef",
+          "descricao": "Molho de tomate, mussarela, carne seca, rodelas de tomate, pimentão e orégano.",
+          "preco": 86.90,
           "destaque": true,
           "tag": "Chef Selection",
           "foto": "/images/cardapio/parma-rucula.jpg"
         },
         {
-          "id": "quattro-formaggi",
-          "nome": "Quattro Formaggi D'Oro",
-          "descricao": "Harmonia equilibrada de Mozzarella Fior di Latte, Gorgonzola Dolce cremoso, Provolone defumado e finalização com Parmesão gratinado.",
-          "preco": 72.00,
-          "destaque": false,
-          "tag": "Especial",
-          "foto": "/images/cardapio/quatro-queijos.jpg"
+          "id": "pizza-carne-seca",
+          "nome": "Carne Seca",
+          "descricao": "Molho de tomate, mussarela, carne seca e requeijão cremoso.",
+          "preco": 86.90,
+          "destaque": true,
+          "tag": "Premium",
+          "foto": "/images/cardapio/parma-rucula.jpg"
         }
       ]
     },
     {
-      "id": "pizzas-tradicionais",
-      "nome": "Pizzas Tradicionais",
-      "descricao": "Os clássicos eternos da cantina italiana, preparados com massa leve e crocante.",
+      "id": "pizzas-doces",
+      "nome": "Pizzas Doces",
+      "descricao": "Sobremesas irresistíveis feitas no forno com chocolates e frutas selecionadas.",
       "itens": [
         {
-          "id": "mussarela-especial",
-          "nome": "Mussarela Especial da Casa",
-          "descricao": "Generosa cobertura de queijo mussarela selecionado, molho de tomate rústico, orégano aromático e azeitonas pretas.",
-          "preco": 58.00,
+          "id": "pizza-doce-romeu-julieta",
+          "nome": "Romeu e Julieta",
+          "descricao": "Creme de leite, mussarela, goiabada e leite condensado.",
+          "preco": 76.90,
+          "destaque": true,
+          "tag": "Clássica Doce",
+          "foto": "/images/cardapio/mussarela-especial.jpg"
+        },
+        {
+          "id": "pizza-doce-prestigio",
+          "nome": "Prestígio",
+          "descricao": "Brigadeiro com coco ralado.",
+          "preco": 76.90,
+          "destaque": false,
+          "tag": "Irresistível",
+          "foto": "/images/cardapio/calabresa-artesanal.png"
+        },
+        {
+          "id": "pizza-doce-brigadeiro",
+          "nome": "Brigadeiro",
+          "descricao": "Brigadeiro com chocolate granulado.",
+          "preco": 76.90,
+          "destaque": true,
+          "tag": "Mais Pedida",
+          "foto": "/images/cardapio/calabresa-artesanal.png"
+        },
+        {
+          "id": "pizza-doce-beijinho",
+          "nome": "Beijinho",
+          "descricao": "Beijinho com coco ralado.",
+          "preco": 76.90,
           "destaque": false,
           "tag": "Tradicional",
           "foto": "/images/cardapio/mussarela-especial.jpg"
         },
         {
-          "id": "frango-catupiry",
-          "nome": "Frango com Catupiry Legítimo",
-          "descricao": "Peito de frango desfiado suavemente temperado com ervas da horta e coberto com o autêntico requeijão cremoso Catupiry.",
-          "preco": 64.00,
-          "destaque": false,
-          "tag": "Clássico",
-          "foto": "/images/cardapio/frango-catupiry.jpg"
-        },
-        {
-          "id": "portuguesa-tradicional",
-          "nome": "Portuguesa Clássica",
-          "descricao": "Presunto cozido fatiado, ovos caipiras, cebola caramelizada, ervilhas frescas, mozzarella e azeitonas pretas no forno a lenha.",
-          "preco": 66.00,
-          "destaque": false,
-          "tag": "Tradicional",
-          "foto": "/images/cardapio/calabresa-artesanal.jpg"
+          "id": "pizza-doce-banana-canela",
+          "nome": "Banana com Canela",
+          "descricao": "Creme de leite, mussarela, banana, canela e leite condensado.",
+          "preco": 76.90,
+          "destaque": true,
+          "tag": "Artesanal",
+          "foto": "/images/cardapio/margherita-especial.jpg"
         }
       ]
     },
     {
-      "id": "esfihas-artesanais",
-      "nome": "Esfihas Abertas",
-      "descricao": "Massa folhada artesanal de textura crocante com recheios generosos.",
+      "id": "combos-pizzas",
+      "nome": "Combos & Destaques",
+      "descricao": "Combinações especiais para compartilhar com a família e amigos.",
       "itens": [
         {
-          "id": "esfiha-carne-especial",
-          "nome": "Esfiha de Carne com Especiarias",
-          "descricao": "Carne bovina de primeira temperada com tomate fresco, cebola, limão siciliano e mix secreto de especiarias árabes.",
-          "preco": 7.50,
+          "id": "combo-duas-grandes",
+          "nome": "Combo Duas Grandes",
+          "descricao": "2 pizzas grandes de 35 cm com bordas de Catupiry e sabores selecionáveis à sua escolha.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
           "destaque": true,
-          "tag": "Favorita",
-          "foto": "/images/cardapio/esfiha-carne.jpg"
+          "tag": "Super Combo",
+          "foto": "/images/cardapio/calabresa-artesanal.png",
+          "composicao": "2 Pizzas Grandes (35 cm) + Bordas de Catupiry"
         },
         {
-          "id": "esfiha-queijo-derretido",
-          "nome": "Esfiha de Três Queijos",
-          "descricao": "Blend cremoso de mozzarella, queijo minas curado e requeijão da roça gratinado na hora.",
-          "preco": 7.90,
+          "id": "combo-grande-pequena-guarana",
+          "nome": "Pizza Grande + Pequena Doce + Guaraná 1,5 L",
+          "descricao": "1 pizza grande de 35 cm, 1 pizza pequena doce de 25 cm e 1 refrigerante Guaraná de 1,5 L gelado.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": true,
+          "tag": "Combo Família",
+          "foto": "/images/cardapio/frango-catupiry.jpg",
+          "composicao": "1 Grande (35 cm) + 1 Pequena Doce (25 cm) + Guaraná 1,5 L"
+        },
+        {
+          "id": "combo-10-esfihas-guarana",
+          "nome": "Combo 10 Esfihas + Guaraná Antarctica 1,5 L",
+          "descricao": "10 esfihas artesanais à escolha do cliente e 1 refrigerante Guaraná Antarctica de 1,5 litro.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": true,
+          "tag": "Promoção Limitada",
+          "foto": "/images/cardapio/esfiha-carne.jpg",
+          "composicao": "10 Esfihas à sua escolha + 1 Guaraná Antarctica 1,5 L"
+        }
+      ]
+    },
+    {
+      "id": "esfihas-unitarias",
+      "nome": "Esfihas Unitárias",
+      "descricao": "Massa artesanal aberta, crocante e com recheios generosos.",
+      "itens": [
+        {
+          "id": "esfiha-queijo",
+          "nome": "Esfiha de Queijo",
+          "descricao": "Queijo mussarela de qualidade derretido e dourado no forno.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Cremosa",
           "foto": "/images/cardapio/esfiha-queijo.jpg"
         },
         {
-          "id": "esfiha-calabresa-catupiry",
-          "nome": "Esfiha de Calabresa com Catupiry",
-          "descricao": "Calabresa moída artesanal com toque de cebolinha e finalizada com Catupiry legítimo tostado.",
-          "preco": 8.50,
+          "id": "esfiha-carne",
+          "nome": "Esfiha de Carne",
+          "descricao": "Carne bovina de primeira temperada com tomates, cebola e especiarias aromáticas.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": true,
+          "tag": "Mais Pedida",
+          "foto": "/images/cardapio/esfiha-carne.jpg"
+        },
+        {
+          "id": "esfiha-carne-queijo",
+          "nome": "Esfiha de Carne com Queijo",
+          "descricao": "Carne bovina temperada coberta por generosa camada de mussarela derretida.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
           "destaque": false,
-          "tag": "Destaque",
+          "tag": "Combinação Perfeita",
+          "foto": "/images/cardapio/esfiha-carne.jpg"
+        },
+        {
+          "id": "esfiha-calabresa",
+          "nome": "Esfiha de Calabresa",
+          "descricao": "Mussarela derretida com calabresa especial moída.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": false,
+          "tag": "Tradicional",
           "foto": "/images/cardapio/esfiha-calabresa.jpg"
+        },
+        {
+          "id": "esfiha-frango-catupiry",
+          "nome": "Esfiha de Frango com Catupiry",
+          "descricao": "Frango desfiado temperado com requeijão cremoso Catupiry legítimo.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": true,
+          "tag": "Favorita",
+          "foto": "/images/cardapio/esfiha-carne.jpg"
+        },
+        {
+          "id": "esfiha-frango-queijo",
+          "nome": "Esfiha de Frango com Queijo",
+          "descricao": "Frango desfiado temperado coberto com queijo mussarela derretido.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": false,
+          "tag": "Artesanal",
+          "foto": "/images/cardapio/esfiha-queijo.jpg"
+        },
+        {
+          "id": "esfiha-palmito",
+          "nome": "Esfiha de Palmito",
+          "descricao": "Palmito em pedaços com queijo mussarela e toque de orégano.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": false,
+          "tag": "Leve",
+          "foto": "/images/cardapio/esfiha-queijo.jpg"
+        },
+        {
+          "id": "esfiha-milho",
+          "nome": "Esfiha de Milho",
+          "descricao": "Milho verde selecionado com mussarela e orégano.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": false,
+          "tag": "Leve",
+          "foto": "/images/cardapio/esfiha-queijo.jpg"
         }
       ]
     },
     {
-      "id": "sobremesas",
-      "nome": "Doces & Sobremesas",
-      "descricao": "O fechamento perfeito para uma noite inesquecível.",
+      "id": "kits-esfihas",
+      "nome": "Kits de Esfihas",
+      "descricao": "Praticidade e economia com kits montados para grupos e reuniões.",
       "itens": [
         {
-          "id": "pizza-nutella-morango",
-          "nome": "Pizza Dolce Nutella & Morangos",
-          "descricao": "Creme de avelã Nutella genuíno, morangos frescos fatiados, lascas de amêndoas tostadas e leite em pó ninho polvilhado.",
-          "preco": 54.00,
+          "id": "kit-inicial-ja-provou",
+          "nome": "Já Provou? — Kit Inicial",
+          "descricao": "2 esfihas de carne e 1 esfiha de queijo (+ adicionais da casa).",
+          "unidades": "3+ esfihas",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": false,
+          "tag": "Experimente",
+          "foto": "/images/cardapio/esfiha-carne.jpg",
+          "distribuicao": "2 Carne · 1 Queijo"
+        },
+        {
+          "id": "kit-esfiha-1",
+          "nome": "Kit Esfiha 1",
+          "descricao": "2 de calabresa, 2 de carne, 2 de queijo e 2 de frango. Total: 8 esfihas.",
+          "unidades": "8 esfihas",
+          "preco": null,
+          "precoTexto": "Sob consulta",
           "destaque": true,
-          "tag": "Irresistível",
+          "tag": "8 Unidades",
+          "foto": "/images/cardapio/esfiha-carne.jpg",
+          "distribuicao": "2 Calabresa · 2 Carne · 2 Queijo · 2 Frango"
+        },
+        {
+          "id": "kit-esfiha-2",
+          "nome": "Kit Esfiha 2",
+          "descricao": "10 esfihas de carne bovina temperada.",
+          "unidades": "10 esfihas",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": false,
+          "tag": "10 Unidades",
+          "foto": "/images/cardapio/esfiha-carne.jpg",
+          "distribuicao": "10 Carne"
+        },
+        {
+          "id": "kit-esfiha-3",
+          "nome": "Kit Esfiha 3",
+          "descricao": "3 de calabresa, 3 de carne, 3 de queijo e 3 de frango. Total: 12 esfihas.",
+          "unidades": "12 esfihas",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": true,
+          "tag": "12 Unidades",
+          "foto": "/images/cardapio/esfiha-calabresa.jpg",
+          "distribuicao": "3 Calabresa · 3 Carne · 3 Queijo · 3 Frango"
+        },
+        {
+          "id": "kit-esfiha-4",
+          "nome": "Kit Esfiha 4",
+          "descricao": "4 de calabresa, 4 de carne, 4 de queijo e 4 de frango. Total: 16 esfihas.",
+          "unidades": "16 esfihas",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": false,
+          "tag": "16 Unidades",
+          "foto": "/images/cardapio/esfiha-calabresa.jpg",
+          "distribuicao": "4 Calabresa · 4 Carne · 4 Queijo · 4 Frango"
+        },
+        {
+          "id": "kit-esfiha-5",
+          "nome": "Kit Esfiha 5",
+          "descricao": "5 de calabresa, 5 de carne, 5 de queijo, 5 de frango e 5 de bacon. Total: 25 esfihas.",
+          "unidades": "25 esfihas",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": true,
+          "tag": "25 Unidades",
+          "foto": "/images/cardapio/esfiha-queijo.jpg",
+          "distribuicao": "5 Calabresa · 5 Carne · 5 Queijo · 5 Frango · 5 Bacon"
+        },
+        {
+          "id": "kit-esfiha-6",
+          "nome": "Kit Esfiha 6",
+          "descricao": "10 de carne, 5 de calabresa, 5 de queijo, 5 de frango e 5 de bacon. Total: 30 esfihas.",
+          "unidades": "30 esfihas",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": true,
+          "tag": "30 Unidades",
+          "foto": "/images/cardapio/esfiha-carne.jpg",
+          "distribuicao": "10 Carne · 5 Calabresa · 5 Queijo · 5 Frango · 5 Bacon"
+        }
+      ]
+    },
+    {
+      "id": "bebidas",
+      "nome": "Bebidas",
+      "descricao": "Refrigerantes gelados para acompanhar perfeitamente suas pizzas e esfihas.",
+      "itens": [
+        {
+          "id": "bebida-refrigerante-1-5l",
+          "nome": "Refrigerantes de 1,5 Litro",
+          "descricao": "Garrafa Pet de 1,5L bem gelada. Inclui Guaraná Antarctica 1,5L e sabores disponíveis.",
+          "volume": "1,5 L",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": true,
+          "tag": "Familiar 1,5 L",
+          "foto": "/images/cardapio/frango-catupiry.jpg"
+        },
+        {
+          "id": "bebida-refrigerante-lata",
+          "nome": "Refrigerantes em Lata",
+          "descricao": "Lata de 350ml gelada. Consulte os sabores disponíveis no momento do pedido.",
+          "volume": "350 ml",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": false,
+          "tag": "Lata 350 ml",
+          "foto": "/images/cardapio/calabresa-artesanal.jpg"
+        }
+      ]
+    },
+    {
+      "id": "bordas-adicionais",
+      "nome": "Bordas Recheadas",
+      "descricao": "Bordas especiais associadas à Pizza Grande de 35 cm (máximo 1 borda por pizza).",
+      "itens": [
+        {
+          "id": "borda-sem-borda",
+          "nome": "Sem Borda",
+          "descricao": "Massa crocante tradicional assada no ponto perfeito.",
+          "preco": 0.00,
+          "precoTexto": "Sem adicional",
+          "destaque": false,
+          "tag": "Tradicional",
+          "foto": "/images/cardapio/calabresa-artesanal.png"
+        },
+        {
+          "id": "borda-catupiry",
+          "nome": "Borda de Catupiry",
+          "descricao": "Requeijão tipo catupiry cremoso. Inclusa em combos de pizza grande.",
+          "preco": null,
+          "precoTexto": "Sob consulta / Inclusa em combos",
+          "destaque": true,
+          "tag": "Favorita",
+          "foto": "/images/cardapio/frango-catupiry.jpg"
+        },
+        {
+          "id": "borda-chocolate",
+          "nome": "Borda de Chocolate",
+          "descricao": "Chocolate nobre cremoso derretido na borda.",
+          "preco": 9.90,
+          "destaque": true,
+          "tag": "Doce",
+          "foto": "/images/cardapio/margherita-especial.jpg"
+        },
+        {
+          "id": "borda-goiabada",
+          "nome": "Borda de Goiabada",
+          "descricao": "Goiabada cremosa especial, excelente contraste com a massa.",
+          "preco": 9.90,
+          "destaque": false,
+          "tag": "Doce",
           "foto": "/images/cardapio/mussarela-especial.jpg"
         },
         {
-          "id": "pizza-banana-canela",
-          "nome": "Banana Flambada com Chocolate Branco",
-          "descricao": "Bananas selecionadas caramelizadas no forno a lenha, canela em pó, chocolate branco nobre derretido e leite condensado.",
-          "preco": 48.00,
+          "id": "borda-mussarela",
+          "nome": "Borda de Mussarela",
+          "descricao": "Generosa quantidade de queijo mussarela derretido na borda.",
+          "preco": 9.90,
+          "destaque": true,
+          "tag": "Queijo Derretido",
+          "foto": "/images/cardapio/mussarela-especial.jpg"
+        },
+        {
+          "id": "borda-requeijao-cremoso",
+          "nome": "Borda de Requeijão Cremoso",
+          "descricao": "Requeijão cremoso especial gratinado no forno.",
+          "preco": 9.90,
           "destaque": false,
-          "tag": "Doce da Casa",
-          "foto": "/images/cardapio/margherita-especial.jpg"
+          "tag": "Cremosa",
+          "foto": "/images/cardapio/quatro-queijos.jpg"
+        },
+        {
+          "id": "borda-cheddar",
+          "nome": "Borda de Cheddar",
+          "descricao": "Cheddar cremoso especial com sabor marcante.",
+          "preco": 9.90,
+          "destaque": false,
+          "tag": "Marcante",
+          "foto": "/images/cardapio/parma-rucula.jpg"
         }
       ]
     }

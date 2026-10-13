@@ -2,54 +2,95 @@
  * Utilitário para cálculo de horário de funcionamento no fuso America/Cuiaba (UTC-4)
  * 
  * Regra: Segunda a Domingo, das 17:00 às 23:00
- * A função é pura e aceita um objeto Date opcional para facilitar testes automatizados.
+ * Horário de corte da cozinha: 22:30 (configurável em site.config.js)
+ * 
+ * A função é pura e aceita um objeto Date opcional para facilitar testes e revalidações.
  */
 
 export function obterStatusFuncionamento(dataReferencia = new Date(), configHorario = {}) {
-  const horaAbertura = configHorario.horaAbertura ?? 17;
-  const horaFechamento = configHorario.horaFechamento ?? 23;
   const fuso = configHorario.fusoHorario ?? 'America/Cuiaba';
+  
+  // Grade padrão oficial caso não venha no config
+  const diasGrade = configHorario.dias || [
+    { dia: 0, nome: "Domingo", abertura: "17:30", fechamento: "23:15" },
+    { dia: 1, nome: "Segunda-feira", abertura: "17:30", fechamento: "23:00" },
+    { dia: 2, nome: "Terça-feira", abertura: "17:30", fechamento: "23:00" },
+    { dia: 3, nome: "Quarta-feira", abertura: "17:30", fechamento: "23:00" },
+    { dia: 4, nome: "Quinta-feira", abertura: "17:30", fechamento: "23:00" },
+    { dia: 5, nome: "Sexta-feira", abertura: "17:30", fechamento: "23:15" },
+    { dia: 6, nome: "Sábado", abertura: "17:30", fechamento: "23:30" }
+  ];
 
-  // Obter hora e minuto no fuso de Cuiabá
-  const formatador = new Intl.DateTimeFormat('pt-BR', {
-    timeZone: fuso,
-    hour: 'numeric',
-    minute: 'numeric',
-    second: 'numeric',
-    hour12: false
-  });
+  // Obter dia da semana, hora e minuto atual no fuso de Cuiabá
+  let diaSemana = 0;
+  let horaAtual = 0;
+  let minutoAtual = 0;
 
-  const partes = formatador.formatToParts(dataReferencia);
-  const mapa = {};
-  for (const p of partes) {
-    mapa[p.type] = parseInt(p.value, 10);
+  try {
+    const formatador = new Intl.DateTimeFormat('en-US', {
+      timeZone: fuso,
+      weekday: 'short',
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: false
+    });
+
+    const partes = formatador.formatToParts(dataReferencia);
+    const mapa = {};
+    for (const p of partes) {
+      mapa[p.type] = p.value;
+    }
+
+    const mapaDias = { 'Sun': 0, 'Mon': 1, 'Tue': 2, 'Wed': 3, 'Thu': 4, 'Fri': 5, 'Sat': 6 };
+    diaSemana = mapaDias[mapa.weekday] ?? dataReferencia.getDay();
+    horaAtual = parseInt(mapa.hour, 10) || 0;
+    minutoAtual = parseInt(mapa.minute, 10) || 0;
+  } catch (e) {
+    diaSemana = dataReferencia.getDay();
+    horaAtual = dataReferencia.getHours();
+    minutoAtual = dataReferencia.getMinutes();
   }
 
-  const horaAtual = mapa.hour ?? 0;
-  const minutoAtual = mapa.minute ?? 0;
+  // Configuração do dia atual
+  const configDiaAtual = diasGrade.find(d => d.dia === diaSemana) || diasGrade[0];
+  
+  // Parse de abertura e fechamento
+  const [horaAb, minAb] = (configDiaAtual.abertura || "17:30").split(':').map(n => parseInt(n, 10));
+  const [horaFech, minFech] = (configDiaAtual.fechamento || "23:00").split(':').map(n => parseInt(n, 10));
+
   const minutosTotais = horaAtual * 60 + minutoAtual;
+  const minutosAbertura = horaAb * 60 + minAb;
+  const minutosFechamento = horaFech * 60 + minFech;
 
-  const minutosAbertura = horaAbertura * 60;
-  const minutosFechamento = horaFechamento * 60;
+  let estaAberto = false;
+  let motivoFechamento = null;
+  let statusTexto = '';
 
-  // Aberto entre 17:00 e 22:59:59 (até antes das 23:00)
-  const estaAberto = minutosTotais >= minutosAbertura && minutosTotais < minutosFechamento;
-
-  let statusTexto = "";
-  if (estaAberto) {
-    statusTexto = configHorario.textoAberto || `Aberto agora · recebe pedidos até ${horaFechamento}h`;
+  if (minutosTotais < minutosAbertura) {
+    estaAberto = false;
+    motivoFechamento = 'antes_abertura';
+    statusTexto = `Fechado agora · abrimos hoje às ${configDiaAtual.abertura.replace(':', 'h')}`;
+  } else if (minutosTotais >= minutosFechamento) {
+    estaAberto = false;
+    motivoFechamento = 'apos_fechamento';
+    const proximoDia = diasGrade.find(d => d.dia === (diaSemana + 1) % 7) || diasGrade[0];
+    statusTexto = `Fechado agora · abrimos amanhã às ${proximoDia.abertura.replace(':', 'h')}`;
   } else {
-    if (minutosTotais < minutosAbertura) {
-      statusTexto = configHorario.textoFechadoHoje || `Fechado agora · abrimos hoje às ${horaAbertura}h`;
-    } else {
-      statusTexto = configHorario.textoFechadoAmanha || `Fechado agora · abrimos às ${horaAbertura}h`;
-    }
+    estaAberto = true;
+    motivoFechamento = null;
+    statusTexto = `Aberto agora · atendimento até ${configDiaAtual.fechamento.replace(':', 'h')}`;
   }
 
   return {
     estaAberto,
+    podeFazerPedido: estaAberto,
+    motivoFechamento,
+    diaSemana,
+    nomeDia: configDiaAtual.nome,
     horaAtual,
     minutoAtual,
+    horarioAberturaStr: configDiaAtual.abertura,
+    horarioFechamentoStr: configDiaAtual.fechamento,
     statusTexto,
     classeStatus: estaAberto ? 'status--aberto' : 'status--fechado'
   };

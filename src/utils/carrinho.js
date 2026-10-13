@@ -100,10 +100,10 @@ class CarrinhoStore {
    * Adiciona ou atualiza uma pizza personalizada no carrinho
    */
   salvarPizza(dadosPizza, idExistente = null) {
-    const { sabores = [], tamanho = null, quantidade = 1, observacoes = '' } = dadosPizza;
+    const { sabores = [], tamanho = null, borda = null, quantidade = 1, observacoes = '' } = dadosPizza;
     if (sabores.length === 0) return;
 
-    const precoUnitario = calcularPrecoPizza(sabores, tamanho);
+    const precoUnitario = calcularPrecoPizza(sabores, tamanho, borda);
     const fotoCapa = sabores[0]?.foto || '/images/cardapio/calabresa-artesanal.png';
 
     if (idExistente) {
@@ -113,6 +113,7 @@ class CarrinhoStore {
           ...this.itens[index],
           sabores: [...sabores],
           tamanho: tamanho || this.itens[index].tamanho,
+          borda: borda !== undefined ? borda : this.itens[index].borda,
           precoUnitario,
           foto: fotoCapa,
           quantidade: Math.max(1, quantidade),
@@ -128,6 +129,7 @@ class CarrinhoStore {
       id: `pizza_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
       tipo: 'pizza',
       tamanho: tamanho || { id: 'grande', nome: 'Pizza Grande', fatias: 8 },
+      borda: borda || null,
       sabores: [...sabores],
       precoUnitario,
       foto: fotoCapa,
@@ -188,9 +190,17 @@ class CarrinhoStore {
     window.dispatchEvent(new CustomEvent('abrir-modal-checkout'));
   }
 
+  abrirModal() {
+    this.abrirModalCheckout();
+  }
+
   fecharModalCheckout() {
     this.modalCheckoutAberto = false;
     window.dispatchEvent(new CustomEvent('fechar-modal-checkout'));
+  }
+
+  fecharModal() {
+    this.fecharModalCheckout();
   }
 }
 

@@ -4,14 +4,14 @@ export function renderSobre(config) {
   const sobre = config.textos?.sobre || {};
   const paragrafos = sobre.paragrafos || [
     "A Don Corleone reúne pizzas e esfihas em uma experiência pensada para deixar sua noite mais gostosa.",
-    "Na unidade Arena Cuiabá, você escolhe seus sabores e conta com a praticidade do delivery ou da retirada no balcão."
+    "Na nossa unidade na Cidade Alta, você escolhe seus sabores e conta com a praticidade do delivery ou da retirada no balcão."
   ];
 
   const destaques = sobre.destaques || [
     { rotulo: "Variedade", valor: "Pizzas & Esfihas" },
     { rotulo: "Praticidade", valor: "Delivery & Retirada" },
-    { rotulo: "Atendimento", valor: "17h às 23h" },
-    { rotulo: "Localização", valor: "Arena Cuiabá" }
+    { rotulo: "Atendimento", valor: "A partir de 17h30" },
+    { rotulo: "Localização", valor: "Cidade Alta" }
   ];
 
   const paragrafosHtml = paragrafos.map(p => `
@@ -34,7 +34,7 @@ export function renderSobre(config) {
         <div class="sobre-img-frame">
           <img src="/images/cardapio/margherita-especial.jpg" alt="Preparação artesanal da pizza Don Corleone" class="sobre-img-main" />
           <div class="sobre-img-badge">
-            <span class="badge-number">Arena</span>
+            <span class="badge-number">Cidade Alta</span>
             <span class="badge-text">Cuiabá — MT</span>
           </div>
         </div>
@@ -48,7 +48,7 @@ export function renderSobre(config) {
         </div>
 
         <h2 id="sobre-titulo" class="section-title">${esc(sobre.titulo || 'Mais sabor para os seus momentos.')}</h2>
-        <p class="sobre-subtitulo-desc text-italic text-gold mb-6">${esc(sobre.subtitulo || 'Pizzas e esfihas na Arena Cuiabá')}</p>
+        <p class="sobre-subtitulo-desc text-italic text-gold mb-6">${esc(sobre.subtitulo || 'Pizzas e esfihas na Cidade Alta, Cuiabá')}</p>
 
         <div class="sobre-conteudo-box">
           ${paragrafosHtml}

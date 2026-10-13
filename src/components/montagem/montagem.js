@@ -1,6 +1,7 @@
 import { renderStatusAberto } from '../status-aberto.js';
 import { rolarPara, gsap } from '../../utils/motion.js';
 import { carrinho } from '../../utils/carrinho.js';
+import { icone } from '../../utils/icons.js';
 
 export function renderMontagem(config) {
   const hero = config.textos?.hero || {};
@@ -13,7 +14,7 @@ export function renderMontagem(config) {
       <!-- Coluna de Conteúdo Hero -->
       <div class="montagem-info">
         <div class="montagem-header-top">
-          <span class="hero-badge">${hero.badge || 'CANTINA &amp; PIZZARIA · ARENA CUIABÁ'}</span>
+          <span class="hero-badge">${hero.badge || 'CANTINA &amp; PIZZARIA · CIDADE ALTA, CUIABÁ'}</span>
           ${statusHtml}
         </div>
 
@@ -23,7 +24,7 @@ export function renderMontagem(config) {
         </h1>
 
         <p class="hero-subtitulo">
-          ${hero.subtitulo || 'Pizzas e esfihas para transformar sua fome em um momento especial. Escolha seus sabores e peça para receber em casa ou retirar na unidade Arena Cuiabá.'}
+          ${hero.subtitulo || 'Pizzas artesanais e esfihas feitas para transformar sua fome em um momento especial. Escolha seus sabores e peça para entrega ou retirada na unidade Cidade Alta.'}
         </p>
 
         <!-- Botões de Ação Imediata -->
@@ -40,38 +41,49 @@ export function renderMontagem(config) {
           </a>
         </div>
 
-        <!-- Destaques Verificados -->
+        <!-- Destaques Verificados com Ícones Vetoriais Gastronômicos -->
         <div class="hero-features-list">
           <div class="feature-tag">
-            <span class="dot-gold"></span>
+            <svg class="feature-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
+              <path d="M12 2c-.6 2.3-2.5 4.5-2.5 7 0 2.8 2.2 5 5 5 1.5 0 2.8-.7 3.7-1.8C17.5 15.6 15 18 12 18c-3.3 0-6-2.7-6-6 0-3.5 2.5-6.5 6-10z"/>
+            </svg>
+            <span>Forno a Lenha Artesanal</span>
+          </div>
+          <div class="feature-tag">
+            <svg class="feature-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M2 22l10-10M12 12c1-2 3-3 6-3-1 3-2 5-6 6zm0 0c2 1 3 3 3 6-3-1-5-2-6-6z"/>
+            </svg>
             <span>Pizzas &amp; Esfihas</span>
           </div>
           <div class="feature-tag">
-            <span class="dot-gold"></span>
-            <span>Delivery &amp; Retirada</span>
+            <svg class="feature-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+            </svg>
+            <span>Abre às 17h30 · Todos os dias</span>
           </div>
           <div class="feature-tag">
-            <span class="dot-gold"></span>
-            <span>Todos os dias, 17h às 23h</span>
-          </div>
-          <div class="feature-tag">
-            <span class="dot-gold"></span>
-            <span>Unidade Arena Cuiabá</span>
+            <svg class="feature-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+              <path d="M8 22h8M12 15v7M5 3h14l-2 8a5 5 0 0 1-10 0L5 3z"/>
+            </svg>
+            <span>Cidade Alta · Cuiabá</span>
           </div>
         </div>
       </div>
 
-      <!-- Palco da Fotografia Gastronômica com Efeito Flutuante e Vapor -->
+      <!-- Palco da Fotografia Gastronômica com Efeito Flutuante, Calor de Brasas e Luz Especular -->
       <div class="montagem-visual">
         <div class="hero-pizza-showcase" id="hero-pizza-showcase">
           
-          <!-- Efeito de Iluminação e Brilho de Fundo -->
+          <!-- Efeito de Iluminação e Brilho de Fundo das Brasas do Forno -->
           <div class="pizza-backlight-glow" aria-hidden="true"></div>
           
-          <!-- Moldura da Fotografia com Tilt Parallax -->
+          <!-- Moldura da Fotografia com Tilt Parallax e Camadas Hiper-realistas -->
           <div class="pizza-hero-card" id="pizza-hero-card">
             <img src="/images/cardapio/calabresa-artesanal.jpg" alt="Pizza de Calabresa Artesanal Don Corleone" class="pizza-hero-image" />
             
+            <!-- Luz Especular Dinâmica que reflete a brasa e reage ao mouse -->
+            <div class="pizza-specular-light" id="pizza-specular-light" aria-hidden="true"></div>
+
             <!-- Vapor / Fumaça Quente Subindo -->
             <div class="pizza-steam-effect" aria-hidden="true">
               <span class="steam-vap s1"></span>
@@ -79,11 +91,21 @@ export function renderMontagem(config) {
               <span class="steam-vap s3"></span>
             </div>
 
-            <!-- Selo Gastronômico Flutuante -->
+            <!-- Selo Circular Decorativo Vintage (Tradição & Forno a Lenha) -->
+            <div class="vintage-circular-seal" aria-hidden="true">
+              <div class="seal-inner-ring">
+                <span class="seal-icon-fire">${icone('fogo', 16)}</span>
+                <span class="seal-text-top">TRADIÇÃO ITALIANA</span>
+                <span class="seal-text-center">DON CORLEONE</span>
+                <span class="seal-text-bottom">FORNO A LENHA · CUIABÁ</span>
+              </div>
+            </div>
+
+            <!-- Selo Gastronômico Flutuante em Latão/Ouro -->
             <div class="pizza-seal-float">
-              <span class="seal-star">★ ★ ★ ★ ★</span>
+              <div class="seal-badge-stars">★ ★ ★ ★ ★</div>
               <span class="seal-title">Calabresa Don Corleone</span>
-              <span class="seal-sub">Sabor Incomparável</span>
+              <span class="seal-sub">Receita Secreta de Família · Cidade Alta</span>
             </div>
           </div>
 
@@ -99,6 +121,8 @@ export function initMontagem(config) {
   const showcase = document.querySelector('#hero-pizza-showcase');
   const card = document.querySelector('#pizza-hero-card');
 
+  const specularLight = document.querySelector('#pizza-specular-light');
+
   // 1. Animação de Flutuação Suave Contínua
   if (card) {
     gsap.to(card, {
@@ -111,20 +135,30 @@ export function initMontagem(config) {
     });
   }
 
-  // 2. Efeito de Tilt 3D Parallax Interativo ao mover o mouse
+  // 2. Efeito de Tilt 3D Parallax Interativo & Luz Especular Dinâmica
   if (showcase && card) {
     showcase.addEventListener('mousemove', (e) => {
       const rect = showcase.getBoundingClientRect();
-      const x = (e.clientX - rect.left) / rect.width - 0.5;
-      const y = (e.clientY - rect.top) / rect.height - 0.5;
+      const xNorm = (e.clientX - rect.left) / rect.width;
+      const yNorm = (e.clientY - rect.top) / rect.height;
+      const x = xNorm - 0.5;
+      const y = yNorm - 0.5;
 
       gsap.to(card, {
-        rotateY: x * 12,
-        rotateX: -y * 12,
+        rotateY: x * 14,
+        rotateX: -y * 14,
         duration: 0.5,
         ease: "power2.out",
         transformPerspective: 1000
       });
+
+      // Atualiza o ponto de luz especular de brasa sobre a pizza
+      if (specularLight) {
+        const posX = Math.round(xNorm * 100);
+        const posY = Math.round(yNorm * 100);
+        specularLight.style.background = `radial-gradient(circle at ${posX}% ${posY}%, rgba(255, 205, 120, 0.42) 0%, rgba(226, 109, 43, 0.2) 30%, transparent 65%)`;
+        specularLight.style.opacity = '1';
+      }
     });
 
     showcase.addEventListener('mouseleave', () => {
@@ -134,6 +168,11 @@ export function initMontagem(config) {
         duration: 0.8,
         ease: "power2.out"
       });
+
+      if (specularLight) {
+        specularLight.style.opacity = '0.5';
+        specularLight.style.background = `radial-gradient(circle at 50% 50%, rgba(255, 205, 120, 0.25) 0%, rgba(226, 109, 43, 0.1) 40%, transparent 70%)`;
+      }
     });
   }
 

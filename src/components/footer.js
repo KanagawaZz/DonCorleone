@@ -39,7 +39,7 @@ export function renderFooter(config) {
           &copy; ${anoAtual} ${esc(marca.nome || 'Don Corleone')}. Todos os direitos reservados.
         </p>
         <p class="footer-city">
-          ${esc(marca.cidade || 'Cuiabá')} — ${esc(marca.estado || 'MT')}
+          ${esc(config.localizacao?.enderecoCompleto || 'Avenida Brasil, 2055, Cidade Alta, Cuiabá - MT, CEP 78030-409, Brasil')}
         </p>
       </div>
 

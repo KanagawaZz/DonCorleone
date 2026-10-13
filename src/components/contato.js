@@ -7,13 +7,14 @@ export function renderContato(config) {
   const horario = config.horario || {};
   const linkWhatsApp = gerarLinkWhatsApp(config);
 
-  const telefoneDisplay = contato.telefoneDDD 
-    ? `(${contato.telefoneDDD}) ${contato.telefoneDelivery}` 
-    : contato.telefoneDelivery;
+  const telBruto = contato.telefoneDelivery || '';
+  const telefoneDisplay = (contato.telefoneDDD && !telBruto.trim().startsWith('('))
+    ? `(${contato.telefoneDDD}) ${telBruto}`
+    : telBruto;
 
   const telHref = contato.telefoneCompleto 
-    ? `tel:${contato.telefoneCompleto}` 
-    : `tel:65${contato.telefoneDelivery.replace(/\D/g, '')}`;
+    ? `tel:+${contato.telefoneCompleto}` 
+    : `tel:${telBruto.replace(/\D/g, '')}`;
 
   return `
   <section id="contato" class="secao-contato" aria-labelledby="contato-titulo">
@@ -63,15 +64,18 @@ export function renderContato(config) {
               <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
             </svg>
           </div>
-          <h3 class="contato-card-titulo">Horário &amp; Unidade</h3>
-          <p class="contato-card-desc">
-            <strong>${esc(horario.diasSemana || 'Segunda a domingo')}</strong><br>
-            ${horario.horaAbertura || 17}h às ${horario.horaFechamento || 23}h
-          </p>
-          <p class="contato-unidade-tag">Unidade: ${esc(localizacao.unidade || 'Arena Cuiabá')}</p>
+          <h3 class="contato-card-titulo">Horários &amp; Localização</h3>
+          <div class="contato-horarios-info text-xs">
+            <p><strong>Segunda a Quinta:</strong> 17h30 às 23h00</p>
+            <p><strong>Sexta-feira:</strong> 17h30 às 23h15</p>
+            <p><strong>Sábado:</strong> 17h30 às 23h30</p>
+            <p><strong>Domingo:</strong> 17h30 às 23h15</p>
+          </div>
+          <p class="contato-unidade-tag mt-2"><strong>Unidade:</strong> ${esc(localizacao.enderecoCompleto || 'Av. Brasil, 2055, Cidade Alta, Cuiabá - MT')}</p>
+          <p class="contato-pix-tag mt-1 text-xs">PIX Oficial: <strong>${esc(config.pagamento?.pix?.chave || '65993605364')}</strong></p>
           ${localizacao.linkGoogleMaps ? `
             <a href="${localizacao.linkGoogleMaps}" target="_blank" rel="noopener noreferrer" class="btn btn--outline w-full mt-auto">
-              Como Chegar
+              Ver no Google Maps
             </a>
           ` : ''}
         </div>

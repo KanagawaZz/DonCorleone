@@ -1,17 +1,16 @@
-# DonCorleone — Landing Page Cinematográfica & Gastronômica
+# DonCorleone — Cantina & Pizzaria | Arena Cuiabá
 
-Landing page de alta conversão para a pizzaria e cantina artesanal **DonCorleone**, com cena 3D/2.5D imersiva, narrativa cinematográfica no scroll, cardápio interativo e conversão direta para pedidos via WhatsApp.
+Landing page de alta conversão e web app gastronômico para a **Don Corleone — Cantina & Pizzaria** (Cuiabá/MT), com personalização artesanal de pizzas (até 3 sabores), carrinho integrado, verificação de funcionamento em tempo real e checkout direto para WhatsApp.
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Vite 6+**: Bundler ultrarrápido e servidor de desenvolvimento
-- **Vanilla JavaScript (ES Modules)**: Sem sobrecarga de frameworks, inicialização instantânea
-- **Three.js**: Cena 3D procedural com camadas de massa, molho, queijo, calabresa e manjericão, com iluminação quente e renderização otimizada
-- **GSAP & ScrollTrigger**: Animações de alto desempenho sincronizadas com a rolagem
-- **Lenis**: Rolagem suave (*smooth scroll*) integrada ao GSAP ticker
-- **Design System com CSS Moderno**: Tokens visuais em `css/base.css`, paleta noir/dourado/vinho, tipografia editorial e acessibilidade completa
+- **Vite 6+**: Bundler ultrarrápido e servidor local de desenvolvimento
+- **Vanilla JavaScript (ES Modules)**: Sem frameworks pesados (sem React/Vue), carregamento instantâneo
+- **Lenis**: Rolagem suave (*smooth scroll*)
+- **GSAP & ScrollTrigger**: Animações de entrada e cascata nos cards gastronômicos
+- **Design System com CSS Moderno**: Tokens visuais em `src/styles/tokens.css`, paleta noir/ouro envelhecido/brasa de forno (`#0C0A09`, `#B8860B`, `#E26D2B`) e tipografia clássica (*Cinzel*, *Playfair Display*, *Manrope*)
 
 ---
 
@@ -21,43 +20,76 @@ Landing page de alta conversão para a pizzaria e cantina artesanal **DonCorleon
 - **Node.js** (versão 18+ ou LTS)
 - **NPM**
 
-### 2. Instalação e Execução
+### 2. Comandos
 ```bash
 npm install
 npm run dev        # Inicia o servidor local (http://localhost:3000)
-npm run build      # Gera o build de produção na pasta dist/
+npm run build      # Valida e compila os arquivos de produção para dist/
 npm run preview    # Pré-visualiza o build de produção localmente
 ```
 
-> **Atenção:** Não abra o `index.html` diretamente com `file://`. Utilize os scripts acima ou um servidor HTTP estático local.
+---
+
+## 🏷️ Como Configurar e Ligar/Desligar Promoções
+
+No arquivo [`src/data/site.config.js`](file:///c:/Users/kayron.eduardo/Documents/DonCorleone/src/data/site.config.js), localize o bloco `promocao`:
+
+```javascript
+promocao: {
+  ativa: true,                          // Mude para true para ligar, ou false para desligar
+  titulo: "Promoção Dia dos Namorados", // Título da campanha exibido na faixa do topo
+  texto: "Ganhe 10% de desconto em todas as pizzas e esfihas!",
+  inicio: "2026-06-10",                 // Data de início (formato YYYY-MM-DD)
+  fim: "2026-06-12",                    // Data de término (formato YYYY-MM-DD)
+  cupom: "AMOR10",                      // Código do cupom (opcional)
+  descontoPercentual: 10                // % de desconto aplicado sobre os produtos no carrinho
+}
+```
+
+### Regras da Promoção:
+1. **Ligar uma promoção**: Defina `ativa: true`, preencha as datas no formato `YYYY-MM-DD` e informe o `descontoPercentual` (número entre 1 e 100).
+2. **Desligar uma promoção**: Defina `ativa: false`. A faixa do topo desaparece imediatamente e nenhum desconto é aplicado no carrinho nem na mensagem do WhatsApp.
+3. **Validade automática**: Mesmo com `ativa: true`, o sistema checa a data no fuso de Cuiabá (`America/Cuiaba`). Se a data atual estiver fora do intervalo `inicio` e `fim`, nada é exibido.
 
 ---
 
-## ⚙️ Onde Editar Cada Informação
+## 📍 Como Atualizar as Taxas de Entrega por Bairro
 
-| O que deseja alterar? | Onde editar |
-|---|---|
-| Nome, slogan, títulos, textos, preços e produtos | `js/config.js` |
-| WhatsApp, endereço, horários de funcionamento, redes sociais | `js/config.js` → `contato` |
-| Cores globais do tema | `css/base.css` → variáveis `:root` |
-| Fontes e tipografia | `css/base.css` (`@font-face` ou Google Fonts) |
-| Cores e visual da pizza 3D | `js/config.js` → `tema.cena3d` |
-| Velocidade e intensidade das animações | `js/config.js` → `animacao` |
-| Qualidade gráfica da cena 3D | `js/config.js` → `animacao.cena3d.qualidade` |
+As taxas de entrega ficam no arquivo [`src/data/bairros.json`](file:///c:/Users/kayron.eduardo/Documents/DonCorleone/src/data/bairros.json):
+
+```json
+[
+  { "cidade": "Cuiabá", "bairro": "Jardim Cuiabá", "taxa": 8.00 },
+  { "cidade": "Cuiabá", "bairro": "Goiabeiras", "taxa": 8.00 },
+  { "cidade": "Várzea Grande", "bairro": "Centro (VG)", "taxa": 14.00 }
+]
+```
+
+- Para alterar o valor de um bairro: basta trocar o número em `taxa` (em reais).
+- Para adicionar um novo bairro: inclua um novo objeto com `cidade`, `bairro` e `taxa`.
+- O cliente também conta com a opção *"Outro bairro (a confirmar)"*, que envia a taxa como pendente de confirmação com a atendente.
+- Na **Retirada no Balcão**, a taxa é automaticamente R$ 0,00 (Grátis).
 
 ---
 
-### 📱 Configuração do WhatsApp
-No arquivo `js/config.js`, no campo `contato.whatsapp`:
-- Insira apenas os dígitos com DDI e DDD (exemplo: `'5565992650139'`).
-- O texto pré-formatado da mensagem pode ser personalizado em `contato.mensagemProduto` (as variáveis `{pizzaria}` e `{produto}` são preenchidas dinamicamente).
-- Caso o número não seja informado, os botões de pedido são desativados com elegância para evitar links quebrados.
+## ⏰ Horário de Funcionamento e Horário de Corte
 
-### 🍕 Gerenciamento do Cardápio
-- **Adicionar pizza:** Copie um objeto dentro do array `cardapio` em `js/config.js` e defina um `id` exclusivo.
-- **Preço:** Informe o valor numérico em reais (ex.: `58.9`). A formatação `R$ 58,90` é automática.
-- **Categorias:** O filtro lê automaticamente a propriedade `categoria` de cada item.
-- **Imagens:** Salve as fotos na pasta `assets/img/cardapio/` (formato WebP ou JPG otimizado) e referencie no campo `imagem`. Se a imagem não for encontrada, uma ilustração artística personalizada é gerada automaticamente como fallback.
+No arquivo [`src/data/site.config.js`](file:///c:/Users/kayron.eduardo/Documents/DonCorleone/src/data/site.config.js):
+
+- `horario.horaAbertura`: Hora de início dos atendimentos (padrão: `17` = 17:00).
+- `horario.horaFechamento`: Hora limite de funcionamento da casa (padrão: `23` = 23:00).
+- `horario.horarioCorte`: Último horário para aceitar novos pedidos na cozinha (padrão: `"22:30"`). Das 22:30 em diante, o botão de finalização no checkout é automaticamente bloqueado com aviso *"Pedidos encerrados por hoje"*.
+
+---
+
+## 💳 Chave Pix e Pagamentos
+
+No arquivo [`src/data/site.config.js`](file:///c:/Users/kayron.eduardo/Documents/DonCorleone/src/data/site.config.js) no bloco `pagamento`:
+
+- `pix.chave`: Chave Pix exibida na tela pós-envio com botão de cópia de 1 clique.
+- `pix.tipo`: Tipo da chave (ex: `"Celular / WhatsApp"`, `"CNPJ"`, `"Chave Aleatória"`).
+- `pix.titular`: Nome da empresa/titular da conta.
+- `tempoMedioEspera`: Tempo médio estimado exibido para pedidos em dinheiro ou cartão (ex: `"40 min"`).
 
 ---
 
@@ -65,32 +97,32 @@ No arquivo `js/config.js`, no campo `contato.whatsapp`:
 
 ```text
 DonCorleone/
-├── index.html            # Estrutura semântica e pontos de ancoragem da página
-├── package.json          # Dependências do projeto
-├── vite.config.js        # Configuração do Vite com injeção automática de SEO
-├── css/
-│   ├── base.css          # Design tokens (cores, fontes, espaçamentos) e reset
-│   ├── hero.css          # Estilos do Hero e abertura cinematográfica
-│   └── cardapio.css      # Grid, cards, filtros e interações do cardápio
-├── js/
-│   ├── config.js         # Única fonte de verdade dos dados comerciais
-│   ├── main.js           # Inicialização e orquestração dos módulos
-│   ├── scroll.js         # GSAP, ScrollTrigger e sincronização do Lenis
-│   ├── pizza3d.js        # Cena 3D Three.js e controle de camadas
-│   ├── cardapio.js       # Renderização dinâmica e filtros do cardápio
-│   ├── content.js        # Injeção de textos configuráveis no DOM
-│   ├── device.js         # Detecção de qualidade de GPU e prefers-reduced-motion
-│   ├── links.js          # Geração segura de URLs e mensagens WhatsApp
-│   └── pizzaArt.js       # Fallback ilustrativo vetorial para produtos
-└── assets/
-    ├── img/              # Logotipos, ícones e fotografias gastronômicas
-    └── fonts/            # Arquivos de fontes locais
+├── index.html                   # HTML base, metadados OpenGraph e Schema.org
+├── package.json                 # Dependências (Vite, GSAP, Lenis, Three.js)
+├── vite.config.js               # Configuração do Vite
+├── src/
+│   ├── main.js                  # Ponto de entrada da aplicação
+│   ├── data/
+│   │   ├── site.config.js       # Central de configurações, Pix, horários e promoções
+│   │   ├── cardapio.json        # Catálogo de pizzas, esfihas e sobremesas
+│   │   ├── bairros.json         # Tabela de bairros e taxas de entrega (Cuiabá e VG)
+│   │   └── depoimentos.json     # Avaliações da cantina
+│   ├── utils/
+│   │   ├── entrega.js           # Cálculo puro de taxa de entrega por modalidade/bairro
+│   │   ├── codigo-pedido.js     # Gerador de códigos curtos padronizados (DC-DDMM-XXX)
+│   │   ├── whatsapp-order.js    # Formatador de mensagem otimizada para WhatsApp
+│   │   ├── horario.js           # Verificação de funcionamento e corte (fuso Cuiabá)
+│   │   ├── promocao.js          # Validação e cálculo de campanhas ativas
+│   │   ├── carrinho.js          # Store reativa do carrinho com sessionStorage
+│   │   └── calculo-pizza.js     # Regras de fatias e maior valor
+│   ├── components/
+│   │   ├── header.js            # Topo com barra de progresso dourada e carrinho
+│   │   ├── banner-promocao.js   # Faixa de destaque para campanhas ativas
+│   │   ├── carrinho-modal.js    # Checkout em 5 passos, autopreenchimento e tela pós-envio
+│   │   ├── barra-pedido.js      # Barra flutuante inferior para mobile
+│   │   └── ...
+│   └── styles/
+│       ├── tokens.css           # Design tokens e variáveis de cores/sombras
+│       ├── base.css             # Estilos globais e componentes base
+│       └── components/          # Estilos individuais dos componentes
 ```
-
----
-
-## 🌐 Publicação (Deploy)
-
-A build gera arquivos estáticos com caminhos relativos prontos para:
-- **Vercel / Netlify:** Vincule o repositório no painel e configure o comando de build como `npm run build` e diretório de saída como `dist`.
-- **GitHub Pages:** Execute `npm run build` e envie a pasta `dist` para a branch `gh-pages`.

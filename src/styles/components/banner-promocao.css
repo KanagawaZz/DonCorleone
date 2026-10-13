@@ -1,0 +1,90 @@
+/* Faixa / Banner Promocional no Topo */
+
+.banner-promocao-topo {
+  width: 100%;
+  background: linear-gradient(90deg, #1C120C 0%, #2A150E 50%, #1C120C 100%);
+  border-bottom: 1px solid rgba(184, 134, 11, 0.35);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(226, 109, 43, 0.2);
+  padding: 8px 16px;
+  position: relative;
+  z-index: 90;
+}
+
+.banner-promocao-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.banner-promocao-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  text-align: center;
+}
+
+.banner-promo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  background: rgba(184, 134, 11, 0.18);
+  border: 1px solid var(--color-gold-aged);
+  border-radius: 999px;
+  font-family: var(--font-cinzel);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-gold-light);
+}
+
+.banner-promo-icon {
+  color: var(--color-oven-amber);
+  font-size: 0.8rem;
+}
+
+.banner-promo-texto {
+  font-family: var(--font-manrope);
+  font-size: 0.82rem;
+  color: var(--color-text-creme);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.banner-promo-cupom {
+  display: inline-block;
+  padding: 2px 8px;
+  background: rgba(226, 109, 43, 0.15);
+  border: 1px dashed var(--color-oven-amber);
+  border-radius: 4px;
+  color: #FFB370;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.banner-promo-desconto {
+  display: inline-block;
+  padding: 2px 8px;
+  background: var(--color-oven-amber);
+  color: #FFFFFF;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 600px) {
+  .banner-promocao-topo {
+    padding: 6px 10px;
+  }
+  .banner-promo-texto {
+    font-size: 0.76rem;
+    gap: 6px;
+  }
+}

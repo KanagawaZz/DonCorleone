@@ -6,6 +6,7 @@
 
 /* Component Styles */
 @import './components/header.css';
+@import './components/banner-promocao.css';
 @import './components/status-aberto.css';
 @import './components/montagem.css';
 @import './components/marquee.css';

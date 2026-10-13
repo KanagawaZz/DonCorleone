@@ -1,20 +1,44 @@
 /**
  * Modal & Drawer de Carrinho e Checkout Integrado - Don Corleone
  * 
- * Permite ao cliente visualizar itens, editar pizzas e sabores,
- * selecionar modalidade de entrega/retirada, informar endereço e pagamento,
- * revisar o pedido completo e abrir diretamente no WhatsApp com a mensagem pronta.
+ * Funcionalidades evoluídas:
+ * 1. Taxa de entrega calculada por bairro (Cuiabá e Várzea Grande) ou a confirmar
+ * 2. Geração de código único legível (DC-DDMM-XXX)
+ * 3. Envio de mensagem ultrarrápida (1ª linha para 3 segundos) via WhatsApp
+ * 4. Tela pós-envio com código, chave Pix (copiar com 1 clique) e aviso de preparo
+ * 5. Bloqueio automático de pedidos quando fechado ou após o horário de corte (22:30)
+ * 6. Autopreenchimento para quem recompra (localStorage) com opção de limpar
+ * 7. Aplicação de desconto de promoções ativas no fuso de Cuiabá
  */
 
 import { carrinho } from '../utils/carrinho.js';
 import { formatarPreco, esc } from '../utils/dom.js';
+import { icone } from '../utils/icons.js';
 import { formatarTituloPizza } from '../utils/calculo-pizza.js';
-import { gerarLinkWhatsAppPedido } from '../utils/whatsapp-order.js';
+import { gerarLinkWhatsAppPedido, montarMensagemWhatsApp } from '../utils/whatsapp-order.js';
+import { pararLenis, retomarLenis } from '../utils/motion.js';
+import bairrosLista from '../data/bairros.json';
+import { calcularTaxaEntrega, obterBairrosAgrupadosPorCidade } from '../utils/entrega.js';
+import { gerarCodigoPedido } from '../utils/codigo-pedido.js';
+import { obterStatusFuncionamento } from '../utils/horario.js';
+import { obterPromocaoAtiva } from '../utils/promocao.js';
+
+const STORAGE_CLIENTE_KEY = 'don_corleone_cliente_v1';
 
 export function renderCarrinhoModal(config) {
+  const bairrosAgrupados = obterBairrosAgrupadosPorCidade(bairrosLista);
+  
+  // Opções do Select de Bairro agrupadas por cidade
+  const optgroupsHtml = Object.entries(bairrosAgrupados).map(([cidade, lista]) => {
+    const options = lista.map(b => `
+      <option value="${esc(b.bairro)}" data-taxa="${b.taxa}">${esc(b.bairro)} — ${formatarPreco(b.taxa)}</option>
+    `).join('');
+    return `<optgroup label="${esc(cidade)}">${options}</optgroup>`;
+  }).join('');
+
   return `
-  <div class="pedido-modal-overlay" id="pedido-modal-overlay" aria-hidden="true">
-    <div class="pedido-modal-container" id="pedido-modal-container" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+  <div class="pedido-modal-overlay" id="pedido-modal-overlay" data-lenis-prevent="true" aria-hidden="true">
+    <div class="pedido-modal-container" id="pedido-modal-container" data-lenis-prevent="true" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
       
       <!-- Cabeçalho do Modal -->
       <header class="pedido-modal-header">
@@ -22,7 +46,7 @@ export function renderCarrinhoModal(config) {
           <img src="${config.marca?.brasaoUrl || '/images/brand/brasao.svg'}" alt="Don Corleone" class="pedido-header-brasao" width="28" height="28" />
           <div>
             <h2 id="modal-titulo" class="pedido-modal-title">Seu Pedido</h2>
-            <p class="pedido-modal-subtitle">Don Corleone · Unidade Arena Cuiabá</p>
+            <p class="pedido-modal-subtitle">Don Corleone · Cantina &amp; Pizzaria Cidade Alta (Cuiabá/MT)</p>
           </div>
         </div>
         <button type="button" class="pedido-modal-close" id="btn-fechar-modal" aria-label="Fechar janela de pedido">
@@ -34,8 +58,17 @@ export function renderCarrinhoModal(config) {
       </header>
 
       <!-- Corpo do Modal com Scroll -->
-      <div class="pedido-modal-body">
+      <div class="pedido-modal-body" id="pedido-modal-body" data-lenis-prevent="true" tabindex="0">
         
+        <!-- Banner de Alerta se a Cantina estiver Fechada ou após Corte -->
+        <div class="aviso-fechado-checkout" id="aviso-fechado-checkout" style="display: none;">
+          <div class="aviso-fechado-icon">${icone('alerta', 26)}</div>
+          <div class="aviso-fechado-textos">
+            <strong>Pizzaria Fechada para Novos Pedidos</strong>
+            <p id="aviso-fechado-mensagem">Consulte o cardápio e valores livremente. Os pedidos só podem ser finalizados quando a cantina estiver aberta.</p>
+          </div>
+        </div>
+
         <!-- Alerta de Carrinho Vazio -->
         <div class="carrinho-vazio-aviso" id="carrinho-vazio-aviso" style="display: none;">
           <div class="vazio-icon-wrap">
@@ -46,7 +79,7 @@ export function renderCarrinhoModal(config) {
             </svg>
           </div>
           <h3>Seu carrinho está vazio</h3>
-          <p>Monte uma pizza deliciosa ou escolha suas esfihas favoritas no cardápio.</p>
+          <p>Monte uma pizza saborosa com até 3 sabores ou escolha suas esfihas no cardápio.</p>
           <button type="button" class="btn btn--primary btn--voltar-cardapio" id="btn-ir-cardapio">
             Explorar Cardápio
           </button>
@@ -79,10 +112,15 @@ export function renderCarrinhoModal(config) {
 
           <!-- SEÇÃO 2: Dados do Cliente -->
           <section class="pedido-secao secao-cliente">
-            <h3 class="pedido-secao-titulo">
-              <span class="secao-num">2</span>
-              Seus Dados
-            </h3>
+            <div class="secao-header-flex">
+              <h3 class="pedido-secao-titulo">
+                <span class="secao-num">2</span>
+                Seus Dados
+              </h3>
+              <button type="button" class="btn-limpar-dados" id="btn-limpar-dados" style="display: none;" title="Limpar dados salvos neste aparelho">
+                Limpar meus dados salvos
+              </button>
+            </div>
             
             <div class="form-grid-2">
               <div class="form-campo">
@@ -100,6 +138,14 @@ export function renderCarrinhoModal(config) {
                 <input type="tel" id="cliente-telefone" name="cliente_telefone" class="form-input" placeholder="(65) 99999-9999" required autocomplete="tel" />
                 <span class="form-erro" id="erro-cliente-telefone"></span>
               </div>
+            </div>
+
+            <!-- Opção de Lembrar Dados para Recompra -->
+            <div class="salvar-dados-wrap mt-3">
+              <label class="checkbox-lembrar-label">
+                <input type="checkbox" id="lembrar-dados-check" checked />
+                <span>Lembrar meus dados neste aparelho para compras futuras</span>
+              </label>
             </div>
           </section>
 
@@ -123,7 +169,7 @@ export function renderCarrinhoModal(config) {
                   </div>
                   <div class="modalidade-textos">
                     <span class="modalidade-titulo">Entrega (Delivery)</span>
-                    <span class="modalidade-desc">Receba quentinha na sua casa</span>
+                    <span class="modalidade-desc">Receba quentinha com motoboy próprio</span>
                   </div>
                   <div class="modalidade-check-indicator"></div>
                 </div>
@@ -140,7 +186,7 @@ export function renderCarrinhoModal(config) {
                   </div>
                   <div class="modalidade-textos">
                     <span class="modalidade-titulo">Retirada no Balcão</span>
-                    <span class="modalidade-desc">Unidade Arena Cuiabá</span>
+                    <span class="modalidade-desc">Unidade Cidade Alta (Taxa R$ 0)</span>
                   </div>
                   <div class="modalidade-check-indicator"></div>
                 </div>
@@ -149,21 +195,45 @@ export function renderCarrinhoModal(config) {
 
             <!-- Bloco Condicional: Campos de Endereço para Entrega -->
             <div class="condicional-bloco" id="bloco-endereco-entrega">
-              <div class="aviso-taxa-entrega">
+              
+              <!-- Alerta Dinâmico da Taxa do Bairro -->
+              <div class="aviso-taxa-entrega" id="aviso-taxa-dinamica">
                 <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="10"></circle>
                   <line x1="12" y1="8" x2="12" y2="12"></line>
                   <line x1="12" y1="16" x2="12.01" y2="16"></line>
                 </svg>
-                <span><strong>Taxa de entrega:</strong> a confirmar com a pizzaria após envio do endereço.</span>
+                <span id="texto-taxa-dinamica"><strong>Taxa de entrega:</strong> selecione seu bairro abaixo para calcular.</span>
               </div>
 
-              <div class="form-grid-3">
+              <!-- Seleção de Bairro agrupado por cidade -->
+              <div class="form-campo mt-3">
+                <label for="entrega-bairro-select" class="form-label">
+                  Bairro de Entrega <span class="campo-obrigatorio">*</span>
+                </label>
+                <select id="entrega-bairro-select" name="entrega_bairro_select" class="form-input form-select" required>
+                  <option value="">Selecione o bairro de entrega...</option>
+                  ${optgroupsHtml}
+                  <option value="outro">Outro bairro (a confirmar com a atendente)</option>
+                </select>
+                <span class="form-erro" id="erro-entrega-bairro"></span>
+              </div>
+
+              <!-- Campo que aparece se o usuário escolher "Outro bairro" -->
+              <div class="form-campo mt-2" id="campo-outro-bairro" style="display: none;">
+                <label for="entrega-bairro-outro" class="form-label">
+                  Qual é o seu bairro? <span class="campo-obrigatorio">*</span>
+                </label>
+                <input type="text" id="entrega-bairro-outro" name="entrega_bairro_outro" class="form-input" placeholder="Digite o nome do seu bairro..." />
+                <span class="form-help-subtle">A taxa para este bairro será confirmada pela atendente via WhatsApp.</span>
+              </div>
+
+              <div class="form-grid-3 mt-3">
                 <div class="form-campo grid-col-2">
                   <label for="entrega-rua" class="form-label">
                     Rua / Avenida <span class="campo-obrigatorio">*</span>
                   </label>
-                  <input type="text" id="entrega-rua" name="entrega_rua" class="form-input" placeholder="Ex: Av. Agrícola Paes de Barros" required />
+                  <input type="text" id="entrega-rua" name="entrega_rua" class="form-input" placeholder="Ex: Av. Brasil" required />
                   <span class="form-erro" id="erro-entrega-rua"></span>
                 </div>
 
@@ -171,23 +241,8 @@ export function renderCarrinhoModal(config) {
                   <label for="entrega-numero" class="form-label">
                     Número <span class="campo-obrigatorio">*</span>
                   </label>
-                  <input type="text" id="entrega-numero" name="entrega_numero" class="form-input" placeholder="Ex: 120" required />
+                  <input type="text" id="entrega-numero" name="entrega_numero" class="form-input" placeholder="Ex: 2055" required />
                   <span class="form-erro" id="erro-entrega-numero"></span>
-                </div>
-              </div>
-
-              <div class="form-grid-2 mt-3">
-                <div class="form-campo">
-                  <label for="entrega-bairro" class="form-label">
-                    Bairro <span class="campo-obrigatorio">*</span>
-                  </label>
-                  <input type="text" id="entrega-bairro" name="entrega_bairro" class="form-input" placeholder="Ex: Verdão" required />
-                  <span class="form-erro" id="erro-entrega-bairro"></span>
-                </div>
-
-                <div class="form-campo">
-                  <label for="entrega-cidade" class="form-label">Cidade</label>
-                  <input type="text" id="entrega-cidade" name="entrega_cidade" class="form-input" value="Cuiabá — MT" readonly />
                 </div>
               </div>
 
@@ -199,7 +254,19 @@ export function renderCarrinhoModal(config) {
 
                 <div class="form-campo">
                   <label for="entrega-referencia" class="form-label">Ponto de referência (opcional)</label>
-                  <input type="text" id="entrega-referencia" name="entrega_referencia" class="form-input" placeholder="Ex: Próximo à Arena Pantanal" />
+                  <input type="text" id="entrega-referencia" name="entrega_referencia" class="form-input" placeholder="Ex: Próximo à praça / mercado" />
+                </div>
+              </div>
+
+              <div class="form-grid-2 mt-3">
+                <div class="form-campo">
+                  <label for="entrega-cidade" class="form-label">Cidade</label>
+                  <input type="text" id="entrega-cidade" name="entrega_cidade" class="form-input" value="Cuiabá / Várzea Grande — MT" readonly />
+                </div>
+
+                <div class="form-campo">
+                  <label for="entrega-cep" class="form-label">CEP (opcional)</label>
+                  <input type="text" id="entrega-cep" name="entrega_cep" class="form-input" placeholder="Ex: 78030-409" />
                 </div>
               </div>
             </div>
@@ -207,9 +274,10 @@ export function renderCarrinhoModal(config) {
             <!-- Bloco Condicional: Informações de Retirada no Balcão -->
             <div class="condicional-bloco" id="bloco-info-retirada" style="display: none;">
               <div class="balcao-info-box">
-                <div class="balcao-badge">Retirada na Loja</div>
-                <h4>Unidade Arena Cuiabá</h4>
-                <p><strong>Horário de funcionamento:</strong> Todos os dias, das 17h às 23h.</p>
+                <div class="balcao-badge">Retirada no Balcão · Taxa Grátis</div>
+                <h4>Unidade Cidade Alta</h4>
+                <p><strong>Endereço:</strong> Avenida Brasil, 2055, Cidade Alta, Cuiabá - MT (CEP 78030-409)</p>
+                <p class="mt-1"><strong>Expediente:</strong> Seg a Qui: 17h30 às 23h00 · Sex e Dom: 17h30 às 23h15 · Sáb: 17h30 às 23h30</p>
                 <div class="form-campo mt-3">
                   <label for="retirada-horario" class="form-label">Horário pretendido para retirada (opcional)</label>
                   <input type="text" id="retirada-horario" name="retirada_horario" class="form-input" placeholder="Ex: Em 30 minutos / Às 20:30" />
@@ -271,6 +339,20 @@ export function renderCarrinhoModal(config) {
               </label>
             </div>
 
+            <!-- Bandeiras de Cartão Aceitas na Entrega -->
+            <div class="pagamento-bandeiras-nota mt-2">
+              <span class="bandeiras-icone">${icone('cartao', 18)}</span>
+              <span>Bandeiras aceitas na maquininha na entrega: <strong>Visa, Mastercard, American Express e Elo</strong></span>
+            </div>
+
+            <!-- Bloco Informativo de Pix -->
+            <div class="condicional-bloco mt-3" id="bloco-aviso-pix">
+              <div class="pix-aviso-box">
+                <span class="pix-badge-pill">Atenção ao Pix</span>
+                <p>A chave Pix oficial (<strong>${config.pagamento?.pix?.chave || '65993605364'}</strong>) será apresentada na tela após o envio e a produção é iniciada <strong>após o envio do comprovante no WhatsApp</strong>.</p>
+              </div>
+            </div>
+
             <!-- Bloco Condicional de Troco para Dinheiro -->
             <div class="condicional-bloco mt-3" id="bloco-troco-dinheiro" style="display: none;">
               <div class="troco-pergunta-wrap">
@@ -301,7 +383,7 @@ export function renderCarrinhoModal(config) {
               <span class="secao-num">5</span>
               Observações Gerais (opcional)
             </h3>
-            <textarea id="pedido-observacoes" name="pedido_observacoes" class="form-textarea" rows="2" placeholder="Ex: Tocar campainha, ligar ao chegar..."></textarea>
+            <textarea id="pedido-observacoes" name="pedido_observacoes" class="form-textarea" rows="2" placeholder="Ex: Tocar campainha, chamar no portão, sem talheres..."></textarea>
           </section>
 
           <!-- SEÇÃO 6: Resumo e Revisão do Pedido -->
@@ -312,26 +394,99 @@ export function renderCarrinhoModal(config) {
             </h3>
 
             <div class="revisao-card" id="revisao-card-box">
-              <!-- Preenchido dinamicamente -->
+              <!-- Preenchido dinamicamente com subtotal, desconto, taxa e total -->
             </div>
           </section>
 
         </div>
+
+        <!-- ============================================================ -->
+        <!-- TELA PÓS-ENVIO COM INSTRUÇÕES DE PIX E CÓDIGO (TAREFA 4)      -->
+        <!-- ============================================================ -->
+        <div class="carrinho-tela-pos-envio" id="carrinho-tela-pos-envio" style="display: none;">
+          
+          <div class="pos-envio-sucesso-header">
+            <div class="pos-envio-icone-check">✓</div>
+            <span class="pos-envio-badge-tag">Pedido Encaminhado com Sucesso</span>
+            <h3 class="pos-envio-titulo">Seu Pedido está a Caminho!</h3>
+            <div class="pos-envio-codigo-wrap">
+              <span class="codigo-label">Código do Pedido:</span>
+              <span class="codigo-destaque" id="pos-envio-codigo-display">DC-0000-000</span>
+            </div>
+          </div>
+
+          <!-- Bloco Específico se Pagamento for PIX -->
+          <div class="pos-envio-pix-card" id="pos-envio-pix-card" style="display: none;">
+            <div class="pix-card-header">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+                <path d="M12 2 4 10l8 8 8-8-8-8zm0 4.24 3.76 3.76L12 13.76 8.24 10 12 6.24z"/>
+              </svg>
+              <h4>Pagamento via Pix</h4>
+            </div>
+
+            <p class="pix-card-instrucao">
+              Copie a chave Pix abaixo e efetue o pagamento no seu banco:
+            </p>
+
+            <div class="pix-chave-box">
+              <div class="pix-chave-info">
+                <span class="pix-chave-tipo" id="pos-pix-tipo">Chave Celular / Pix</span>
+                <span class="pix-chave-valor" id="pos-pix-chave">${config.pagamento?.pix?.chave || '65993605364'}</span>
+              </div>
+              <button type="button" class="btn btn--gold btn-copiar-pix" id="btn-copiar-chave-pix">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+                <span id="btn-copiar-pix-label">Copiar Chave</span>
+              </button>
+            </div>
+
+            <div class="pix-aviso-importante">
+              <strong>${icone('alerta', 14)} REGRA DE PRODUÇÃO:</strong>
+              <span>Seu pedido entra em preparo assim que enviarmos a confirmação do comprovante. Envie o comprovante no WhatsApp.</span>
+            </div>
+          </div>
+
+          <!-- Bloco Específico se Pagamento for Dinheiro ou Cartão -->
+          <div class="pos-envio-outros-card" id="pos-envio-outros-card" style="display: none;">
+            <div class="outros-card-badge">Confirmação Pendente</div>
+            <p id="pos-envio-outros-msg">
+              Pedido enviado! A atendente vai confirmar em instantes. Tempo médio: 40 min.
+            </p>
+          </div>
+
+          <!-- Botões de Ação na Tela Pós-Envio -->
+          <div class="pos-envio-acoes">
+            <a href="#" target="_blank" rel="noopener noreferrer" class="btn btn--primary w-full" id="btn-reabrir-whats">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.27-2.42 5.82a8.196 8.196 0 0 1-5.82 2.41c-1.47 0-2.91-.39-4.18-1.15l-.3-.18-3.11.82.83-3.03-.2-.31a8.21 8.21 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24zm4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.75-.67-1.25-1.5-1.4-1.75-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.44.13-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.08 0 1.23.89 2.42 1.02 2.59.13.17 1.76 2.69 4.27 3.77.6.26 1.06.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.17-.47-.3z"/>
+              </svg>
+              <span>Abrir WhatsApp Novamente</span>
+            </a>
+
+            <button type="button" class="btn btn--outline w-full mt-2" id="btn-novo-pedido">
+              Fazer Outro Pedido
+            </button>
+          </div>
+
+        </div>
+
       </div>
 
       <!-- Rodapé com Ações de Envio -->
       <footer class="pedido-modal-footer" id="pedido-modal-footer">
         <div class="footer-total-box">
-          <span class="footer-total-label">Subtotal dos produtos:</span>
+          <span class="footer-total-label" id="footer-total-label">Total do Pedido:</span>
           <span class="footer-total-valor" id="footer-total-valor">R$ 0,00</span>
-          <span class="footer-total-taxa-aviso" id="footer-taxa-aviso">+ taxa de entrega a confirmar</span>
+          <span class="footer-total-taxa-aviso" id="footer-taxa-aviso">+ taxa de entrega</span>
         </div>
 
         <button type="button" class="btn btn--primary btn--enviar-whats" id="btn-enviar-pedido-whats">
           <svg class="btn-icon" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
             <path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm.01 1.67c4.54 0 8.24 3.7 8.24 8.24 0 2.2-.86 4.27-2.42 5.82a8.196 8.196 0 0 1-5.82 2.41c-1.47 0-2.91-.39-4.18-1.15l-.3-.18-3.11.82.83-3.03-.2-.31a8.21 8.21 0 0 1-1.26-4.38c0-4.54 3.7-8.24 8.24-8.24zm4.52 11.66c-.25-.13-1.47-.72-1.7-.81-.23-.08-.39-.13-.56.13-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.13-1.06-.39-2.02-1.24-.75-.67-1.25-1.5-1.4-1.75-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.44.13-.14.17-.25.25-.42.08-.17.04-.31-.02-.44-.06-.13-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.87.85-.87 2.08 0 1.23.89 2.42 1.02 2.59.13.17 1.76 2.69 4.27 3.77.6.26 1.06.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.17-.47-.3z"/>
           </svg>
-          <span>Confirmar e Continuar para o WhatsApp</span>
+          <span id="btn-enviar-label">Confirmar e Enviar para o WhatsApp</span>
         </button>
       </footer>
 
@@ -346,6 +501,7 @@ export function initCarrinhoModal(config) {
   const btnAddMais = document.querySelector('#btn-add-mais');
   const btnIrCardapio = document.querySelector('#btn-ir-cardapio');
   const btnEnviar = document.querySelector('#btn-enviar-pedido-whats');
+  const btnEnviarLabel = document.querySelector('#btn-enviar-label');
   
   const listaItens = document.querySelector('#pedido-itens-lista');
   const avisoVazio = document.querySelector('#carrinho-vazio-aviso');
@@ -356,26 +512,163 @@ export function initCarrinhoModal(config) {
   const footerTaxaAviso = document.querySelector('#footer-taxa-aviso');
   const revisaoBox = document.querySelector('#revisao-card-box');
 
+  // Elementos do Bloqueio de Horário
+  const avisoFechado = document.querySelector('#aviso-fechado-checkout');
+  const avisoFechadoMensagem = document.querySelector('#aviso-fechado-mensagem');
+
+  // Elementos de Endereço & Bairros
+  const selectBairro = document.querySelector('#entrega-bairro-select');
+  const campoOutroBairro = document.querySelector('#campo-outro-bairro');
+  const inputOutroBairro = document.querySelector('#entrega-bairro-outro');
+  const avisoTaxaDinamica = document.querySelector('#texto-taxa-dinamica');
+
   // Campos do formulário
   const inputNome = document.querySelector('#cliente-nome');
   const inputTelefone = document.querySelector('#cliente-telefone');
+  const checkLembrarDados = document.querySelector('#lembrar-dados-check');
+  const btnLimparDados = document.querySelector('#btn-limpar-dados');
+
   const radiosModalidade = document.querySelectorAll('input[name="modalidade_tipo"]');
   const blocoEndereco = document.querySelector('#bloco-endereco-entrega');
   const blocoRetirada = document.querySelector('#bloco-info-retirada');
   const inputRua = document.querySelector('#entrega-rua');
   const inputNumero = document.querySelector('#entrega-numero');
-  const inputBairro = document.querySelector('#entrega-bairro');
   const inputComplemento = document.querySelector('#entrega-complemento');
   const inputReferencia = document.querySelector('#entrega-referencia');
+  const inputCep = document.querySelector('#entrega-cep');
   const inputRetiradaHorario = document.querySelector('#retirada-horario');
+
   const radiosPagamento = document.querySelectorAll('input[name="forma_pagamento"]');
+  const blocoAvisoPix = document.querySelector('#bloco-aviso-pix');
   const blocoTroco = document.querySelector('#bloco-troco-dinheiro');
   const radiosTroco = document.querySelectorAll('input[name="precisa_troco"]');
   const campoValorTroco = document.querySelector('#campo-valor-troco');
   const inputValorTroco = document.querySelector('#valor-troco');
   const inputObs = document.querySelector('#pedido-observacoes');
 
-  // Formatação de Telefone com máscara brasileira
+  // Elementos da Tela Pós-Envio
+  const telaPosEnvio = document.querySelector('#carrinho-tela-pos-envio');
+  const posCodigoDisplay = document.querySelector('#pos-envio-codigo-display');
+  const posPixCard = document.querySelector('#pos-envio-pix-card');
+  const posPixTipo = document.querySelector('#pos-pix-tipo');
+  const posPixChave = document.querySelector('#pos-pix-chave');
+  const btnCopiarPix = document.querySelector('#btn-copiar-chave-pix');
+  const btnCopiarPixLabel = document.querySelector('#btn-copiar-pix-label');
+  const posOutrosCard = document.querySelector('#pos-envio-outros-card');
+  const posOutrosMsg = document.querySelector('#pos-envio-outros-msg');
+  const btnReabrirWhats = document.querySelector('#btn-reabrir-whats');
+  const btnNovoPedido = document.querySelector('#btn-novo-pedido');
+
+  let ultimoLinkWhatsGerado = '';
+
+  // 1. CARREGAR DADOS SALVOS NO LOCALSTORAGE (TAREFA 6)
+  function carregarDadosSalvos() {
+    try {
+      const salvo = localStorage.getItem(STORAGE_CLIENTE_KEY);
+      if (salvo) {
+        const dados = JSON.parse(salvo);
+        if (dados && typeof dados === 'object') {
+          if (dados.nome && inputNome) inputNome.value = dados.nome;
+          if (dados.telefone && inputTelefone) inputTelefone.value = dados.telefone;
+          if (dados.rua && inputRua) inputRua.value = dados.rua;
+          if (dados.numero && inputNumero) inputNumero.value = dados.numero;
+          if (dados.complemento && inputComplemento) inputComplemento.value = dados.complemento;
+          if (dados.referencia && inputReferencia) inputReferencia.value = dados.referencia;
+          if (dados.cep && inputCep) inputCep.value = dados.cep;
+
+          if (dados.bairro && selectBairro) {
+            selectBairro.value = dados.bairro;
+            if (selectBairro.value === 'outro') {
+              if (campoOutroBairro) campoOutroBairro.style.display = 'block';
+              if (inputOutroBairro && dados.bairroOutro) inputOutroBairro.value = dados.bairroOutro;
+            }
+          }
+
+          if (btnLimparDados) btnLimparDados.style.display = 'inline-block';
+        }
+      }
+    } catch (e) {
+      console.warn('Não foi possível ler dados salvos do cliente:', e);
+    }
+  }
+
+  function salvarDadosCliente(dados) {
+    if (!checkLembrarDados?.checked) return;
+    try {
+      const paraSalvar = {
+        nome: dados.cliente.nome,
+        telefone: dados.cliente.telefone,
+        rua: dados.endereco.logradouro,
+        numero: dados.endereco.numero,
+        bairro: selectBairro?.value || '',
+        bairroOutro: inputOutroBairro?.value?.trim() || '',
+        complemento: dados.endereco.complemento,
+        referencia: dados.endereco.referencia,
+        cep: dados.endereco.cep
+      };
+      localStorage.setItem(STORAGE_CLIENTE_KEY, JSON.stringify(paraSalvar));
+      if (btnLimparDados) btnLimparDados.style.display = 'inline-block';
+    } catch (e) {
+      console.warn('Não foi possível salvar dados no localStorage:', e);
+    }
+  }
+
+  // Botão Limpar Dados
+  btnLimparDados?.addEventListener('click', () => {
+    try {
+      localStorage.removeItem(STORAGE_CLIENTE_KEY);
+      if (inputNome) inputNome.value = '';
+      if (inputTelefone) inputTelefone.value = '';
+      if (inputRua) inputRua.value = '';
+      if (inputNumero) inputNumero.value = '';
+      if (inputComplemento) inputComplemento.value = '';
+      if (inputReferencia) inputReferencia.value = '';
+      if (inputCep) inputCep.value = '';
+      if (selectBairro) selectBairro.value = '';
+      if (inputOutroBairro) inputOutroBairro.value = '';
+      if (campoOutroBairro) campoOutroBairro.style.display = 'none';
+
+      btnLimparDados.style.display = 'none';
+      atualizarRevisao();
+    } catch (e) {
+      console.warn('Erro ao limpar localStorage:', e);
+    }
+  });
+
+  // 2. VERIFICAÇÃO DE HORÁRIO E BLOQUEIO (TAREFA 5)
+  function verificarStatusFuncionamento() {
+    const status = obterStatusFuncionamento(new Date(), config.horario || {});
+
+    if (!status.podeFazerPedido) {
+      if (avisoFechado) {
+        avisoFechado.style.display = 'flex';
+        if (avisoFechadoMensagem) {
+          avisoFechadoMensagem.textContent = `Pizzaria fechada no momento: ${status.statusTexto}. Você pode consultar os valores e montar suas pizzas, mas os pedidos só podem ser finalizados quando a cantina estiver aberta.`;
+        }
+      }
+
+      if (btnEnviar) {
+        btnEnviar.disabled = true;
+        btnEnviar.classList.add('btn--bloqueado');
+      }
+      if (btnEnviarLabel) {
+        btnEnviarLabel.textContent = `Fechado · ${status.statusTexto}`;
+      }
+    } else {
+      if (avisoFechado) avisoFechado.style.display = 'none';
+      if (btnEnviar) {
+        btnEnviar.disabled = false;
+        btnEnviar.classList.remove('btn--bloqueado');
+      }
+      if (btnEnviarLabel) {
+        btnEnviarLabel.textContent = 'Confirmar e Enviar para o WhatsApp';
+      }
+    }
+
+    return status;
+  }
+
+  // 3. MÁSCARAS DE INPUT
   if (inputTelefone) {
     inputTelefone.addEventListener('input', (e) => {
       let v = e.target.value.replace(/\D/g, '');
@@ -392,7 +685,6 @@ export function initCarrinhoModal(config) {
     });
   }
 
-  // Formatação de Troco
   if (inputValorTroco) {
     inputValorTroco.addEventListener('input', (e) => {
       let v = e.target.value.replace(/\D/g, '');
@@ -404,8 +696,21 @@ export function initCarrinhoModal(config) {
     });
   }
 
-  // Ouvintes de alteração nos inputs para atualizar o resumo
-  [inputNome, inputRua, inputNumero, inputBairro, inputComplemento, inputReferencia, inputRetiradaHorario, inputObs].forEach(input => {
+  // 4. TAXA DE ENTREGA POR BAIRRO (TAREFA 1)
+  selectBairro?.addEventListener('change', () => {
+    const val = selectBairro.value;
+    if (val === 'outro') {
+      if (campoOutroBairro) campoOutroBairro.style.display = 'block';
+    } else {
+      if (campoOutroBairro) campoOutroBairro.style.display = 'none';
+    }
+    atualizarRevisao();
+  });
+
+  inputOutroBairro?.addEventListener('input', atualizarRevisao);
+
+  // Ouvintes nos demais inputs para reatividade
+  [inputNome, inputRua, inputNumero, inputComplemento, inputReferencia, inputRetiradaHorario, inputObs, inputCep].forEach(input => {
     input?.addEventListener('input', atualizarRevisao);
   });
 
@@ -420,27 +725,30 @@ export function initCarrinhoModal(config) {
         cardRetirada?.classList.remove('active');
         if (blocoEndereco) blocoEndereco.style.display = 'block';
         if (blocoRetirada) blocoRetirada.style.display = 'none';
-        if (footerTaxaAviso) footerTaxaAviso.style.display = 'block';
       } else {
         cardRetirada?.classList.add('active');
         cardEntrega?.classList.remove('active');
         if (blocoEndereco) blocoEndereco.style.display = 'none';
         if (blocoRetirada) blocoRetirada.style.display = 'block';
-        if (footerTaxaAviso) footerTaxaAviso.style.display = 'none';
       }
       atualizarRevisao();
     });
   });
 
-  // Pagamento
+  // Forma de Pagamento
   radiosPagamento.forEach(radio => {
     radio.addEventListener('change', () => {
       document.querySelectorAll('.pagamento-opcao').forEach(lbl => lbl.classList.remove('active'));
       radio.closest('.pagamento-opcao')?.classList.add('active');
 
-      if (radio.value === 'dinheiro') {
+      if (radio.value === 'pix') {
+        if (blocoAvisoPix) blocoAvisoPix.style.display = 'block';
+        if (blocoTroco) blocoTroco.style.display = 'none';
+      } else if (radio.value === 'dinheiro') {
+        if (blocoAvisoPix) blocoAvisoPix.style.display = 'none';
         if (blocoTroco) blocoTroco.style.display = 'block';
       } else {
+        if (blocoAvisoPix) blocoAvisoPix.style.display = 'none';
         if (blocoTroco) blocoTroco.style.display = 'none';
       }
       atualizarRevisao();
@@ -459,6 +767,7 @@ export function initCarrinhoModal(config) {
     });
   });
 
+  // 5. RENDERIZAÇÃO DOS ITENS DO CARRINHO
   function renderizarItensModal() {
     const itens = carrinho.obterItens();
     const subtotal = carrinho.obterSubtotal();
@@ -467,12 +776,14 @@ export function initCarrinhoModal(config) {
       if (avisoVazio) avisoVazio.style.display = 'block';
       if (conteudoAtivo) conteudoAtivo.style.display = 'none';
       if (footerModal) footerModal.style.display = 'none';
+      if (telaPosEnvio) telaPosEnvio.style.display = 'none';
       return;
     }
 
     if (avisoVazio) avisoVazio.style.display = 'none';
     if (conteudoAtivo) conteudoAtivo.style.display = 'block';
     if (footerModal) footerModal.style.display = 'flex';
+    if (telaPosEnvio) telaPosEnvio.style.display = 'none';
 
     if (listaItens) {
       listaItens.innerHTML = itens.map(item => {
@@ -480,11 +791,21 @@ export function initCarrinhoModal(config) {
         const itemSubtotal = precoUnit * (item.quantidade || 1);
 
         if (item.tipo === 'pizza') {
-          const qtdSabores = item.sabores?.length || 1;
           const tituloPizza = formatarTituloPizza(item, config);
           const listaSaboresHtml = (item.sabores || []).map(s => `
             <span class="pizza-sabor-pill">• ${esc(s.nome)}</span>
           `).join('');
+
+          let bordaHtml = '';
+          if (item.borda && item.borda.id !== 'sem-borda') {
+            const precoBordaTxt = (typeof item.borda.preco === 'number' && item.borda.preco > 0)
+              ? ` (+${formatarPreco(item.borda.preco)})`
+              : (item.borda.precoTexto ? ` (${item.borda.precoTexto})` : '');
+            bordaHtml = `<div class="item-borda-tag"><strong>Borda:</strong> ${esc(item.borda.nome)}${precoBordaTxt}</div>`;
+          }
+
+          const precoUnitTexto = (typeof precoUnit === 'number' && precoUnit > 0) ? `${formatarPreco(precoUnit)} cada` : 'Sob consulta';
+          const subtotalTexto = (typeof itemSubtotal === 'number' && itemSubtotal > 0) ? formatarPreco(itemSubtotal) : 'A confirmar';
 
           return `
           <div class="item-linha pizza-item-card" data-item-id="${item.id}">
@@ -494,10 +815,11 @@ export function initCarrinhoModal(config) {
               <div class="pizza-sabores-wrap">
                 ${listaSaboresHtml}
               </div>
+              ${bordaHtml}
               <div class="item-meta-row">
-                <span class="item-unitario">${formatarPreco(precoUnit)} cada</span>
+                <span class="item-unitario">${precoUnitTexto}</span>
                 <button type="button" class="btn-editar-pizza-item" data-action="edit">
-                  ✏️ Editar Sabores
+                  ${icone('editar', 13)} Editar Sabores / Borda
                 </button>
               </div>
             </div>
@@ -507,7 +829,7 @@ export function initCarrinhoModal(config) {
               <button type="button" class="btn-qty btn-qty-plus" data-action="plus" aria-label="Aumentar quantidade">+</button>
             </div>
             <div class="item-total-preco">
-              ${formatarPreco(itemSubtotal)}
+              ${subtotalTexto}
             </div>
             <button type="button" class="btn-item-remover" data-action="remove" aria-label="Remover item">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
@@ -518,13 +840,15 @@ export function initCarrinhoModal(config) {
           </div>
           `;
         } else {
-          // Item Simples (Esfiha, Sobremesa)
+          const precoUnitTexto = (typeof precoUnit === 'number' && precoUnit > 0) ? `${formatarPreco(precoUnit)} cada` : 'Sob consulta';
+          const subtotalTexto = (typeof itemSubtotal === 'number' && itemSubtotal > 0) ? formatarPreco(itemSubtotal) : 'A confirmar';
+
           return `
           <div class="item-linha" data-item-id="${item.id}">
             <img src="${item.foto}" alt="${esc(item.nome)}" class="item-thumb" />
             <div class="item-detalhes">
               <h4 class="item-nome">${esc(item.nome)}</h4>
-              <span class="item-unitario">${formatarPreco(precoUnit)} cada</span>
+              <span class="item-unitario">${precoUnitTexto}</span>
             </div>
             <div class="item-qty-controles">
               <button type="button" class="btn-qty btn-qty-minus" data-action="minus" aria-label="Diminuir quantidade">−</button>
@@ -532,7 +856,7 @@ export function initCarrinhoModal(config) {
               <button type="button" class="btn-qty btn-qty-plus" data-action="plus" aria-label="Aumentar quantidade">+</button>
             </div>
             <div class="item-total-preco">
-              ${formatarPreco(itemSubtotal)}
+              ${subtotalTexto}
             </div>
             <button type="button" class="btn-item-remover" data-action="remove" aria-label="Remover item">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
@@ -545,7 +869,7 @@ export function initCarrinhoModal(config) {
         }
       }).join('');
 
-      // Ações nos botões de cada linha
+      // Eventos dos botões de cada item
       listaItens.querySelectorAll('.item-linha').forEach(linha => {
         const itemId = linha.dataset.itemId;
         const itemObj = itens.find(i => i.id === itemId);
@@ -568,17 +892,38 @@ export function initCarrinhoModal(config) {
       });
     }
 
-    const subtotalFmt = formatarPreco(subtotal);
-    if (subtotalDisplay) subtotalDisplay.textContent = subtotalFmt;
-    if (footerTotalValor) footerTotalValor.textContent = subtotalFmt;
-
+    if (subtotalDisplay) subtotalDisplay.textContent = formatarPreco(subtotal);
     atualizarRevisao();
   }
 
+  // 6. EXTRAÇÃO DOS DADOS DO FORMULÁRIO COM TAXA E PROMOÇÃO
   function obterDadosFormulario() {
     const modalidade = document.querySelector('input[name="modalidade_tipo"]:checked')?.value || 'entrega';
     const formaPag = document.querySelector('input[name="forma_pagamento"]:checked')?.value || 'pix';
     const precisaTroco = document.querySelector('input[name="precisa_troco"]:checked')?.value || 'nao';
+
+    const bairroSel = selectBairro?.value || '';
+    let bairroFinal = bairroSel;
+    if (bairroSel === 'outro') {
+      bairroFinal = inputOutroBairro?.value?.trim() || 'Outro bairro (a confirmar)';
+    }
+
+    const entregaInfo = calcularTaxaEntrega(modalidade, bairroSel, bairrosLista);
+    if (bairroSel === 'outro' && inputOutroBairro?.value?.trim()) {
+      entregaInfo.bairro = inputOutroBairro.value.trim();
+    }
+
+    // Promoção
+    const subtotal = carrinho.obterSubtotal();
+    const promo = obterPromocaoAtiva(config.promocao);
+    const desconto = promo.ativa ? promo.calcularDesconto(subtotal) : 0;
+    const promocaoInfo = {
+      ativa: promo.ativa,
+      titulo: promo.titulo,
+      cupom: promo.cupom,
+      desconto,
+      descontoPercentual: promo.descontoPercentual
+    };
 
     return {
       itens: carrinho.obterItens(),
@@ -587,17 +932,20 @@ export function initCarrinhoModal(config) {
         telefone: inputTelefone?.value?.trim() || ''
       },
       modalidade,
+      entregaInfo,
+      promocaoInfo,
       endereco: {
         logradouro: inputRua?.value?.trim() || '',
         numero: inputNumero?.value?.trim() || '',
-        bairro: inputBairro?.value?.trim() || '',
+        bairro: bairroFinal,
         complemento: inputComplemento?.value?.trim() || '',
         referencia: inputReferencia?.value?.trim() || '',
         cidade: 'Cuiabá',
-        estado: 'MT'
+        estado: 'MT',
+        cep: inputCep?.value?.trim() || ''
       },
       retirada: {
-        unidade: 'Arena Cuiabá',
+        unidade: 'Avenida Brasil, 2055, Cidade Alta, Cuiabá - MT',
         horarioPretendido: inputRetiradaHorario?.value?.trim() || ''
       },
       pagamento: {
@@ -609,37 +957,137 @@ export function initCarrinhoModal(config) {
     };
   }
 
+  // 7. ATUALIZAÇÃO DO RESUMO E RODAPÉ EM TEMPO REAL
   function atualizarRevisao() {
     if (!revisaoBox) return;
     const dados = obterDadosFormulario();
     const subtotal = carrinho.obterSubtotal();
+    const desconto = dados.promocaoInfo.desconto || 0;
+    const subtotalComDesconto = Math.max(0, subtotal - desconto);
+    const pedidoMinimo = config.pagamento?.pedidoMinimo || 22.00;
+
+    // Texto dinâmico de taxa
+    if (avisoTaxaDinamica) {
+      if (dados.modalidade === 'retirada') {
+        avisoTaxaDinamica.innerHTML = '<strong>Retirada no balcão:</strong> sem taxa de entrega (R$ 0,00).';
+      } else {
+        if (dados.entregaInfo.statusTaxa === 'definida') {
+          avisoTaxaDinamica.innerHTML = `<strong>Taxa para ${esc(dados.entregaInfo.bairro)}:</strong> ${formatarPreco(dados.entregaInfo.taxa)}`;
+        } else if (selectBairro?.value === 'outro') {
+          avisoTaxaDinamica.innerHTML = '<strong>Outro bairro:</strong> taxa a confirmar com a atendente via WhatsApp.';
+        } else {
+          avisoTaxaDinamica.innerHTML = '<strong>Taxa de entrega:</strong> selecione seu bairro acima para calcular.';
+        }
+      }
+    }
 
     let enderecoOuRetiradaHtml = '';
+    let taxaLinhaHtml = '';
+
     if (dados.modalidade === 'entrega') {
       const enderecoTexto = [
         dados.endereco.logradouro ? `${dados.endereco.logradouro}, ${dados.endereco.numero || 'S/N'}` : null,
         dados.endereco.bairro ? `Bairro: ${dados.endereco.bairro}` : null,
-        'Cuiabá — MT'
+        'Cuiabá / VG'
       ].filter(Boolean).join(' · ');
 
       enderecoOuRetiradaHtml = `
         <div class="rev-linha">
           <span class="rev-label">Entrega em:</span>
-          <span class="rev-val">${enderecoTexto || 'Informe o endereço acima'}</span>
-        </div>
-        <div class="rev-linha">
-          <span class="rev-label">Taxa de entrega:</span>
-          <span class="rev-val text-gold">A confirmar com a pizzaria</span>
+          <span class="rev-val">${esc(enderecoTexto || 'Informe o endereço acima')}</span>
         </div>
       `;
+
+      if (dados.entregaInfo.statusTaxa === 'definida') {
+        taxaLinhaHtml = `
+          <div class="rev-linha">
+            <span class="rev-label">Taxa de entrega (${esc(dados.entregaInfo.bairro)}):</span>
+            <span class="rev-val text-gold">${formatarPreco(dados.entregaInfo.taxa)}</span>
+          </div>
+        `;
+      } else {
+        taxaLinhaHtml = `
+          <div class="rev-linha">
+            <span class="rev-label">Taxa de entrega:</span>
+            <span class="rev-val text-gold">A confirmar com a atendente</span>
+          </div>
+        `;
+      }
     } else {
       enderecoOuRetiradaHtml = `
         <div class="rev-linha">
           <span class="rev-label">Modalidade:</span>
-          <span class="rev-val">Retirada no balcão (Arena Cuiabá)</span>
+          <span class="rev-val">Retirada no balcão (Cidade Alta)</span>
+        </div>
+      `;
+      taxaLinhaHtml = `
+        <div class="rev-linha">
+          <span class="rev-label">Taxa de entrega:</span>
+          <span class="rev-val text-gold">R$ 0,00 (Grátis)</span>
         </div>
       `;
     }
+
+    // Linha de promoção / desconto
+    let descontoHtml = '';
+    if (desconto > 0) {
+      descontoHtml = `
+        <div class="rev-linha desconto-linha">
+          <span class="rev-label text-gold">Desconto (${dados.promocaoInfo.descontoPercentual}%):</span>
+          <span class="rev-val text-gold">- ${formatarPreco(desconto)}</span>
+        </div>
+      `;
+    }
+
+    // Linha de alerta de pedido mínimo
+    let avisoPedidoMinimoHtml = '';
+    if (subtotal > 0 && subtotal < pedidoMinimo) {
+      const diferenca = pedidoMinimo - subtotal;
+      avisoPedidoMinimoHtml = `
+        <div class="rev-linha aviso-minimo-linha">
+          <span class="rev-label text-danger">${icone('alerta', 14)} Pedido Mínimo: ${formatarPreco(pedidoMinimo)}</span>
+          <span class="rev-val text-danger">Adicione mais ${formatarPreco(diferenca)}</span>
+        </div>
+      `;
+    }
+
+    // Linha de aviso de itens com valor sob consulta
+    const temItensSobConsulta = dados.itens.some(item => 
+      (typeof item.precoUnitario !== 'number' && typeof item.preco !== 'number') || 
+      (!item.preco && item.tipo !== 'pizza')
+    );
+    let avisoItensSobConsultaHtml = '';
+    if (temItensSobConsulta) {
+      avisoItensSobConsultaHtml = `
+        <div class="rev-linha aviso-sob-consulta-linha">
+          <span class="rev-label text-gold">${icone('info', 14)} Preços sob consulta:</span>
+          <span class="rev-val text-gold">Valores a confirmar com atendente</span>
+        </div>
+      `;
+    }
+
+    // Cálculo do total final
+    let totalDisplayTexto = '';
+    let footerAvisoTexto = '';
+
+    if (dados.modalidade === 'retirada') {
+      totalDisplayTexto = formatarPreco(subtotalComDesconto);
+      footerAvisoTexto = temItensSobConsulta ? 'Retirada · + itens a confirmar' : 'Retirada no balcão';
+    } else if (dados.entregaInfo.statusTaxa === 'definida') {
+      const totalComTaxa = subtotalComDesconto + dados.entregaInfo.taxa;
+      totalDisplayTexto = formatarPreco(totalComTaxa);
+      footerAvisoTexto = temItensSobConsulta 
+        ? `Inclui entrega (${formatarPreco(dados.entregaInfo.taxa)}) · + itens a confirmar`
+        : `Inclui entrega (${formatarPreco(dados.entregaInfo.taxa)})`;
+    } else {
+      totalDisplayTexto = `${formatarPreco(subtotalComDesconto)}`;
+      footerAvisoTexto = temItensSobConsulta 
+        ? '+ taxa e itens a confirmar'
+        : '+ taxa de entrega a confirmar';
+    }
+
+    if (footerTotalValor) footerTotalValor.textContent = totalDisplayTexto;
+    if (footerTaxaAviso) footerTaxaAviso.textContent = footerAvisoTexto;
 
     const nomesPag = {
       pix: 'Pix',
@@ -651,20 +1099,29 @@ export function initCarrinhoModal(config) {
     revisaoBox.innerHTML = `
       <div class="rev-linha">
         <span class="rev-label">Cliente:</span>
-        <span class="rev-val">${dados.cliente.nome || 'Pendente'} · ${dados.cliente.telefone || 'Pendente'}</span>
+        <span class="rev-val">${esc(dados.cliente.nome || 'Pendente')} · ${esc(dados.cliente.telefone || 'Pendente')}</span>
       </div>
       ${enderecoOuRetiradaHtml}
       <div class="rev-linha">
         <span class="rev-label">Pagamento:</span>
         <span class="rev-val">${nomesPag[dados.pagamento.forma] || 'Pix'}</span>
       </div>
-      <div class="rev-linha total-linha">
+      <div class="rev-linha">
         <span class="rev-label">Subtotal dos produtos:</span>
-        <span class="rev-val-destaque">${formatarPreco(subtotal)}</span>
+        <span class="rev-val">${formatarPreco(subtotal)}</span>
+      </div>
+      ${avisoPedidoMinimoHtml}
+      ${avisoItensSobConsultaHtml}
+      ${descontoHtml}
+      ${taxaLinhaHtml}
+      <div class="rev-linha total-linha">
+        <span class="rev-label">Total do Pedido:</span>
+        <span class="rev-val-destaque">${totalDisplayTexto}</span>
       </div>
     `;
   }
 
+  // 8. VALIDAÇÃO DO FORMULÁRIO
   function limparErros() {
     document.querySelectorAll('.form-erro').forEach(el => el.textContent = '');
     document.querySelectorAll('.form-input').forEach(el => el.classList.remove('input-invalido'));
@@ -674,6 +1131,13 @@ export function initCarrinhoModal(config) {
     limparErros();
     let valido = true;
     let primeiroElementoInvalido = null;
+
+    const pedidoMinimo = config.pagamento?.pedidoMinimo || 22.00;
+    const subtotalAtual = carrinho.obterSubtotal();
+    if (subtotalAtual > 0 && subtotalAtual < pedidoMinimo) {
+      alert(`O valor mínimo para pedidos na Don Corleone é de ${formatarPreco(pedidoMinimo)}. Por favor, adicione mais itens ao seu carrinho.`);
+      return false;
+    }
 
     const marcarErro = (input, idErro, mensagem) => {
       valido = false;
@@ -697,18 +1161,21 @@ export function initCarrinhoModal(config) {
     // Validar Endereço se modalidade for Entrega
     const modalidade = document.querySelector('input[name="modalidade_tipo"]:checked')?.value;
     if (modalidade === 'entrega') {
+      if (!selectBairro?.value) {
+        marcarErro(selectBairro, 'erro-entrega-bairro', 'Selecione o bairro para cálculo da entrega.');
+      } else if (selectBairro.value === 'outro' && !inputOutroBairro?.value?.trim()) {
+        marcarErro(inputOutroBairro, 'erro-entrega-bairro', 'Informe o nome do seu bairro.');
+      }
+
       if (!inputRua?.value?.trim()) {
         marcarErro(inputRua, 'erro-entrega-rua', 'Informe o nome da rua ou avenida.');
       }
       if (!inputNumero?.value?.trim()) {
         marcarErro(inputNumero, 'erro-entrega-numero', 'Informe o número do local.');
       }
-      if (!inputBairro?.value?.trim()) {
-        marcarErro(inputBairro, 'erro-entrega-bairro', 'Informe o bairro.');
-      }
     }
 
-    // Validar Troco se Dinheiro e selecionou precisa de troco
+    // Validar Troco se Dinheiro
     const formaPag = document.querySelector('input[name="forma_pagamento"]:checked')?.value;
     const precisaTroco = document.querySelector('input[name="precisa_troco"]:checked')?.value;
     if (formaPag === 'dinheiro' && precisaTroco === 'sim') {
@@ -725,20 +1192,38 @@ export function initCarrinhoModal(config) {
     return valido;
   }
 
+  // 9. ABRIR E FECHAR MODAL
   function abrir() {
+    pararLenis();
     overlay?.classList.add('is-open');
     overlay?.setAttribute('aria-hidden', 'false');
     document.body.style.overflow = 'hidden';
+
+    // Restaura tela caso estivesse no pós-envio
+    if (telaPosEnvio) telaPosEnvio.style.display = 'none';
+    if (footerModal) footerModal.style.display = 'flex';
+
+    verificarStatusFuncionamento();
     renderizarItensModal();
+    carregarDadosSalvos();
   }
 
   function fechar() {
     overlay?.classList.remove('is-open');
     overlay?.setAttribute('aria-hidden', 'true');
     document.body.style.overflow = '';
+    retomarLenis();
   }
 
-  // Event Listeners
+  // Permite rolagem com o mouse
+  const modalBody = document.querySelector('#pedido-modal-body');
+  if (modalBody) {
+    modalBody.addEventListener('wheel', (e) => {
+      e.stopPropagation();
+    }, { passive: true });
+  }
+
+  // Event Listeners de navegação
   btnFechar?.addEventListener('click', fechar);
   overlay?.addEventListener('click', (e) => {
     if (e.target === overlay) fechar();
@@ -753,23 +1238,26 @@ export function initCarrinhoModal(config) {
   btnAddMais?.addEventListener('click', () => {
     fechar();
     const cardapio = document.querySelector('#cardapio');
-    if (cardapio) {
-      cardapio.scrollIntoView({ behavior: 'smooth' });
-    }
+    cardapio?.scrollIntoView({ behavior: 'smooth' });
   });
 
   btnIrCardapio?.addEventListener('click', () => {
     fechar();
     const cardapio = document.querySelector('#cardapio');
-    if (cardapio) {
-      cardapio.scrollIntoView({ behavior: 'smooth' });
-    }
+    cardapio?.scrollIntoView({ behavior: 'smooth' });
   });
 
-  // Enviar Pedido para o WhatsApp
+  // 10. ENVIO DO PEDIDO (REVALIDAÇÃO DE HORÁRIO + CÓDIGO + TELA PÓS-ENVIO)
   btnEnviar?.addEventListener('click', () => {
     if (carrinho.obterItens().length === 0) {
-      alert('Seu carrinho está vazio. Monte uma pizza ou adicione um produto do cardápio!');
+      alert('Seu carrinho está vazio. Adicione itens antes de enviar!');
+      return;
+    }
+
+    // Revalidação em tempo real do horário no momento do envio (TAREFA 5)
+    const statusAgora = verificarStatusFuncionamento();
+    if (!statusAgora.podeFazerPedido) {
+      alert(`A cantina acabou de encerrar os pedidos para hoje (${statusAgora.statusTexto}). Não é possível enviar novos pedidos no momento.`);
       return;
     }
 
@@ -777,20 +1265,102 @@ export function initCarrinhoModal(config) {
       return;
     }
 
+    // Gerar Código do Pedido (TAREFA 2)
+    const codigoPedido = gerarCodigoPedido(new Date(), config.horario?.fusoHorario || 'America/Cuiaba');
+
+    // Obter dados do formulário
     const dados = obterDadosFormulario();
+    dados.codigoPedido = codigoPedido;
+
+    // Salvar dados no localStorage para próximas compras (TAREFA 6)
+    salvarDadosCliente(dados);
+
+    // Gerar link e abrir WhatsApp
     const linkWhats = gerarLinkWhatsAppPedido(config, dados);
+    ultimoLinkWhatsGerado = linkWhats;
 
-    window.open(linkWhats, '_blank', 'noopener,noreferrer');
+    try {
+      window.open(linkWhats, '_blank', 'noopener,noreferrer');
+    } catch (e) {
+      console.warn('Erro ao abrir popup do WhatsApp:', e);
+    }
+
+    // Exibir Tela Pós-Envio (TAREFA 4)
+    if (conteudoAtivo) conteudoAtivo.style.display = 'none';
+    if (footerModal) footerModal.style.display = 'none';
+    if (telaPosEnvio) telaPosEnvio.style.display = 'block';
+
+    if (posCodigoDisplay) posCodigoDisplay.textContent = codigoPedido;
+
+    const pixConfig = config.pagamento?.pix || {};
+    if (dados.pagamento.forma === 'pix') {
+      if (posPixCard) posPixCard.style.display = 'block';
+      if (posOutrosCard) posOutrosCard.style.display = 'none';
+      if (posPixTipo) posPixTipo.textContent = pixConfig.tipo || 'Chave Pix';
+      if (posPixChave) posPixChave.textContent = pixConfig.chave || '(65) 99265-0139';
+    } else {
+      if (posPixCard) posPixCard.style.display = 'none';
+      if (posOutrosCard) posOutrosCard.style.display = 'block';
+      if (posOutrosMsg) {
+        posOutrosMsg.textContent = `Pedido enviado! A atendente vai confirmar em instantes. Tempo médio: ${config.pagamento?.tempoMedioEspera || '40 min'}.`;
+      }
+    }
+
+    if (btnReabrirWhats) {
+      btnReabrirWhats.href = linkWhats;
+    }
+
+    // Rola para o topo do corpo do modal
+    modalBody?.scrollTo({ top: 0, behavior: 'smooth' });
   });
 
-  // Sincronização com o store do Carrinho
-  window.addEventListener('carrinho-atualizado', renderizarItensModal);
+  // Copiar Chave Pix com Fallback (TAREFA 4)
+  btnCopiarPix?.addEventListener('click', async () => {
+    const chave = config.pagamento?.pix?.chave || posPixChave?.textContent || '';
+    let copiado = false;
 
-  window.addEventListener('abrir-modal-checkout', () => {
-    abrir();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try {
+        await navigator.clipboard.writeText(chave);
+        copiado = true;
+      } catch (e) {
+        copiado = false;
+      }
+    }
+
+    if (!copiado) {
+      // Fallback com textarea temporário
+      const tempArea = document.createElement('textarea');
+      tempArea.value = chave;
+      tempArea.style.position = 'fixed';
+      tempArea.style.opacity = '0';
+      document.body.appendChild(tempArea);
+      tempArea.select();
+      try {
+        copiado = document.execCommand('copy');
+      } catch (e) {
+        copiado = false;
+      }
+      document.body.removeChild(tempArea);
+    }
+
+    if (btnCopiarPixLabel) {
+      btnCopiarPixLabel.textContent = copiado ? '✓ Chave Copiada!' : 'Chave: ' + chave;
+      setTimeout(() => {
+        if (btnCopiarPixLabel) btnCopiarPixLabel.textContent = 'Copiar Chave';
+      }, 3000);
+    }
   });
 
-  window.addEventListener('fechar-modal-checkout', () => {
+  // Botão Fazer Outro Pedido
+  btnNovoPedido?.addEventListener('click', () => {
+    carrinho.limparCarrinho();
+    if (telaPosEnvio) telaPosEnvio.style.display = 'none';
     fechar();
   });
+
+  // Sincronização de eventos globais
+  window.addEventListener('carrinho-atualizado', renderizarItensModal);
+  window.addEventListener('abrir-modal-checkout', abrir);
+  window.addEventListener('fechar-modal-checkout', fechar);
 }

@@ -3,8 +3,9 @@ export function renderMarquee(config) {
     "Pizzas Artesanais",
     "Esfihas Quentinhas",
     "Entrega & Retirada",
-    "Todos os dias, 17h às 23h",
-    "Arena Cuiabá",
+    "Abre às 17h30",
+    "Cidade Alta — Cuiabá",
+    "Pedido Mínimo R$ 22,00",
     "Sabor Incomparável"
   ];
 

@@ -8,6 +8,7 @@ import { inicializarMotion } from './utils/motion.js';
 
 // Componentes
 import { renderHeader, initHeader } from './components/header.js';
+import { renderBannerPromocao, initBannerPromocao } from './components/banner-promocao.js';
 import { renderMontagem, initMontagem } from './components/montagem/montagem.js';
 import { initStatusAberto } from './components/status-aberto.js';
 import { renderMarquee, initMarquee } from './components/marquee.js';
@@ -30,6 +31,7 @@ function montarAplicacao() {
   const html = `
     <a href="#montagem" class="skip-link">Pular para o conteúdo principal</a>
     ${renderHeader(siteConfig)}
+    ${renderBannerPromocao(siteConfig)}
     <main id="main-content">
       ${renderMontagem(siteConfig)}
       ${renderMarquee(siteConfig)}
@@ -52,6 +54,7 @@ function montarAplicacao() {
   inicializarMotion();
 
   initHeader(siteConfig);
+  initBannerPromocao(siteConfig);
   initStatusAberto(siteConfig);
   initMontagem(siteConfig);
   initMarquee(siteConfig);
