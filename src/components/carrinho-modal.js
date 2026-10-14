@@ -12,7 +12,7 @@
  */
 
 import { carrinho } from '../utils/carrinho.js';
-import { formatarPreco, esc } from '../utils/dom.js';
+import { formatarPreco, esc, extrairNumeroMoeda } from '../utils/dom.js';
 import { icone } from '../utils/icons.js';
 import { formatarTituloPizza } from '../utils/calculo-pizza.js';
 import { gerarLinkWhatsAppPedido, montarMensagemWhatsApp } from '../utils/whatsapp-order.js';
@@ -421,6 +421,7 @@ export function renderCarrinhoModal(config) {
                 <label for="valor-troco" class="form-label">Troco para quanto?</label>
                 <input type="text" id="valor-troco" name="valor_troco" class="form-input" placeholder="Ex: R$ 100,00" />
                 <span class="form-erro" id="erro-valor-troco"></span>
+                <div class="feedback-troco-box" id="feedback-troco-box" style="display: none; margin-top: 6px; font-size: 0.85rem; font-weight: 600;"></div>
               </div>
             </div>
           </section>
@@ -600,6 +601,7 @@ export function initCarrinhoModal(config) {
   const radiosTroco = document.querySelectorAll('input[name="precisa_troco"]');
   const campoValorTroco = document.querySelector('#campo-valor-troco');
   const inputValorTroco = document.querySelector('#valor-troco');
+  const feedbackTrocoBox = document.querySelector('#feedback-troco-box');
   const inputObs = document.querySelector('#pedido-observacoes');
 
   // Elementos da Tela Pós-Envio
@@ -1587,9 +1589,55 @@ export function initCarrinhoModal(config) {
     if (footerTotalValor) footerTotalValor.textContent = totalDisplayTexto;
     if (footerTaxaAviso) footerTaxaAviso.textContent = footerAvisoTexto;
 
+    let dinheiroTexto = 'Dinheiro';
+    const totalNumericoRevisao = subtotalComDesconto + (dados.modalidade === 'entrega' && dados.entregaInfo.statusTaxa === 'definida' ? dados.entregaInfo.taxa : 0);
+
+    if (dados.pagamento.forma === 'dinheiro') {
+      if (dados.pagamento.precisaTroco === 'sim') {
+        const vPago = extrairNumeroMoeda(dados.pagamento.trocoPara);
+        if (vPago > totalNumericoRevisao) {
+          const trocoCalc = vPago - totalNumericoRevisao;
+          dinheiroTexto = `Dinheiro (Troco para ${formatarPreco(vPago)} · Levar ${formatarPreco(trocoCalc)})`;
+          if (feedbackTrocoBox) {
+            feedbackTrocoBox.style.display = 'block';
+            feedbackTrocoBox.style.color = '#52B788';
+            feedbackTrocoBox.innerHTML = `👉 Troco a levar pelo motoboy: <strong>${formatarPreco(trocoCalc)}</strong> (Troco para ${formatarPreco(vPago)})`;
+          }
+        } else if (vPago === totalNumericoRevisao && vPago > 0) {
+          dinheiroTexto = `Dinheiro (Valor exato ${formatarPreco(vPago)} · Sem troco)`;
+          if (feedbackTrocoBox) {
+            feedbackTrocoBox.style.display = 'block';
+            feedbackTrocoBox.style.color = '#F0D59A';
+            feedbackTrocoBox.innerHTML = `👉 Pagamento no valor exato do pedido (Não precisa de troco).`;
+          }
+        } else if (vPago > 0) {
+          dinheiroTexto = `Dinheiro (Troco para ${dados.pagamento.trocoPara})`;
+          if (feedbackTrocoBox) {
+            feedbackTrocoBox.style.display = 'block';
+            feedbackTrocoBox.style.color = '#E63946';
+            feedbackTrocoBox.innerHTML = `⚠️ O valor informado (${formatarPreco(vPago)}) deve ser maior que o total do pedido (${formatarPreco(totalNumericoRevisao)}).`;
+          }
+        } else {
+          dinheiroTexto = 'Dinheiro (Com troco a informar)';
+          if (feedbackTrocoBox) {
+            feedbackTrocoBox.style.display = 'none';
+          }
+        }
+      } else {
+        dinheiroTexto = 'Dinheiro (Sem troco · Valor exato)';
+        if (feedbackTrocoBox) {
+          feedbackTrocoBox.style.display = 'none';
+        }
+      }
+    } else {
+      if (feedbackTrocoBox) {
+        feedbackTrocoBox.style.display = 'none';
+      }
+    }
+
     const nomesPag = {
       pix: 'Pix',
-      dinheiro: dados.pagamento.precisaTroco === 'sim' && dados.pagamento.trocoPara ? `Dinheiro (Troco para ${dados.pagamento.trocoPara})` : 'Dinheiro',
+      dinheiro: dinheiroTexto,
       cartao_credito: 'Cartão de Crédito',
       cartao_debito: 'Cartão de Débito'
     };
@@ -1680,6 +1728,23 @@ export function initCarrinhoModal(config) {
     if (formaPag === 'dinheiro' && precisaTroco === 'sim') {
       if (!inputValorTroco?.value?.trim()) {
         marcarErro(inputValorTroco, 'erro-valor-troco', 'Informe para quanto precisa de troco.');
+      } else {
+        const vPago = extrairNumeroMoeda(inputValorTroco.value);
+        const subtotal = carrinho.obterSubtotal();
+        const promo = obterPromocaoAtiva(config.promocao);
+        const desc = promo.ativa ? promo.calcularDesconto(subtotal) : 0;
+        const subDesc = Math.max(0, subtotal - desc);
+        const mod = document.querySelector('input[name="modalidade_tipo"]:checked')?.value || 'entrega';
+        const bairroH = inputBairroHidden?.value?.trim() || '';
+        const bairroIn = inputBairroBusca?.value?.trim() || '';
+        const bFinal = bairroH || bairroIn;
+        const eInfo = calcularTaxaEntrega(mod, bFinal, bairrosLista);
+        const tTaxa = mod === 'entrega' && typeof eInfo.taxa === 'number' ? eInfo.taxa : 0;
+        const tot = subDesc + tTaxa;
+
+        if (vPago > 0 && vPago < tot) {
+          marcarErro(inputValorTroco, 'erro-valor-troco', `O valor para troco (${formatarPreco(vPago)}) deve ser maior que o total do pedido (${formatarPreco(tot)}).`);
+        }
       }
     }
 

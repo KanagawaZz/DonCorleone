@@ -12,6 +12,20 @@ import { icone } from './icons.js';
 
 let deferredPrompt = null;
 
+// Captura imediatamente no carregamento para nunca perder o evento nativo disparado pelo navegador
+if (typeof window !== 'undefined') {
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    atualizarEstadoBotoes(true);
+  });
+
+  window.addEventListener('appinstalled', () => {
+    deferredPrompt = null;
+    atualizarEstadoBotoes(false, true);
+  });
+}
+
 export function inicializarPWA() {
   // 1. Registro do Service Worker
   if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
@@ -23,18 +37,6 @@ export function inicializarPWA() {
       });
     });
   }
-
-  // 2. Ouvinte de instalação nativa (Android, Chrome Desktop, Edge)
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    atualizarEstadoBotoes(true);
-  });
-
-  window.addEventListener('appinstalled', () => {
-    deferredPrompt = null;
-    atualizarEstadoBotoes(false, true);
-  });
 
   // Conecta os botões existentes
   conectarBotoesInstalacao();
