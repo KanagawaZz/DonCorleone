@@ -60,6 +60,16 @@ button, input, select, textarea {
   color: inherit;
 }
 
+input, select, textarea {
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  input, select, textarea {
+    font-size: 16px !important; /* Previne auto-zoom indesejado no iOS Safari e WebKit ao focar */
+  }
+}
+
 button {
   cursor: pointer;
   border: none;

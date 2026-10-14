@@ -244,7 +244,7 @@ export function renderCardapio(config, dadosCardapio = dadosCardapioPadrao) {
               type="text" 
               id="input-busca-cardapio" 
               class="cardapio-busca-input" 
-              placeholder="Pesquisar pizza, esfiha, sabor, ingrediente... (ex: Calabresa, Frango, Carne, Doce)" 
+              placeholder="Pesquisar pizza, esfiha, sabor... (ex: Calabresa)" 
               autocomplete="off"
               aria-label="Pesquisar no cardápio"
             />
