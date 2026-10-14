@@ -2,10 +2,11 @@
 
 .banner-promocao-topo {
   width: 100%;
+  margin-top: var(--header-total-height);
   background: linear-gradient(90deg, #1C120C 0%, #2A150E 50%, #1C120C 100%);
   border-bottom: 1px solid rgba(247, 186, 42, 0.35);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(226, 109, 43, 0.2);
-  padding: 8px 16px;
+  padding: 8px max(16px, var(--safe-area-right)) 8px max(16px, var(--safe-area-left));
   position: relative;
   z-index: 90;
 }

@@ -18,11 +18,20 @@ html {
 
 body {
   min-height: 100vh;
+  min-height: 100dvh;
   position: relative;
   overflow-x: hidden;
   line-height: 1.6;
   background: radial-gradient(circle at 50% 0%, #1c1510 0%, #0C0A09 60%, #080605 100%);
   background-attachment: fixed;
+  padding-left: var(--safe-area-left);
+  padding-right: var(--safe-area-right);
+}
+
+@media (max-width: 1023px) {
+  body {
+    padding-bottom: var(--bottom-bar-total-height);
+  }
 }
 
 /* Subtle luxury grain texture */
@@ -98,13 +107,29 @@ ul, ol {
   width: 100%;
   max-width: var(--container-max);
   margin-inline: auto;
-  padding-inline: var(--space-6);
+  padding-left: max(var(--space-6), var(--safe-area-left));
+  padding-right: max(var(--space-6), var(--safe-area-right));
   position: relative;
   z-index: var(--z-base);
 }
 
+@media (max-width: 480px) {
+  .container {
+    padding-left: max(var(--space-4), var(--safe-area-left));
+    padding-right: max(var(--space-4), var(--safe-area-right));
+  }
+}
+
 .container--narrow {
   max-width: var(--container-narrow);
+}
+
+/* Modos Standalone / PWA instalados no celular */
+@media all and (display-mode: standalone) {
+  /* Experiência nativa sem seleção acidental de texto */
+  body {
+    -webkit-tap-highlight-color: transparent;
+  }
 }
 
 /* Typography elements */
