@@ -204,21 +204,21 @@ h1, h2, h3, h4 {
 }
 
 .btn--gold {
-  background: linear-gradient(135deg, #ECC880 0%, #C8A15A 50%, #8F6B27 100%);
+  background: var(--gradient-brass, linear-gradient(135deg, #FFE082 0%, #F7BA2A 50%, #C48416 100%));
   color: var(--color-text-inverse);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.45), 0 6px 22px rgba(200, 161, 90, 0.35);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.55), 0 6px 22px rgba(247, 186, 42, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   font-weight: 700;
 }
 
 .btn--gold:hover {
   filter: brightness(1.08);
   transform: translateY(-2px);
-  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.55), 0 8px 28px rgba(200, 161, 90, 0.5);
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.65), 0 8px 28px rgba(247, 186, 42, 0.55);
 }
 
 .btn--outline {
-  background-color: rgba(200, 161, 90, 0.08);
+  background-color: rgba(247, 186, 42, 0.08);
   border: 1px solid var(--color-border-glass);
   color: var(--color-text-primary);
   backdrop-filter: blur(8px);
@@ -226,7 +226,7 @@ h1, h2, h3, h4 {
 
 .btn--outline:hover {
   border-color: var(--color-gold);
-  background-color: rgba(200, 161, 90, 0.16);
+  background-color: rgba(247, 186, 42, 0.16);
   color: var(--color-gold-light);
   transform: translateY(-2px);
 }
@@ -280,7 +280,7 @@ h1, h2, h3, h4 {
 .ornament-line {
   height: 1px;
   width: 100px;
-  background: linear-gradient(90deg, transparent, var(--color-gold-aged, #B8860B), var(--color-gold), transparent);
+  background: linear-gradient(90deg, transparent, var(--color-gold-aged, #D99313), var(--color-gold), transparent);
   box-shadow: 0 0 8px rgba(226, 109, 43, 0.3);
 }
 
@@ -288,5 +288,5 @@ h1, h2, h3, h4 {
   width: 32px;
   height: 32px;
   opacity: 0.95;
-  filter: drop-shadow(0 2px 8px rgba(200, 161, 90, 0.35));
+  filter: drop-shadow(0 2px 8px rgba(247, 186, 42, 0.4));
 }

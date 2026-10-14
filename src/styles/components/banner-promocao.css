@@ -3,7 +3,7 @@
 .banner-promocao-topo {
   width: 100%;
   background: linear-gradient(90deg, #1C120C 0%, #2A150E 50%, #1C120C 100%);
-  border-bottom: 1px solid rgba(184, 134, 11, 0.35);
+  border-bottom: 1px solid rgba(247, 186, 42, 0.35);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(226, 109, 43, 0.2);
   padding: 8px 16px;
   position: relative;
@@ -30,8 +30,8 @@
   align-items: center;
   gap: 6px;
   padding: 3px 10px;
-  background: rgba(184, 134, 11, 0.18);
-  border: 1px solid var(--color-gold-aged);
+  background: rgba(247, 186, 42, 0.18);
+  border: 1px solid var(--color-gold);
   border-radius: 999px;
   font-family: var(--font-cinzel);
   font-size: 0.72rem;

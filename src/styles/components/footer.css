@@ -74,7 +74,7 @@
   font-weight: 800;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  background: linear-gradient(180deg, #FBF4E4 0%, #E2BE75 35%, #C8A15A 60%, #7A571B 100%);
+  background: linear-gradient(180deg, #FFF8E7 0%, #FED976 35%, #F7BA2A 60%, #A8690D 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -83,12 +83,12 @@
   padding-inline: 0.5rem;
   padding-block: 0.2rem;
   text-align: center;
-  filter: drop-shadow(0 4px 18px rgba(200, 161, 90, 0.3)) drop-shadow(0 1px 3px rgba(0, 0, 0, 0.9));
+  filter: drop-shadow(0 4px 18px rgba(247, 186, 42, 0.4)) drop-shadow(0 1px 3px rgba(0, 0, 0, 0.9));
   transition: filter 0.4s ease, transform 0.4s ease;
 }
 
 .footer-wordmark-text:hover {
-  filter: drop-shadow(0 6px 28px rgba(200, 161, 90, 0.55)) drop-shadow(0 0 14px rgba(226, 109, 43, 0.35));
+  filter: drop-shadow(0 6px 28px rgba(247, 186, 42, 0.65)) drop-shadow(0 0 14px rgba(226, 109, 43, 0.4));
   transform: translateY(-2px);
 }
 

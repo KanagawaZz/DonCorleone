@@ -330,20 +330,20 @@
   gap: 0.35rem;
   padding: 0.45rem 0.85rem;
   border-radius: var(--radius-pill);
-  background: linear-gradient(135deg, #C8A15A 0%, #A8823E 100%);
+  background: linear-gradient(135deg, #F7BA2A 0%, #C48416 100%);
   color: #120E0B;
   font-size: 0.78rem;
   font-weight: 700;
   border: none;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(200, 161, 90, 0.25);
+  box-shadow: 0 4px 12px rgba(247, 186, 42, 0.35);
 }
 
 .btn-mini-action:hover {
   transform: translateY(-2px);
-  background: linear-gradient(135deg, #DEC085 0%, #C8A15A 100%);
-  box-shadow: 0 6px 16px rgba(200, 161, 90, 0.4);
+  background: linear-gradient(135deg, #FFE082 0%, #F7BA2A 100%);
+  box-shadow: 0 6px 16px rgba(247, 186, 42, 0.5);
 }
 
 .btn-mini-action:active {
@@ -445,11 +445,11 @@
 }
 
 .tab-btn.active {
-  background: linear-gradient(135deg, #C8A15A 0%, #9E782E 100%);
+  background: linear-gradient(135deg, #F7BA2A 0%, #C48416 100%);
   color: var(--color-bg-primary);
   font-weight: 700;
   border-color: var(--color-gold);
-  box-shadow: 0 4px 15px rgba(200, 161, 90, 0.35);
+  box-shadow: 0 4px 15px rgba(247, 186, 42, 0.45);
 }
 
 .tab-btn-icon {

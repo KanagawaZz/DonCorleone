@@ -27,8 +27,8 @@
   left: 0;
   width: 100%;
   height: 2px;
-  background: linear-gradient(90deg, #8F6B27 0%, #ECC880 50%, #C8A15A 100%);
-  box-shadow: 0 0 12px rgba(236, 200, 128, 0.7);
+  background: linear-gradient(90deg, #C48416 0%, #FFE082 50%, #F7BA2A 100%);
+  box-shadow: 0 0 12px rgba(247, 186, 42, 0.8);
   transform-origin: left center;
   transform: scaleX(0);
   pointer-events: none;

@@ -1,10 +1,10 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
   <defs>
     <radialGradient id="seloGold" cx="40%" cy="40%" r="60%">
-      <stop offset="0%" stop-color="#F7E6C4" />
-      <stop offset="45%" stop-color="#C8A15A" />
-      <stop offset="85%" stop-color="#9E762E" />
-      <stop offset="100%" stop-color="#6B4D16" />
+      <stop offset="0%" stop-color="#FFF3CC" />
+      <stop offset="45%" stop-color="#F7BA2A" />
+      <stop offset="85%" stop-color="#C48416" />
+      <stop offset="100%" stop-color="#8A5508" />
     </radialGradient>
     <radialGradient id="seloRed" cx="40%" cy="40%" r="60%">
       <stop offset="0%" stop-color="#D94336" />

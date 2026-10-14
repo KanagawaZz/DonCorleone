@@ -5,16 +5,16 @@
   --color-bg-card: #1F1915;
   --color-bg-card-hover: #29221C;
   --color-bg-glass: rgba(16, 13, 11, 0.78);
-  --color-border-glass: rgba(200, 161, 90, 0.18);
+  --color-border-glass: rgba(247, 186, 42, 0.22);
   --color-border-light: rgba(243, 235, 221, 0.1);
 
-  /* Gold / Champagne / Aged Brass Accents */
-  --color-gold: #C8A15A;
-  --color-gold-light: #E8CA88;
-  --color-gold-dark: #8F6B27;
-  --color-gold-aged: #B8860B;
-  --color-gold-glow: rgba(200, 161, 90, 0.25);
-  --color-gold-border: rgba(200, 161, 90, 0.35);
+  /* Gold / Champagne / Radiant Brass Accents */
+  --color-gold: #F7BA2A;
+  --color-gold-light: #FFE082;
+  --color-gold-dark: #C48416;
+  --color-gold-aged: #D99313;
+  --color-gold-glow: rgba(247, 186, 42, 0.32);
+  --color-gold-border: rgba(247, 186, 42, 0.42);
 
   /* Brand Accents & Oven Heat */
   --color-red: #A82A22;
@@ -78,15 +78,15 @@
   --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
   --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.45);
   --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.6);
-  --shadow-gold: 0 0 30px rgba(200, 161, 90, 0.2);
+  --shadow-gold: 0 0 30px rgba(247, 186, 42, 0.28);
   --shadow-red: 0 6px 24px rgba(168, 42, 34, 0.35);
   --shadow-oven: 0 18px 42px rgba(0, 0, 0, 0.78), 0 0 32px rgba(226, 109, 43, 0.18);
   --shadow-brass-tactile: inset 0 1px 1px rgba(255, 255, 255, 0.3), 0 4px 12px rgba(0, 0, 0, 0.5);
 
   /* Gradients & Texturas Metálicas */
-  --gradient-brass: linear-gradient(135deg, #ECC880 0%, #C8A15A 50%, #8F6B27 100%);
-  --gradient-brass-hover: linear-gradient(135deg, #F5D79E 0%, #D8B26A 50%, #A47C33 100%);
-  --gradient-oven-ember: radial-gradient(circle, rgba(226, 109, 43, 0.25) 0%, rgba(200, 161, 90, 0.12) 50%, transparent 75%);
+  --gradient-brass: linear-gradient(135deg, #FFE082 0%, #F7BA2A 50%, #C48416 100%);
+  --gradient-brass-hover: linear-gradient(135deg, #FFF0B3 0%, #FCC748 50%, #D49018 100%);
+  --gradient-oven-ember: radial-gradient(circle, rgba(226, 109, 43, 0.28) 0%, rgba(247, 186, 42, 0.16) 50%, transparent 75%);
 
   /* Easings */
   --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);

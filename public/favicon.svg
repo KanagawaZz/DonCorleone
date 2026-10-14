@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
   <defs>
     <radialGradient id="favGold" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#E8CA88" />
-      <stop offset="70%" stop-color="#C8A15A" />
-      <stop offset="100%" stop-color="#8F6B27" />
+      <stop offset="0%" stop-color="#FFE082" />
+      <stop offset="70%" stop-color="#F7BA2A" />
+      <stop offset="100%" stop-color="#C48416" />
     </radialGradient>
     <linearGradient id="favBg" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#1A1512" />
