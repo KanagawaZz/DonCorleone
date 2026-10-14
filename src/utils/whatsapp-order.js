@@ -1,43 +1,45 @@
 /**
  * Formatador de Mensagens e Links para WhatsApp - Don Corleone
  * 
- * Otimizado para atendimento ágil e impressão de comanda térmica (80mm/58mm):
- * - 1ª linha compacta para leitura em 3 segundos pela atendente
- * - Bloco da Cozinha / Pizzaiolo (sabores e observações em destaque)
- * - Bloco do Motoboy / Entrega (endereço completo e referências)
- * - Bloco Financeiro / Caixa (cálculo exato de troco para o motoboy levar)
- * - encodeURIComponent com codificação segura para acentos e quebras
+ * Versão Limpa, Elegante e Direta (sem repetições):
+ * - Destaques em negrito padrão WhatsApp (*texto*)
+ * - Divisores elegantes (━━━━━━━━━━━━━━━━━━)
+ * - Seções bem delimitadas: Cabeçalho, Itens, Entrega/Retirada e Pagamento
+ * - Cálculo automático de troco embutido
  */
 
 import { formatarPreco, extrairNumeroMoeda } from './dom.js';
 
 /**
- * Obtém a data e hora formatada no fuso de Cuiabá/MT
+ * Obtém a data e hora formatada no fuso de Cuiabá/MT (ex: 14/10 às 17:32)
  * @returns {string}
  */
 function obterDataHoraCuiaba() {
   try {
-    return new Intl.DateTimeFormat('pt-BR', {
+    const formatador = new Intl.DateTimeFormat('pt-BR', {
       timeZone: 'America/Cuiaba',
       day: '2-digit',
       month: '2-digit',
-      year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
-    }).format(new Date());
+      minute: '2-digit',
+      hour12: false
+    });
+    const partes = formatador.formatToParts(new Date());
+    const m = {};
+    for (const p of partes) m[p.type] = p.value;
+    return `${m.day}/${m.month} às ${m.hour}:${m.minute}`;
   } catch (e) {
     const d = new Date();
     const dia = String(d.getDate()).padStart(2, '0');
     const mes = String(d.getMonth() + 1).padStart(2, '0');
-    const ano = d.getFullYear();
     const hora = String(d.getHours()).padStart(2, '0');
     const min = String(d.getMinutes()).padStart(2, '0');
-    return `${dia}/${mes}/${ano} às ${hora}:${min}`;
+    return `${dia}/${mes} às ${hora}:${min}`;
   }
 }
 
 /**
- * Monta o texto padronizado do pedido para envio via WhatsApp e impressão térmica.
+ * Monta a mensagem otimizada e limpa para envio ao WhatsApp
  * 
  * @param {object} dados
  * @returns {string}
@@ -55,6 +57,9 @@ export function montarMensagemWhatsApp(dados = {}) {
     promocaoInfo = {},      // { ativa, titulo, desconto, descontoPercentual }
     observacoes = ''
   } = dados;
+
+  const divisor = '━━━━━━━━━━━━━━━━━━';
+  const linhas = [];
 
   // 1. Cálculo dos totais
   let subtotal = 0;
@@ -75,21 +80,9 @@ export function montarMensagemWhatsApp(dados = {}) {
   });
 
   const totalNumerico = subtotalComDesconto + taxaEntrega;
-  let totalFinalTexto = '';
-  let totalCabecalhoTexto = '';
+  const totalParcial = temItensSobConsulta || (isEntrega && !taxaDefinida);
 
-  if (temItensSobConsulta) {
-    totalFinalTexto = `${formatarPreco(subtotalComDesconto)} (parcial + itens a confirmar)`;
-    totalCabecalhoTexto = `${formatarPreco(subtotalComDesconto)} (+ a confirmar)`;
-  } else if (taxaDefinida || !isEntrega) {
-    totalFinalTexto = formatarPreco(totalNumerico);
-    totalCabecalhoTexto = formatarPreco(totalNumerico);
-  } else {
-    totalFinalTexto = `${formatarPreco(subtotalComDesconto)} (+ taxa a confirmar)`;
-    totalCabecalhoTexto = `${formatarPreco(subtotalComDesconto)} (+ taxa)`;
-  }
-
-  // 2. Cálculo inteligente do Troco para Dinheiro
+  // Troco para dinheiro
   const isDinheiro = pagamento.forma === 'dinheiro';
   const precisaTroco = pagamento.precisaTroco === 'sim';
   const valorPagoInformado = isDinheiro && precisaTroco ? extrairNumeroMoeda(pagamento.trocoPara) : 0;
@@ -97,53 +90,34 @@ export function montarMensagemWhatsApp(dados = {}) {
     ? valorPagoInformado - totalNumerico 
     : 0;
 
-  // Badges rápidos para a Linha 1 de 3 segundos
-  const modalidadeBadge = isEntrega ? 'ENTREGA' : 'RETIRADA';
-  
-  let pagamentoBadge = 'PIX';
+  // Nome da forma de pagamento para o cabeçalho
+  let pagamentoNomeCabecalho = 'Pix';
   if (isDinheiro) {
-    if (precisaTroco && valorPagoInformado > totalNumerico) {
-      pagamentoBadge = `DINHEIRO (Troco p/ ${formatarPreco(valorPagoInformado)} -> Levar ${formatarPreco(trocoALevar)})`;
-    } else if (precisaTroco && valorPagoInformado > 0) {
-      pagamentoBadge = `DINHEIRO (Troco p/ ${formatarPreco(valorPagoInformado)})`;
-    } else {
-      pagamentoBadge = 'DINHEIRO (Sem troco)';
-    }
-  } else if (pagamento.forma === 'pix') {
-    pagamentoBadge = 'PIX (Aguardando comprovante)';
+    pagamentoNomeCabecalho = 'Dinheiro';
   } else if (pagamento.forma === 'cartao_credito') {
-    pagamentoBadge = 'CARTÃO CRÉDITO (Levar maquininha)';
+    pagamentoNomeCabecalho = 'Cartão de Crédito';
   } else if (pagamento.forma === 'cartao_debito') {
-    pagamentoBadge = 'CARTÃO DÉBITO (Levar maquininha)';
-  } else {
-    pagamentoBadge = (pagamento.forma || 'A COMBINAR').toUpperCase();
+    pagamentoNomeCabecalho = 'Cartão de Débito';
   }
 
+  const modalidadeTexto = isEntrega ? '*Entrega* 🛵' : '*Retirada no balcão* 🏪';
   const dataHoraPedido = obterDataHoraCuiaba();
-  const linhas = [];
 
-  // ==========================================================================
-  // LINHA 1 (ESSENCIAL PARA LEITURA IMEDIATA EM 3 SEGUNDOS)
-  // ==========================================================================
-  linhas.push(`🍕 #${codigoPedido} | ${modalidadeBadge} | ${pagamentoBadge} | ${totalCabecalhoTexto}`);
+  // ==========================================
+  // CABEÇALHO LIMPO E COMPACTO
+  // ==========================================
+  linhas.push('🍕 *DON CORLEONE — NOVO PEDIDO*');
+  linhas.push('');
+  linhas.push(`*Pedido:* #${codigoPedido} · ${dataHoraPedido}`);
+  linhas.push(`${modalidadeTexto} · *Pagamento:* ${pagamentoNomeCabecalho}`);
   linhas.push('');
 
-  // ==========================================================================
-  // CABEÇALHO DA COMANDA TÉRMICA (80mm / 58mm)
-  // ==========================================================================
-  linhas.push('========================================');
-  linhas.push('🍕 DON CORLEONE — COMANDA DE PEDIDO');
-  linhas.push(`PEDIDO: #${codigoPedido}`);
-  linhas.push(`DATA/HORA: ${dataHoraPedido}`);
-  linhas.push(`MODALIDADE: ${isEntrega ? 'ENTREGA (DELIVERY)' : 'RETIRADA NO BALCÃO'}`);
-  linhas.push('========================================');
+  // ==========================================
+  // ITENS DO PEDIDO
+  // ==========================================
+  linhas.push(divisor);
+  linhas.push('🍕 *ITENS DO PEDIDO*');
   linhas.push('');
-
-  // ==========================================================================
-  // BLOCO 1: COZINHA / PIZZAIOLO (SABORES, BORDAS E ADICIONAIS)
-  // ==========================================================================
-  linhas.push('👨‍🍳 [BLOCO DA COZINHA / PIZZAIOLO]');
-  linhas.push('----------------------------------------');
 
   itens.forEach((item, index) => {
     const precoUnit = typeof item.precoUnitario === 'number' ? item.precoUnitario : (item.preco || 0);
@@ -151,36 +125,36 @@ export function montarMensagemWhatsApp(dados = {}) {
 
     if (item.tipo === 'pizza') {
       const qtdSabores = item.sabores?.length || 1;
-      const sufixoSabores = qtdSabores === 1 ? '1 SABOR' : `${qtdSabores} SABORES`;
-      const nomeTamanho = (item.tamanho?.nome || 'Pizza Grande').toUpperCase();
+      const sufixoSabores = qtdSabores === 1 ? '1 sabor' : `${qtdSabores} sabores`;
+      const nomeTamanho = item.tamanho?.nome || 'Pizza Grande';
 
-      linhas.push(`${item.quantidade}x ${nomeTamanho} — ${sufixoSabores}`);
-      
+      linhas.push(`*${item.quantidade}x ${nomeTamanho} — ${sufixoSabores}*`);
+
       (item.sabores || []).forEach(s => {
         let fracao = '';
-        if (qtdSabores === 2) fracao = '1/2 ';
-        else if (qtdSabores === 3) fracao = '1/3 ';
-        linhas.push(`  • ${fracao}${s.nome.toUpperCase()}`);
+        if (qtdSabores === 2) fracao = '½ ';
+        else if (qtdSabores === 3) fracao = '⅓ ';
+        linhas.push(`• ${fracao}${s.nome}`);
       });
 
       if (item.borda && item.borda.id !== 'sem-borda') {
         const precoBordaTxt = (typeof item.borda.preco === 'number' && item.borda.preco > 0) 
           ? ` (+${formatarPreco(item.borda.preco)})` 
           : (item.borda.precoTexto ? ` (${item.borda.precoTexto})` : '');
-        linhas.push(`  • BORDA RECHEADA: ${item.borda.nome}${precoBordaTxt}`);
+        linhas.push(`• Borda: ${item.borda.nome}${precoBordaTxt}`);
       }
 
       if (item.observacoes && item.observacoes.trim()) {
-        linhas.push(`  ⚠️ OBS DO ITEM: ${item.observacoes.trim()}`);
+        linhas.push(`*Obs:* ${item.observacoes.trim()}`);
       }
 
-      linhas.push(`  Valor: ${formatarPreco(itemSubtotal)}`);
+      linhas.push(formatarPreco(itemSubtotal));
     } else {
-      linhas.push(`${item.quantidade}x ${item.nome.toUpperCase()}`);
+      linhas.push(`*${item.quantidade}x ${item.nome}*`);
       if (typeof precoUnit === 'number' && precoUnit > 0) {
-        linhas.push(`  Valor: ${formatarPreco(itemSubtotal)} (${formatarPreco(precoUnit)} cada)`);
+        linhas.push(formatarPreco(itemSubtotal));
       } else {
-        linhas.push(`  Valor: A confirmar (${item.precoTexto || 'Sob consulta'})`);
+        linhas.push(`A confirmar (${item.precoTexto || 'Sob consulta'})`);
       }
     }
 
@@ -190,68 +164,62 @@ export function montarMensagemWhatsApp(dados = {}) {
   });
 
   if (observacoes && observacoes.trim()) {
-    linhas.push('----------------------------------------');
-    linhas.push('OBSERVAÇÕES GERAIS DA COZINHA:');
-    linhas.push(`> ${observacoes.trim()}`);
+    linhas.push('');
+    linhas.push(`*Observações:* ${observacoes.trim()}`);
   }
 
   linhas.push('');
 
-  // ==========================================================================
-  // BLOCO 2: MOTOBOY / ENTREGA (OU RETIRADA NO BALCÃO)
-  // ==========================================================================
+  // ==========================================
+  // ENTREGA OU RETIRADA
+  // ==========================================
+  linhas.push(divisor);
   if (isEntrega) {
-    linhas.push('========================================');
-    linhas.push('🛵 [BLOCO DA ENTREGA / MOTOBOY]');
-    linhas.push('----------------------------------------');
-    linhas.push(`CLIENTE: ${cliente.nome?.trim() || 'Não informado'}`);
-    linhas.push(`TELEFONE: ${cliente.telefone?.trim() || 'Não informado'}`);
+    linhas.push('🛵 *ENTREGA*');
     linhas.push('');
-    linhas.push('ENDEREÇO DE ENTREGA:');
-    const ruaNum = `${endereco.logradouro?.trim() || ''}, Nº ${endereco.numero?.trim() || 'S/N'}`;
-    linhas.push(`Rua/Av: ${ruaNum}`);
-    
-    const bairroExibido = (endereco.bairro?.trim() || entregaInfo.bairro || '').toUpperCase();
-    linhas.push(`BAIRRO: ${bairroExibido || 'A CONFIRMAR'}`);
+    linhas.push(`*Cliente:* ${cliente.nome?.trim() || 'Não informado'}`);
+    linhas.push(`*Telefone:* ${cliente.telefone?.trim() || 'Não informado'}`);
+    linhas.push('');
 
-    if (endereco.complemento?.trim()) {
-      linhas.push(`Complemento: ${endereco.complemento.trim()}`);
-    }
-    if (endereco.referencia?.trim()) {
-      linhas.push(`Ponto de Referência: ${endereco.referencia.trim()}`);
-    }
-    linhas.push(`Cidade: ${endereco.cidade?.trim() || 'Cuiabá'} — ${endereco.estado?.trim() || 'MT'}`);
+    const logradouro = endereco.logradouro?.trim() || '';
+    const numero = endereco.numero?.trim() || 'S/N';
+    const complemento = endereco.complemento?.trim() ? `, ${endereco.complemento.trim()}` : '';
+    linhas.push(`${logradouro}, nº ${numero}${complemento}`);
+
+    const bairro = endereco.bairro?.trim() || entregaInfo.bairro || 'Bairro a confirmar';
+    const cidade = endereco.cidade?.trim() || 'Cuiabá';
+    const estado = endereco.estado?.trim() || 'MT';
+    linhas.push(`Bairro ${bairro} · ${cidade}/${estado}`);
+
     if (endereco.cep?.trim()) {
       linhas.push(`CEP: ${endereco.cep.trim()}`);
     }
+    if (endereco.referencia?.trim()) {
+      linhas.push(`*Referência:* ${endereco.referencia.trim()}`);
+    }
   } else {
-    linhas.push('========================================');
-    linhas.push('🏪 [BLOCO DA RETIRADA / BALCÃO]');
-    linhas.push('----------------------------------------');
-    linhas.push(`CLIENTE: ${cliente.nome?.trim() || 'Não informado'}`);
-    linhas.push(`TELEFONE: ${cliente.telefone?.trim() || 'Não informado'}`);
+    linhas.push('🏪 *RETIRADA NO BALCÃO*');
     linhas.push('');
-    linhas.push(`LOCAL: ${retirada.unidade || 'Avenida Brasil, 2055, Cidade Alta, Cuiabá - MT'}`);
+    linhas.push(`*Cliente:* ${cliente.nome?.trim() || 'Não informado'}`);
+    linhas.push(`*Telefone:* ${cliente.telefone?.trim() || 'Não informado'}`);
+    linhas.push('');
+    linhas.push(`Unidade Cidade Alta — Av. Brasil, 2055`);
     const tempoRetiradaTxt = retirada.tempoEstimado || '20 a 35 min';
-    linhas.push(`PREVISÃO DE RETIRADA: ${tempoRetiradaTxt}`);
+    linhas.push(`*Previsão de retirada:* ${tempoRetiradaTxt}`);
     if (retirada.horarioPretendido?.trim()) {
-      linhas.push(`HORÁRIO PRETENDIDO: ${retirada.horarioPretendido.trim()}`);
+      linhas.push(`*Horário pretendido:* ${retirada.horarioPretendido.trim()}`);
     }
   }
 
   linhas.push('');
 
-  // ==========================================================================
-  // BLOCO 3: FINANCEIRO / CAIXA (COM CÁLCULO EXATO DE TROCO)
-  // ==========================================================================
-  linhas.push('========================================');
-  linhas.push('💵 [BLOCO FINANCEIRO / CAIXA]');
-  linhas.push('----------------------------------------');
-  linhas.push(`Subtotal produtos: ${formatarPreco(subtotal)}`);
-
-  if (temItensSobConsulta) {
-    linhas.push('⚠️ Contém itens sob consulta — valores parciais a confirmar.');
-  }
+  // ==========================================
+  // RESUMO DO PAGAMENTO
+  // ==========================================
+  linhas.push(divisor);
+  linhas.push('💰 *RESUMO DO PAGAMENTO*');
+  linhas.push('');
+  linhas.push(`Produtos: ${formatarPreco(subtotal)}`);
 
   if (desconto > 0) {
     const rotuloPromo = promocaoInfo.titulo ? ` (${promocaoInfo.descontoPercentual}% - ${promocaoInfo.titulo})` : '';
@@ -260,55 +228,63 @@ export function montarMensagemWhatsApp(dados = {}) {
 
   if (isEntrega) {
     if (taxaDefinida) {
-      const bairroNome = entregaInfo.bairro || endereco.bairro || 'Bairro';
-      linhas.push(`Taxa de entrega (${bairroNome}): ${formatarPreco(taxaEntrega)}`);
+      linhas.push(`Entrega: ${formatarPreco(taxaEntrega)}`);
     } else {
-      linhas.push('Taxa de entrega: A confirmar com a atendente');
+      linhas.push('Entrega: A confirmar');
     }
   } else {
-    linhas.push('Taxa de entrega: R$ 0,00 (Retirada no balcão)');
+    linhas.push('Entrega: R$ 0,00 (Retirada)');
   }
 
-  linhas.push('----------------------------------------');
-  linhas.push(`VALOR TOTAL: ${totalFinalTexto}`);
-  linhas.push('----------------------------------------');
+  linhas.push('');
 
-  // Detalhamento do Pagamento e Cálculo do Troco
+  if (totalParcial) {
+    const sufixo = !taxaDefinida ? ' + entrega' : ' (parcial + itens a confirmar)';
+    linhas.push(`*TOTAL PARCIAL: ${formatarPreco(subtotalComDesconto)}${sufixo}*`);
+  } else {
+    linhas.push(`*TOTAL: ${formatarPreco(totalNumerico)}*`);
+  }
+
+  // Detalhe de troco ou instruções de pagamento
   if (isDinheiro) {
-    linhas.push('💵 FORMA DE PAGAMENTO: DINHEIRO');
+    linhas.push('');
     if (precisaTroco) {
       if (valorPagoInformado > totalNumerico) {
-        linhas.push(`👉 TROCO PARA ${formatarPreco(valorPagoInformado)} | LEVAR ${formatarPreco(trocoALevar)} DE TROCO`);
+        linhas.push(`💵 *Troco para ${formatarPreco(valorPagoInformado)}*`);
+        linhas.push(`Levar ${formatarPreco(trocoALevar)} de troco`);
       } else if (valorPagoInformado === totalNumerico) {
-        linhas.push(`👉 PAGAMENTO EXATO EM DINHEIRO: ${formatarPreco(valorPagoInformado)} (Não precisa de troco)`);
+        linhas.push(`💵 *Pagamento exato em dinheiro*`);
+        linhas.push(`Não precisa de troco (${formatarPreco(valorPagoInformado)})`);
       } else if (valorPagoInformado > 0) {
-        linhas.push(`⚠️ ATENÇÃO: Troco solicitado para ${formatarPreco(valorPagoInformado)}, mas o total é ${formatarPreco(totalNumerico)}`);
+        linhas.push(`💵 *Troco solicitado para ${formatarPreco(valorPagoInformado)}*`);
+        linhas.push(`⚠️ Valor menor que o total (${formatarPreco(totalNumerico)})`);
       } else {
-        linhas.push(`👉 TROCO SOLICITADO: Para ${pagamento.trocoPara || 'valor a combinar'}`);
+        linhas.push(`💵 *Troco para ${pagamento.trocoPara || 'a confirmar'}*`);
       }
     } else {
-      linhas.push(`👉 NÃO PRECISA DE TROCO (Receber valor exato: ${totalFinalTexto})`);
+      linhas.push(`💵 *Pagamento em Dinheiro (Sem troco)*`);
+      linhas.push(`Receber valor exato`);
     }
   } else if (pagamento.forma === 'pix') {
-    linhas.push('📱 FORMA DE PAGAMENTO: PIX');
-    linhas.push('Chave Pix: 65993605364 (Celular / Don Corleone)');
-    linhas.push('⚠️ STATUS: AGUARDANDO ENVIO DO COMPROVANTE');
+    linhas.push('');
+    linhas.push('📱 *Pagamento via Pix*');
+    linhas.push('Chave: 65993605364 (Celular)');
+    linhas.push('*Aguardando comprovante*');
   } else if (pagamento.forma === 'cartao_credito') {
-    linhas.push('💳 FORMA DE PAGAMENTO: CARTÃO DE CRÉDITO');
-    linhas.push('👉 LEVAR MAQUININHA NA ENTREGA');
-    linhas.push('Bandeiras: Visa, Mastercard, American Express e Elo');
+    linhas.push('');
+    linhas.push('💳 *Cartão de Crédito*');
+    linhas.push('Levar maquininha na entrega');
   } else if (pagamento.forma === 'cartao_debito') {
-    linhas.push('💳 FORMA DE PAGAMENTO: CARTÃO DE DÉBITO');
-    linhas.push('👉 LEVAR MAQUININHA NA ENTREGA');
-  } else {
-    linhas.push(`FORMA DE PAGAMENTO: ${(pagamento.forma || 'A combinar').toUpperCase()}`);
+    linhas.push('');
+    linhas.push('💳 *Cartão de Débito*');
+    linhas.push('Levar maquininha na entrega');
   }
 
-  linhas.push('========================================');
-  linhas.push('Don Corleone Cantina & Pizzaria · Cidade Alta');
-  linhas.push('Avenida Brasil, 2055 — Cuiabá/MT');
   linhas.push('');
-  linhas.push('Aguardo a confirmação do pedido!');
+  linhas.push(divisor);
+  linhas.push('*Don Corleone Cantina & Pizzaria*');
+  linhas.push('Avenida Brasil, 2055 · Cidade Alta');
+  linhas.push('Cuiabá/MT');
 
   return linhas.join('\n');
 }
