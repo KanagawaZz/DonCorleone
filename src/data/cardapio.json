@@ -12,7 +12,7 @@
           "preco": 76.90,
           "destaque": true,
           "tag": "Clássica",
-          "foto": "/images/cardapio/calabresa-artesanal.png"
+          "foto": "/images/cardapio/calabresa.jpg"
         },
         {
           "id": "pizza-frango-catupiry",
@@ -30,7 +30,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Cremosa",
-          "foto": "/images/cardapio/quatro-queijos.jpg"
+          "foto": "/images/cardapio/tres-queijos.png"
         },
         {
           "id": "pizza-lombo-requeijao",
@@ -39,7 +39,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Especial",
-          "foto": "/images/cardapio/calabresa-artesanal.jpg"
+          "foto": "/images/cardapio/lombo.png"
         },
         {
           "id": "pizza-baiana-apimentada",
@@ -48,7 +48,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Picante",
-          "foto": "/images/cardapio/calabresa-artesanal.jpg"
+          "foto": "/images/cardapio/baiana.jpg"
         },
         {
           "id": "pizza-mafiosa",
@@ -57,7 +57,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Don Corleone",
-          "foto": "/images/cardapio/calabresa-artesanal.png"
+          "foto": "/images/cardapio/mafiosa.png"
         },
         {
           "id": "pizza-presunto-queijo",
@@ -75,7 +75,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Receita da Casa",
-          "foto": "/images/cardapio/parma-rucula.jpg"
+          "foto": "/images/cardapio/genovesa.png"
         },
         {
           "id": "pizza-moda-da-casa",
@@ -84,7 +84,7 @@
           "preco": 76.90,
           "destaque": true,
           "tag": "Assinatura",
-          "foto": "/images/cardapio/frango-catupiry.jpg"
+          "foto": "/images/cardapio/moda-da-casa.png"
         },
         {
           "id": "pizza-portuguesa",
@@ -93,7 +93,7 @@
           "preco": 76.90,
           "destaque": true,
           "tag": "Favorita",
-          "foto": "/images/cardapio/calabresa-artesanal.jpg"
+          "foto": "/images/cardapio/portuguesa.jpg"
         },
         {
           "id": "pizza-dom-camilo",
@@ -111,7 +111,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Clássica",
-          "foto": "/images/cardapio/calabresa-artesanal.jpg"
+          "foto": "/images/cardapio/calabresa.jpg"
         },
         {
           "id": "pizza-goiana",
