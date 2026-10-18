@@ -47,7 +47,15 @@ export function isAppInstalado() {
 }
 
 export function isIOS() {
-  return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  const ua = (typeof navigator !== 'undefined' && navigator.userAgent) || '';
+  const isIos = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+  const isIpadOS = /Macintosh/.test(ua) && typeof navigator !== 'undefined' && navigator.maxTouchPoints > 1;
+  return isIos || isIpadOS;
+}
+
+export function isInAppBrowser() {
+  const ua = (typeof navigator !== 'undefined' && navigator.userAgent) || '';
+  return /FBAN|FBAV|Instagram|WhatsApp|Line|Twitter/i.test(ua);
 }
 
 function atualizarEstadoBotoes(disponivel = true, instalado = false) {
@@ -80,6 +88,17 @@ export function conectarBotoesInstalacao() {
 
 async function tratarCliqueInstalacao(e) {
   e.preventDefault();
+
+  // Fecha o menu gaveta mobile se estiver aberto
+  const drawer = document.querySelector('#mobile-drawer');
+  const toggleBtn = document.querySelector('#mobile-menu-toggle');
+  if (drawer?.classList.contains('is-open')) {
+    toggleBtn?.classList.remove('is-open');
+    toggleBtn?.setAttribute('aria-expanded', 'false');
+    drawer.classList.remove('is-open');
+    drawer.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+  }
 
   if (isAppInstalado()) {
     exibirModalInstrucoes('instalado');
@@ -145,19 +164,45 @@ export function exibirModalInstrucoes(tipo = 'geral') {
         <ol class="modal-pwa-passos">
           <li>
             <span class="passo-numero">1</span>
-            <span>Toque no botão <strong>Compartilhar</strong> (ícone com quadrado e seta para cima na barra inferior do Safari).</span>
+            <span>
+              Toque no botão <strong>Compartilhar</strong>
+              <span class="ios-icon-inline" title="Compartilhar">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                  <polyline points="16 6 12 2 8 6"></polyline>
+                  <line x1="12" y1="2" x2="12" y2="15"></line>
+                </svg>
+              </span>
+              (na barra inferior do Safari).
+            </span>
           </li>
           <li>
             <span class="passo-numero">2</span>
-            <span>Role as opções para baixo e selecione <strong>"Adicionar à Tela de Início"</strong>.</span>
+            <span>
+              Role para baixo e selecione <strong>"Adicionar à Tela de Início"</strong>
+              <span class="ios-icon-inline" title="Adicionar à Tela de Início">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2">
+                  <rect x="3" y="3" width="18" height="18" rx="4"></rect>
+                  <line x1="12" y1="8" x2="12" y2="16"></line>
+                  <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+              </span>.
+            </span>
           </li>
           <li>
             <span class="passo-numero">3</span>
-            <span>Toque em <strong>"Adicionar"</strong> no canto superior direito.</span>
+            <span>Toque em <strong>"Adicionar"</strong> no canto superior direito para confirmar.</span>
           </li>
         </ol>
 
+        ${isInAppBrowser() ? `
+          <div class="aviso-inapp-ios">
+            <strong>Dica:</strong> Se você abriu pelo Instagram ou WhatsApp, toque nos três pontinhos (<strong>...</strong>) no topo e selecione <strong>"Abrir no Safari"</strong> primeiro.
+          </div>
+        ` : ''}
+
         <button type="button" class="btn btn--primary w-full mt-4" id="btn-entendi-pwa">Entendi, vou adicionar</button>
+        <button type="button" class="btn-trocar-modo-pwa" id="btn-trocar-para-geral">Está no Android ou PC? Ver instruções gerais</button>
       </div>
     `;
   } else {
@@ -184,22 +229,36 @@ export function exibirModalInstrucoes(tipo = 'geral') {
         </ol>
 
         <button type="button" class="btn btn--primary w-full mt-4" id="btn-entendi-pwa">Fechar</button>
+        <button type="button" class="btn-trocar-modo-pwa" id="btn-trocar-para-ios">Está no iPhone / iPad? Ver instruções do iOS</button>
       </div>
     `;
   }
 
   modal.innerHTML = conteudoHtml;
   modal.classList.add('is-open');
+  document.body.style.overflow = 'hidden';
 
-  modal.querySelector('#btn-fechar-pwa-modal')?.addEventListener('click', () => {
+  const fecharModal = () => {
     modal.classList.remove('is-open');
+    document.body.style.overflow = '';
+  };
+
+  modal.querySelector('#btn-fechar-pwa-modal')?.addEventListener('click', fecharModal);
+  modal.querySelector('#btn-entendi-pwa')?.addEventListener('click', fecharModal);
+  
+  modal.querySelector('#btn-trocar-para-ios')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    exibirModalInstrucoes('ios');
   });
-  modal.querySelector('#btn-entendi-pwa')?.addEventListener('click', () => {
-    modal.classList.remove('is-open');
+
+  modal.querySelector('#btn-trocar-para-geral')?.addEventListener('click', (e) => {
+    e.stopPropagation();
+    exibirModalInstrucoes('geral');
   });
-  modal.addEventListener('click', (e) => {
+
+  modal.onclick = (e) => {
     if (e.target === modal) {
-      modal.classList.remove('is-open');
+      fecharModal();
     }
-  });
+  };
 }

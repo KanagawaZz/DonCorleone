@@ -187,3 +187,45 @@
   line-height: 1.5;
   margin-bottom: 1.25rem;
 }
+
+.btn-trocar-modo-pwa {
+  display: block;
+  width: 100%;
+  margin-top: 0.85rem;
+  padding: 0.5rem;
+  background: transparent;
+  border: none;
+  color: var(--color-gold, #C8A15A);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  text-align: center;
+  transition: color 0.2s ease;
+}
+
+.btn-trocar-modo-pwa:hover {
+  color: var(--color-gold-light, #F0D59A);
+}
+
+.ios-icon-inline {
+  display: inline-flex;
+  vertical-align: middle;
+  margin: 0 4px;
+  color: var(--color-gold, #C8A15A);
+  background: rgba(200, 161, 90, 0.14);
+  padding: 2px 5px;
+  border-radius: 4px;
+  border: 1px solid rgba(200, 161, 90, 0.25);
+}
+
+.aviso-inapp-ios {
+  margin-top: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  background: rgba(226, 109, 43, 0.12);
+  border-left: 3px solid var(--color-oven-amber, #E26D2B);
+  border-radius: 0 8px 8px 0;
+  font-size: 0.78rem;
+  color: #EFE6DC;
+  line-height: 1.4;
+}
