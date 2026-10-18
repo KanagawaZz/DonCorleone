@@ -618,6 +618,26 @@
   z-index: 5;
 }
 
+.cardapio-item-cat-pill {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  padding: 4px 11px;
+  background: rgba(14, 11, 10, 0.88);
+  border: 1px solid rgba(212, 175, 55, 0.4);
+  border-radius: var(--radius-pill);
+  font-size: 0.70rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--color-gold-light);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.55);
+  z-index: 5;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
 /* Informações do Item */
 .cardapio-item-info {
   padding: var(--space-6);

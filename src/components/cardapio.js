@@ -8,7 +8,8 @@ import dadosCardapioPadrao from '../data/cardapio.json';
  * Renderiza o card individual de um produto com formatação de preço e botões de ação.
  */
 export function renderizarCardItem(item, catId = '') {
-  const isPizzaCategory = catId === 'pizzas-salgadas' || catId === 'pizzas-doces' || item.tipo === 'pizza';
+  const effectiveCatId = item.categoriaId || catId;
+  const isPizzaCategory = effectiveCatId === 'pizzas-salgadas' || effectiveCatId === 'pizzas-doces' || item.tipo === 'pizza';
 
   let precoExibido = '';
   if (typeof item.preco === 'number' && item.preco > 0) {
@@ -19,14 +20,29 @@ export function renderizarCardItem(item, catId = '') {
     precoExibido = item.precoTexto || 'Sob consulta';
   }
 
-  const itemJson = JSON.stringify({ ...item, categoriaId: item.categoriaId || catId }).replace(/"/g, '&quot;');
+  const itemJson = JSON.stringify({ ...item, categoriaId: effectiveCatId }).replace(/"/g, '&quot;');
+
+  // Nome formatado para deixar explícito quando é pizza (evita qualquer ambiguidade com esfihas)
+  const nomeExibido = isPizzaCategory && !item.nome.toLowerCase().startsWith('pizza')
+    ? (effectiveCatId === 'pizzas-doces' ? `Pizza Doce ${item.nome}` : `Pizza ${item.nome}`)
+    : item.nome;
+
+  const categoriaLabels = {
+    'pizzas-salgadas': '🍕 Pizza Salgada',
+    'pizzas-doces': '🍕 Pizza Doce',
+    'combos-pizzas': '🎁 Combo',
+    'esfihas-unitarias': '🥟 Esfiha',
+    'kits-esfihas': '📦 Kit Esfihas',
+    'bebidas': '🥤 Bebida'
+  };
+  const categoriaBadgeText = categoriaLabels[effectiveCatId] || item.categoriaNome || '';
 
   return `
   <article class="cardapio-item-card" data-reveal>
     <div class="cardapio-card-frame" aria-hidden="true"></div>
 
     <div class="cardapio-item-img-wrap">
-      <img src="${item.foto || '/images/cardapio/calabresa-artesanal.jpg'}" alt="${esc(item.nome)}" loading="lazy" class="cardapio-item-img" />
+      <img src="${item.foto || '/images/cardapio/calabresa-artesanal.jpg'}" alt="${esc(nomeExibido)}" loading="lazy" class="cardapio-item-img" />
       
       ${item.tag ? `
         <span class="cardapio-item-tag">
@@ -35,9 +51,15 @@ export function renderizarCardItem(item, catId = '') {
         </span>
       ` : `
         <span class="cardapio-item-tag-subtle">
-          <span>${esc(item.categoriaNome || 'Don Corleone')}</span>
+          <span>${esc(categoriaBadgeText)}</span>
         </span>
       `}
+
+      ${categoriaBadgeText && item.tag ? `
+        <span class="cardapio-item-cat-pill">
+          <span>${esc(categoriaBadgeText)}</span>
+        </span>
+      ` : ''}
       
       <div class="cardapio-img-overlay"></div>
       <div class="cardapio-ember-glow" aria-hidden="true"></div>
@@ -45,7 +67,7 @@ export function renderizarCardItem(item, catId = '') {
     
     <div class="cardapio-item-info">
       <div class="cardapio-item-header">
-        <h3 class="cardapio-item-nome">${esc(item.nome)}</h3>
+        <h3 class="cardapio-item-nome">${esc(nomeExibido)}</h3>
         <span class="cardapio-item-preco ${!item.preco ? 'preco-consulta' : ''}">${precoExibido}</span>
       </div>
       
@@ -416,7 +438,17 @@ export function initCardapio(config, dadosCardapio = dadosCardapioPadrao) {
     const resultados = [];
 
     todosItens.forEach(item => {
-      const nomeNorm = normalizar(item.nome);
+      const isPizza = item.categoriaId === 'pizzas-salgadas' || item.categoriaId === 'pizzas-doces';
+      const nomeExibido = isPizza && !item.nome.toLowerCase().startsWith('pizza') 
+        ? (item.categoriaId === 'pizzas-doces' ? `Pizza Doce ${item.nome}` : `Pizza ${item.nome}`)
+        : item.nome;
+
+      const nomeNorm = normalizar(nomeExibido);
+      // Extrai sabor principal removendo prefixos genéricos (ex: "esfiha de carne" -> "carne")
+      const saborNorm = nomeNorm
+        .replace(/^(pizza doce de|pizza doce|pizza de|pizza|esfiha doce de|esfiha doce|esfiha de|esfiha|kit esfiha|kit|combo)\s+/g, '')
+        .trim();
+
       const descNorm = normalizar(item.descricao);
       const compNorm = normalizar(item.composicao);
       const distNorm = normalizar(item.distribuicao);
@@ -428,14 +460,24 @@ export function initCardapio(config, dadosCardapio = dadosCardapioPadrao) {
       let score = 0;
       let matchTipo = null; // 'titulo' | 'ingrediente' | 'outro'
 
-      // --- 1. AVALIAÇÃO DE PRIORIDADE NO TÍTULO (NOME DA PIZZA/PRODUTO) ---
-      if (nomeNorm === termoNorm) {
-        score = 1000;
+      // --- 1. AVALIAÇÃO DE PRIORIDADE NO TÍTULO / SABOR ---
+      // 1.1 Match exato no sabor principal (ex: busca "carne" -> "Esfiha de Carne" pontua 1200!)
+      if (saborNorm === termoNorm || nomeNorm === termoNorm) {
+        score = 1200;
         matchTipo = 'titulo';
-      } else if (nomeNorm.startsWith(termoNorm)) {
-        score = 800;
+      } 
+      // 1.2 Variações diretas do sabor (ex: "carne com queijo", "carne com catupiry")
+      else if (saborNorm.startsWith(termoNorm + ' com ') || saborNorm.startsWith(termoNorm + ' e ') || saborNorm.startsWith(termoNorm + ' c/')) {
+        score = 900;
         matchTipo = 'titulo';
-      } else if (nomeNorm.includes(termoNorm)) {
+      }
+      // 1.3 Sabores compostos derivados (ex: "carne seca")
+      else if (saborNorm.startsWith(termoNorm) || nomeNorm.startsWith(termoNorm)) {
+        score = 750;
+        matchTipo = 'titulo';
+      } 
+      // 1.4 Contém o termo completo no nome
+      else if (saborNorm.includes(termoNorm) || nomeNorm.includes(termoNorm)) {
         score = 600;
         matchTipo = 'titulo';
       } else if (palavras.length > 1 && palavras.every(p => nomeNorm.includes(p))) {
@@ -476,8 +518,6 @@ export function initCardapio(config, dadosCardapio = dadosCardapioPadrao) {
       }
 
       if (score > 0) {
-        const isPizza = item.categoriaId === 'pizzas-salgadas' || item.categoriaId === 'pizzas-doces';
-        if (isPizza) score += 5;
         if (item.destaque) score += 2;
 
         resultados.push({
@@ -489,7 +529,7 @@ export function initCardapio(config, dadosCardapio = dadosCardapioPadrao) {
     });
 
     // Ordenação estrita por pontuação decrescente:
-    // Garante que Título da Pizza vem PRIMEIRO, seguido por Ingredientes.
+    // Garante que Sabor Exato vem PRIMEIRO, seguido por variações, derivados e ingredientes.
     resultados.sort((a, b) => b.score - a.score);
 
     const encontrados = resultados;

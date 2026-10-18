@@ -17,7 +17,7 @@ export const ITENS_COMPRE_JUNTO = [
     nome: 'Guaraná Antarctica 1,5L',
     subtitulo: 'Garrafa 1,5L bem gelada',
     preco: 14.00,
-    foto: '/images/cardapio/frango-catupiry.jpg',
+    foto: '/images/cardapio/refrigerante-1-5l.png',
     icone: 'bebida'
   },
   {
@@ -28,7 +28,7 @@ export const ITENS_COMPRE_JUNTO = [
     nome: 'Coca-Cola 2 Litros',
     subtitulo: 'Garrafa 2L bem gelada',
     preco: 16.00,
-    foto: '/images/cardapio/calabresa-artesanal.jpg',
+    foto: '/images/cardapio/refrigerante-1-5l.png',
     icone: 'bebida'
   },
   {
@@ -39,7 +39,7 @@ export const ITENS_COMPRE_JUNTO = [
     nome: 'Refrigerante em Lata 350ml',
     subtitulo: 'Lata 350ml gelada',
     preco: 7.00,
-    foto: '/images/cardapio/calabresa-artesanal.png',
+    foto: '/images/cardapio/refrigerante-lata.jpg',
     icone: 'bebida'
   },
   {

@@ -611,7 +611,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "Familiar 1,5 L",
-          "foto": "/images/cardapio/frango-catupiry.jpg"
+          "foto": "/images/cardapio/refrigerante-1-5l.png"
         },
         {
           "id": "bebida-refrigerante-lata",
@@ -622,7 +622,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Lata 350 ml",
-          "foto": "/images/cardapio/calabresa-artesanal.jpg"
+          "foto": "/images/cardapio/refrigerante-lata.jpg"
         }
       ]
     }
