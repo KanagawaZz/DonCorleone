@@ -520,7 +520,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Experimente",
-          "foto": "/images/cardapio/esfiha-carne.jpg",
+          "foto": "/images/cardapio/kit-esfiha-inicial.jpg",
           "distribuicao": "2 Carne · 1 Queijo"
         },
         {
@@ -532,7 +532,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "8 Unidades",
-          "foto": "/images/cardapio/esfiha-carne.jpg",
+          "foto": "/images/cardapio/kit-esfiha-1.jpg",
           "distribuicao": "2 Calabresa · 2 Carne · 2 Queijo · 2 Frango"
         },
         {
@@ -544,7 +544,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "10 Unidades",
-          "foto": "/images/cardapio/esfiha-carne.jpg",
+          "foto": "/images/cardapio/kit-esfiha-2.jpg",
           "distribuicao": "10 Carne"
         },
         {
@@ -556,7 +556,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "12 Unidades",
-          "foto": "/images/cardapio/esfiha-calabresa.jpg",
+          "foto": "/images/cardapio/kit-esfiha-3.jpg",
           "distribuicao": "3 Calabresa · 3 Carne · 3 Queijo · 3 Frango"
         },
         {
@@ -568,7 +568,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "16 Unidades",
-          "foto": "/images/cardapio/esfiha-calabresa.jpg",
+          "foto": "/images/cardapio/kit-esfiha-4.png",
           "distribuicao": "4 Calabresa · 4 Carne · 4 Queijo · 4 Frango"
         },
         {
@@ -580,7 +580,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "25 Unidades",
-          "foto": "/images/cardapio/esfiha-bacon.jpg",
+          "foto": "/images/cardapio/kit-esfiha-5.png",
           "distribuicao": "5 Calabresa · 5 Carne · 5 Queijo · 5 Frango · 5 Bacon"
         },
         {
@@ -592,7 +592,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "30 Unidades",
-          "foto": "/images/cardapio/combo-esfihas.jpg",
+          "foto": "/images/cardapio/kit-esfiha-6.jpg",
           "distribuicao": "10 Carne · 5 Calabresa · 5 Queijo · 5 Frango · 5 Bacon"
         }
       ]
