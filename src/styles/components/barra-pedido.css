@@ -39,13 +39,35 @@
 
 .barra-btn-whats {
   flex: 1;
+  min-width: 0;
   font-size: var(--text-sm);
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 0.85rem;
+}
+
+.barra-btn-whats #barra-btn-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .barra-btn-tel {
-  padding: 0.75rem 1.25rem;
+  padding: 0.75rem 1rem;
   font-size: var(--text-sm);
+  flex-shrink: 0;
+}
+
+@media (max-width: 380px) {
+  .barra-btn-whats {
+    font-size: 0.8125rem;
+    padding: 0.7rem 0.65rem;
+    gap: 0.35rem;
+  }
+  .barra-btn-tel {
+    font-size: 0.8125rem;
+    padding: 0.7rem 0.75rem;
+    gap: 0.35rem;
+  }
 }
 
 /* Em desktop grande a barra é oculta para manter visual limpo */

@@ -1383,6 +1383,30 @@
     justify-content: space-between;
     align-items: center;
   }
+
+  .compre-junto-header {
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .item-linha {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .item-detalhes {
+    flex: 1 1 calc(100% - 68px);
+  }
+
+  .item-qty-controles {
+    margin-left: 60px;
+  }
+
+  .item-total-preco {
+    margin-left: auto;
+  }
 }
 
 @media (max-width: 400px) {

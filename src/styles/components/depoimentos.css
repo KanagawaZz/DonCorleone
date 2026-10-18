@@ -9,7 +9,7 @@
 
 .depoimentos-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: var(--space-6);
 }
 
@@ -55,4 +55,10 @@
 .depoimento-cidade {
   font-size: var(--text-xs);
   color: var(--color-text-muted);
+}
+
+@media (max-width: 480px) {
+  .depoimento-card {
+    padding: var(--space-5) var(--space-4);
+  }
 }

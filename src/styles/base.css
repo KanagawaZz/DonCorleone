@@ -218,6 +218,16 @@ h1, h2, h3, h4 {
   user-select: none;
   position: relative;
   overflow: hidden;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+  .btn {
+    white-space: normal;
+    text-align: center;
+    line-height: 1.25;
+  }
 }
 
 .btn:active {

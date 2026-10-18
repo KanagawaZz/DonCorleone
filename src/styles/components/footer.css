@@ -60,21 +60,23 @@
 /* Wordmark de Assinatura Don Corleone */
 .footer-wordmark-container {
   width: 100%;
+  max-width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  overflow: visible;
+  overflow: hidden;
   padding-block: var(--space-4);
   margin-bottom: var(--space-8);
   user-select: none;
   position: relative;
+  box-sizing: border-box;
 }
 
 .footer-wordmark-text {
   font-family: var(--font-serif);
-  font-size: clamp(2.2rem, 8.5vw, 6.2rem);
+  font-size: clamp(1.35rem, 6.8vw, 6.2rem);
   font-weight: 800;
-  letter-spacing: 0.16em;
+  letter-spacing: clamp(0.04em, 1.8vw, 0.16em);
   text-transform: uppercase;
   background: linear-gradient(180deg, #FFF8E7 0%, #FED976 35%, #F7BA2A 60%, #A8690D 100%);
   -webkit-background-clip: text;
@@ -85,6 +87,8 @@
   padding-inline: 0.5rem;
   padding-block: 0.2rem;
   text-align: center;
+  max-width: 100%;
+  box-sizing: border-box;
   filter: drop-shadow(0 4px 18px rgba(247, 186, 42, 0.4)) drop-shadow(0 1px 3px rgba(0, 0, 0, 0.9));
   transition: filter 0.4s ease, transform 0.4s ease;
 }

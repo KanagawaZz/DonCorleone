@@ -44,22 +44,24 @@ export function renderizarCardItem(item, catId = '') {
     <div class="cardapio-item-img-wrap">
       <img src="${item.foto || '/images/cardapio/calabresa-artesanal.webp'}" alt="${esc(nomeExibido)}" loading="lazy" class="cardapio-item-img" />
       
-      ${item.tag ? `
-        <span class="cardapio-item-tag">
-          <span class="tag-fire-icon">✦</span>
-          <span>${esc(item.tag)}</span>
-        </span>
-      ` : `
-        <span class="cardapio-item-tag-subtle">
-          <span>${esc(categoriaBadgeText)}</span>
-        </span>
-      `}
+      <div class="cardapio-item-badges-bar">
+        ${item.tag ? `
+          <span class="cardapio-item-tag">
+            <span class="tag-fire-icon">✦</span>
+            <span>${esc(item.tag)}</span>
+          </span>
+        ` : `
+          <span class="cardapio-item-tag-subtle">
+            <span>${esc(categoriaBadgeText)}</span>
+          </span>
+        `}
 
-      ${categoriaBadgeText && item.tag ? `
-        <span class="cardapio-item-cat-pill">
-          <span>${esc(categoriaBadgeText)}</span>
-        </span>
-      ` : ''}
+        ${categoriaBadgeText && item.tag ? `
+          <span class="cardapio-item-cat-pill">
+            <span>${esc(categoriaBadgeText)}</span>
+          </span>
+        ` : ''}
+      </div>
       
       <div class="cardapio-img-overlay"></div>
       <div class="cardapio-ember-glow" aria-hidden="true"></div>
@@ -104,7 +106,7 @@ export function renderizarCardItem(item, catId = '') {
               <circle cx="20" cy="21" r="1"></circle>
               <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
             </svg>
-            <span>${item.preco ? 'Adicionar ao Carrinho' : 'Adicionar ao Pedido (A Confirmar)'}</span>
+            <span>${item.preco ? 'Adicionar ao Carrinho' : 'Adicionar ao Pedido'}</span>
           </button>
         `}
       </div>
@@ -260,7 +262,7 @@ export function renderCardapio(config, dadosCardapio = dadosCardapioPadrao) {
               type="text" 
               id="input-busca-cardapio" 
               class="cardapio-busca-input" 
-              placeholder="Pesquisar pizza, esfiha, sabor... (ex: Calabresa)" 
+              placeholder="Buscar pizza, esfiha ou sabor..." 
               autocomplete="off"
               aria-label="Pesquisar no cardápio"
             />

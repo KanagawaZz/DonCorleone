@@ -433,18 +433,32 @@
   .hero-badge {
     font-size: 10px;
     padding: 5px 12px;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.08em;
+    max-width: 100%;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.35;
+    box-sizing: border-box;
   }
 
   .hero-titulo {
-    font-size: clamp(2.1rem, 7.8vw, 2.7rem);
-    line-height: 1.1;
+    font-size: clamp(1.8rem, 7.5vw, 2.7rem);
+    line-height: 1.15;
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+
+  .hero-titulo-linha {
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   .hero-subtitulo {
     font-size: var(--text-sm);
     line-height: 1.55;
     margin-bottom: var(--space-5);
+    word-break: break-word;
+    overflow-wrap: break-word;
   }
 
   .hero-features-list {

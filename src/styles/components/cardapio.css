@@ -577,25 +577,43 @@
   z-index: 3;
 }
 
-.cardapio-item-tag {
+/* Container Flexível de Badges e Tags do Card (Evita sobreposição em telas mobile) */
+.cardapio-item-badges-bar {
   position: absolute;
-  top: 14px;
-  left: 14px;
-  padding: 5px 14px;
-  background: rgba(12, 10, 9, 0.9);
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 6px;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.cardapio-item-badges-bar > * {
+  pointer-events: auto;
+  position: static !important;
+}
+
+.cardapio-item-tag {
+  padding: 4px 10px;
+  background: rgba(12, 10, 9, 0.92);
   border: 1px solid var(--color-gold);
   border-radius: var(--radius-pill);
-  font-size: 0.72rem;
+  font-size: 0.70rem;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   color: var(--color-gold-light);
   backdrop-filter: blur(8px);
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
-  z-index: 5;
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .tag-fire-icon {
@@ -603,39 +621,35 @@
 }
 
 .cardapio-item-tag-subtle {
-  position: absolute;
-  top: 14px;
-  left: 14px;
-  padding: 4px 12px;
-  background: rgba(12, 10, 9, 0.8);
+  padding: 4px 10px;
+  background: rgba(12, 10, 9, 0.85);
   border: 1px solid rgba(200, 161, 90, 0.3);
   border-radius: var(--radius-pill);
   font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.06em;
   color: var(--color-text-secondary);
   backdrop-filter: blur(8px);
-  z-index: 5;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .cardapio-item-cat-pill {
-  position: absolute;
-  top: 14px;
-  right: 14px;
-  padding: 4px 11px;
-  background: rgba(14, 11, 10, 0.88);
-  border: 1px solid rgba(212, 175, 55, 0.4);
+  padding: 4px 10px;
+  background: rgba(14, 11, 10, 0.92);
+  border: 1px solid rgba(212, 175, 55, 0.45);
   border-radius: var(--radius-pill);
-  font-size: 0.70rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.02em;
   color: var(--color-gold-light);
   backdrop-filter: blur(8px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.55);
-  z-index: 5;
   display: inline-flex;
   align-items: center;
   gap: 5px;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 /* Informações do Item */
@@ -653,8 +667,9 @@
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  gap: var(--space-3);
+  gap: var(--space-2) var(--space-3);
   margin-bottom: var(--space-2);
+  flex-wrap: wrap;
 }
 
 .cardapio-item-nome {
@@ -662,7 +677,10 @@
   font-size: var(--text-xl);
   font-weight: 700;
   color: var(--color-text-primary);
-  line-height: 1.2;
+  line-height: 1.25;
+  min-width: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .cardapio-item-preco {
@@ -671,6 +689,7 @@
   font-weight: 800;
   color: var(--color-gold-light);
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 /* Linha Ornamental Divisória Fina */
@@ -701,7 +720,7 @@
 /* Botão com sensação tátil de latão escovado e relevo */
 .cardapio-item-footer .btn--primary {
   width: 100%;
-  padding: 0.85rem 1.25rem;
+  padding: 0.85rem 1rem;
   font-size: var(--text-sm);
   font-weight: 700;
   display: flex;
@@ -711,6 +730,9 @@
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.3), 0 6px 18px rgba(168, 42, 34, 0.45);
   transition: all 0.2s var(--ease-smooth);
+  white-space: normal;
+  text-align: center;
+  line-height: 1.25;
 }
 
 .cardapio-item-footer .btn--primary:hover {
@@ -797,6 +819,21 @@
     font-size: clamp(1.8rem, 6.5vw, 2.3rem);
   }
 
+  .cardapio-info-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0.85rem 1rem;
+    gap: 0.75rem;
+  }
+
+  .info-banner-divider {
+    display: none;
+  }
+
+  .info-banner-item {
+    width: 100%;
+  }
+
   .cardapio-tabs-wrapper {
     justify-content: flex-start;
     padding-inline: var(--space-4);
@@ -805,6 +842,12 @@
   .cardapio-grid {
     grid-template-columns: 1fr;
     gap: var(--space-6);
+  }
+
+  .cardapio-item-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
   }
 
   .cardapio-item-img-wrap {
@@ -837,12 +880,6 @@
 
   .cardapio-grid {
     gap: var(--space-4);
-  }
-
-  .cardapio-item-header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
   }
 }
 

@@ -345,3 +345,16 @@
     font-size: 11px;
   }
 }
+
+@media (max-width: 360px) {
+  .header-brand-name {
+    font-size: 0.875rem;
+    letter-spacing: 0.02em;
+  }
+
+  .btn--header-order {
+    padding: 0.45rem 0.6rem;
+    font-size: 10px;
+    gap: 4px;
+  }
+}

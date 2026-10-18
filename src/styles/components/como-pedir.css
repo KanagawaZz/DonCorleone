@@ -10,7 +10,7 @@
 
 .passos-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
   gap: var(--space-6);
   position: relative;
 }
@@ -79,4 +79,10 @@
   font-size: var(--text-sm);
   color: var(--color-text-secondary);
   line-height: 1.6;
+}
+
+@media (max-width: 480px) {
+  .passo-card {
+    padding: var(--space-6) var(--space-4);
+  }
 }
