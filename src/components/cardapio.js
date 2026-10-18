@@ -2,6 +2,8 @@ import { formatarPreco, esc } from '../utils/dom.js';
 import { carrinho } from '../utils/carrinho.js';
 import { gsap, ScrollTrigger } from '../utils/motion.js';
 import { icone } from '../utils/icons.js';
+import { obterStatusFuncionamento } from '../utils/horario.js';
+import { exibirModalAvisoHorarioPizza } from './modal-aviso-horario.js';
 import dadosCardapioPadrao from '../data/cardapio.json';
 
 /**
@@ -645,12 +647,24 @@ export function initCardapio(config, dadosCardapio = dadosCardapioPadrao) {
     const btnCustomizar = e.target.closest('.btn--customizar-pizza');
     if (btnCustomizar) {
       e.preventDefault();
+      let itemData = null;
       try {
-        const itemData = JSON.parse(btnCustomizar.dataset.itemData);
-        carrinho.abrirModalPizza(itemData);
-      } catch (err) {
-        carrinho.abrirModalPizza();
+        itemData = JSON.parse(btnCustomizar.dataset.itemData);
+      } catch (err) {}
+
+      const status = obterStatusFuncionamento(new Date(), config.horario || {});
+      if (!status.podeFazerPedido) {
+        exibirModalAvisoHorarioPizza({
+          itemData,
+          status,
+          onSimular: (dados) => {
+            carrinho.abrirModalPizza(dados);
+          }
+        });
+        return;
       }
+
+      carrinho.abrirModalPizza(itemData);
       return;
     }
 
@@ -658,6 +672,18 @@ export function initCardapio(config, dadosCardapio = dadosCardapioPadrao) {
     const btnBorda = e.target.closest('.btn--abrir-montador-borda');
     if (btnBorda) {
       e.preventDefault();
+      const status = obterStatusFuncionamento(new Date(), config.horario || {});
+      if (!status.podeFazerPedido) {
+        exibirModalAvisoHorarioPizza({
+          itemData: null,
+          status,
+          onSimular: () => {
+            carrinho.abrirModalPizza();
+          }
+        });
+        return;
+      }
+
       carrinho.abrirModalPizza();
       return;
     }

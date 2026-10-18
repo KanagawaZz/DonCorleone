@@ -13,6 +13,7 @@ import { formatarPreco, esc } from '../utils/dom.js';
 import { icone } from '../utils/icons.js';
 import { calcularPrecoPizza } from '../utils/calculo-pizza.js';
 import { pararLenis, retomarLenis } from '../utils/motion.js';
+import { obterStatusFuncionamento } from '../utils/horario.js';
 import dadosCardapio from '../data/cardapio.json';
 
 export function renderPizzaCustomizerModal(config) {
@@ -54,6 +55,14 @@ export function renderPizzaCustomizerModal(config) {
       <!-- Corpo com Scroll -->
       <div class="pizza-modal-body" id="pizza-modal-body" data-lenis-prevent="true" tabindex="0">
         
+        <!-- Alerta de Modo Consulta Fora do Horário de Atendimento -->
+        <div class="pizza-modal-banner-fechado" id="pizza-banner-fechado" style="display: none;">
+          <span class="banner-fechado-icon">🕒</span>
+          <div id="pizza-banner-fechado-texto">
+            <strong>Forno a lenha fora do expediente:</strong> Modo aberto para consulta dos sabores.
+          </div>
+        </div>
+
         <!-- Palco de Prévia Visual das Fatias -->
         <div class="pizza-visual-preview-stage" id="pizza-visual-preview-stage">
           <div class="pizza-stone-plate">
@@ -488,6 +497,25 @@ export function initPizzaCustomizerModal(config) {
         saboresSelecionados = [saborAchado];
       } else {
         saboresSelecionados = todosSaboresPizza.length > 0 ? [todosSaboresPizza[0]] : [];
+      }
+    }
+
+    // Verificação de Horário de Expediente no Modal
+    const statusAgora = obterStatusFuncionamento(new Date(), config.horario || {});
+    const bannerFechado = document.querySelector('#pizza-banner-fechado');
+    const bannerTexto = document.querySelector('#pizza-banner-fechado-texto');
+    if (bannerFechado) {
+      if (!statusAgora.podeFazerPedido) {
+        bannerFechado.style.display = 'flex';
+        if (bannerTexto) {
+          const horaAbertura = statusAgora.horarioAberturaStr ? statusAgora.horarioAberturaStr.replace(':', 'h') : '17h30';
+          bannerTexto.innerHTML = `<strong>Forno fora do expediente (${esc(statusAgora.statusTexto)}):</strong> Você pode montar e adicionar ao carrinho normalmente para conferir os valores. O envio do pedido será liberado às ${horaAbertura}.`;
+        }
+        if (btnAddLabel) {
+          btnAddLabel.textContent = itemEditandoId ? 'Salvar Alterações' : 'Adicionar ao Carrinho';
+        }
+      } else {
+        bannerFechado.style.display = 'none';
       }
     }
 
