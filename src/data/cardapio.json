@@ -315,16 +315,6 @@
           "foto": "/images/cardapio/esfiha-carne-catupiry.jpg"
         },
         {
-          "id": "esfiha-carne-seca",
-          "nome": "Esfiha de Carne Seca",
-          "descricao": "Carne seca desfiada e temperada com mussarela derretida.",
-          "preco": null,
-          "precoTexto": "Sob consulta",
-          "destaque": true,
-          "tag": "Especial da Casa",
-          "foto": "/images/cardapio/esfiha-carne-seca.jpg"
-        },
-        {
           "id": "esfiha-queijo",
           "nome": "Esfiha de Queijo",
           "descricao": "Queijo mussarela de qualidade derretido e dourado no forno.",
