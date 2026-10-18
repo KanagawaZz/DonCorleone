@@ -32,7 +32,7 @@ export function renderSobre(config) {
       <!-- Imagem Editorial Gastronômica -->
       <div class="sobre-visual-col" data-reveal>
         <div class="sobre-img-frame">
-          <img src="/images/cardapio/margherita-especial.jpg" alt="Preparação artesanal da pizza Don Corleone" class="sobre-img-main" />
+          <img src="/images/cardapio/margherita-especial.webp" alt="Preparação artesanal da pizza Don Corleone" class="sobre-img-main" />
           <div class="sobre-img-badge">
             <span class="badge-number">Cidade Alta</span>
             <span class="badge-text">Cuiabá — MT</span>

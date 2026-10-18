@@ -12,7 +12,7 @@
           "preco": 76.90,
           "destaque": true,
           "tag": "Clássica",
-          "foto": "/images/cardapio/calabresa.jpg"
+          "foto": "/images/cardapio/calabresa.webp"
         },
         {
           "id": "pizza-frango-catupiry",
@@ -21,7 +21,7 @@
           "preco": 76.90,
           "destaque": true,
           "tag": "Mais Pedida",
-          "foto": "/images/cardapio/frango-catupiry.jpg"
+          "foto": "/images/cardapio/frango-catupiry.webp"
         },
         {
           "id": "pizza-tres-queijos",
@@ -30,7 +30,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Cremosa",
-          "foto": "/images/cardapio/tres-queijos.png"
+          "foto": "/images/cardapio/tres-queijos.webp"
         },
         {
           "id": "pizza-lombo-requeijao",
@@ -39,7 +39,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Especial",
-          "foto": "/images/cardapio/lombo.png"
+          "foto": "/images/cardapio/lombo.webp"
         },
         {
           "id": "pizza-baiana-apimentada",
@@ -48,7 +48,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Picante",
-          "foto": "/images/cardapio/baiana.jpg"
+          "foto": "/images/cardapio/baiana.webp"
         },
         {
           "id": "pizza-mafiosa",
@@ -57,7 +57,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Don Corleone",
-          "foto": "/images/cardapio/mafiosa.png"
+          "foto": "/images/cardapio/mafiosa.webp"
         },
         {
           "id": "pizza-presunto-queijo",
@@ -66,7 +66,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Tradicional",
-          "foto": "/images/cardapio/presunto-queijo.jpg"
+          "foto": "/images/cardapio/presunto-queijo.webp"
         },
         {
           "id": "pizza-genovesa",
@@ -75,7 +75,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Receita da Casa",
-          "foto": "/images/cardapio/genovesa.png"
+          "foto": "/images/cardapio/genovesa.webp"
         },
         {
           "id": "pizza-moda-da-casa",
@@ -84,7 +84,7 @@
           "preco": 76.90,
           "destaque": true,
           "tag": "Assinatura",
-          "foto": "/images/cardapio/moda-da-casa.png"
+          "foto": "/images/cardapio/moda-da-casa.webp"
         },
         {
           "id": "pizza-portuguesa",
@@ -93,7 +93,7 @@
           "preco": 76.90,
           "destaque": true,
           "tag": "Favorita",
-          "foto": "/images/cardapio/portuguesa.jpg"
+          "foto": "/images/cardapio/portuguesa.webp"
         },
         {
           "id": "pizza-dom-camilo",
@@ -102,7 +102,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Especial",
-          "foto": "/images/cardapio/dom-camilo.jpg"
+          "foto": "/images/cardapio/dom-camilo.webp"
         },
         {
           "id": "pizza-calabresa-catupiry",
@@ -111,7 +111,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Clássica",
-          "foto": "/images/cardapio/calabresa.jpg"
+          "foto": "/images/cardapio/calabresa.webp"
         },
         {
           "id": "pizza-goiana",
@@ -120,7 +120,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Sabor Regional",
-          "foto": "/images/cardapio/frango-catupiry.jpg"
+          "foto": "/images/cardapio/frango-catupiry.webp"
         },
         {
           "id": "pizza-mussarela",
@@ -129,7 +129,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Tradicional",
-          "foto": "/images/cardapio/mussarela.png"
+          "foto": "/images/cardapio/mussarela.webp"
         },
         {
           "id": "pizza-milho",
@@ -138,7 +138,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Leve",
-          "foto": "/images/cardapio/milho.jpg"
+          "foto": "/images/cardapio/milho.webp"
         },
         {
           "id": "pizza-palmito",
@@ -147,7 +147,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Vegetariana",
-          "foto": "/images/cardapio/palmito.jpg"
+          "foto": "/images/cardapio/palmito.webp"
         },
         {
           "id": "pizza-strogonoff-frango",
@@ -156,7 +156,7 @@
           "preco": 86.90,
           "destaque": true,
           "tag": "Especial da Casa",
-          "foto": "/images/cardapio/strogonoff-frango.jpg"
+          "foto": "/images/cardapio/strogonoff-frango.webp"
         },
         {
           "id": "pizza-americana",
@@ -165,7 +165,7 @@
           "preco": 86.90,
           "destaque": true,
           "tag": "Premium",
-          "foto": "/images/cardapio/americana.jpg"
+          "foto": "/images/cardapio/americana.webp"
         },
         {
           "id": "pizza-moda-do-chef",
@@ -174,7 +174,7 @@
           "preco": 86.90,
           "destaque": true,
           "tag": "Chef Selection",
-          "foto": "/images/cardapio/moda-do-chef.jpg"
+          "foto": "/images/cardapio/moda-do-chef.webp"
         },
         {
           "id": "pizza-carne-seca",
@@ -183,7 +183,7 @@
           "preco": 86.90,
           "destaque": true,
           "tag": "Premium",
-          "foto": "/images/cardapio/carne-seca.jpg"
+          "foto": "/images/cardapio/carne-seca.webp"
         }
       ]
     },
@@ -199,7 +199,7 @@
           "preco": 76.90,
           "destaque": true,
           "tag": "Clássica Doce",
-          "foto": "/images/cardapio/romeu-e-julieta.jpg"
+          "foto": "/images/cardapio/romeu-e-julieta.webp"
         },
         {
           "id": "pizza-doce-prestigio",
@@ -208,7 +208,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Irresistível",
-          "foto": "/images/cardapio/prestigio.jpg"
+          "foto": "/images/cardapio/prestigio.webp"
         },
         {
           "id": "pizza-doce-brigadeiro",
@@ -217,7 +217,7 @@
           "preco": 76.90,
           "destaque": true,
           "tag": "Mais Pedida",
-          "foto": "/images/cardapio/brigadeiro.jpg"
+          "foto": "/images/cardapio/brigadeiro.webp"
         },
         {
           "id": "pizza-doce-beijinho",
@@ -226,7 +226,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Tradicional",
-          "foto": "/images/cardapio/beijinho.jpg"
+          "foto": "/images/cardapio/beijinho.webp"
         },
         {
           "id": "pizza-doce-banana-canela",
@@ -235,7 +235,7 @@
           "preco": 76.90,
           "destaque": true,
           "tag": "Artesanal",
-          "foto": "/images/cardapio/banana-canela.jpg"
+          "foto": "/images/cardapio/banana-canela.webp"
         }
       ]
     },
@@ -252,7 +252,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "Super Combo",
-          "foto": "/images/cardapio/combo-duas-grandes.jpg",
+          "foto": "/images/cardapio/combo-duas-grandes.webp",
           "composicao": "2 Pizzas Grandes (35 cm)"
         },
         {
@@ -263,7 +263,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "Combo Família",
-          "foto": "/images/cardapio/combo-grande-pequena-guarana.jpg",
+          "foto": "/images/cardapio/combo-grande-pequena-guarana.webp",
           "composicao": "1 Grande (35 cm) + 1 Pequena Doce (25 cm) + Guaraná 1,5 L"
         },
         {
@@ -274,7 +274,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "Promoção Limitada",
-          "foto": "/images/cardapio/combo-10-esfihas.jpg",
+          "foto": "/images/cardapio/combo-10-esfihas.webp",
           "composicao": "10 Esfihas à sua escolha + 1 Guaraná Antarctica 1,5 L"
         }
       ]
@@ -292,7 +292,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "Mais Pedida",
-          "foto": "/images/cardapio/esfiha-carne.jpg"
+          "foto": "/images/cardapio/esfiha-carne.webp"
         },
         {
           "id": "esfiha-carne-queijo",
@@ -302,7 +302,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Combinação Perfeita",
-          "foto": "/images/cardapio/esfiha-carne-queijo.jpg"
+          "foto": "/images/cardapio/esfiha-carne-queijo.webp"
         },
         {
           "id": "esfiha-carne-catupiry",
@@ -312,7 +312,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Cremosa",
-          "foto": "/images/cardapio/esfiha-carne-catupiry.jpg"
+          "foto": "/images/cardapio/esfiha-carne-catupiry.webp"
         },
         {
           "id": "esfiha-queijo",
@@ -322,7 +322,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Cremosa",
-          "foto": "/images/cardapio/esfiha-queijo.jpg"
+          "foto": "/images/cardapio/esfiha-queijo.webp"
         },
         {
           "id": "esfiha-tres-queijos",
@@ -332,7 +332,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Especial",
-          "foto": "/images/cardapio/esfiha-tres-queijos.jpg"
+          "foto": "/images/cardapio/esfiha-tres-queijos.webp"
         },
         {
           "id": "esfiha-calabresa",
@@ -342,7 +342,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Tradicional",
-          "foto": "/images/cardapio/esfiha-calabresa.jpg"
+          "foto": "/images/cardapio/esfiha-calabresa.webp"
         },
         {
           "id": "esfiha-calabresa-catupiry",
@@ -352,7 +352,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Favorita",
-          "foto": "/images/cardapio/esfiha-calabresa-catupiry.jpg"
+          "foto": "/images/cardapio/esfiha-calabresa-catupiry.webp"
         },
         {
           "id": "esfiha-frango-catupiry",
@@ -362,7 +362,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "Favorita",
-          "foto": "/images/cardapio/esfiha-frango-catupiry.jpg"
+          "foto": "/images/cardapio/esfiha-frango-catupiry.webp"
         },
         {
           "id": "esfiha-frango-queijo",
@@ -372,7 +372,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Artesanal",
-          "foto": "/images/cardapio/esfiha-frango-queijo.jpg"
+          "foto": "/images/cardapio/esfiha-frango-queijo.webp"
         },
         {
           "id": "esfiha-frango-cheddar",
@@ -382,7 +382,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Marcante",
-          "foto": "/images/cardapio/esfiha-frango-cheddar.jpg"
+          "foto": "/images/cardapio/esfiha-frango-cheddar.webp"
         },
         {
           "id": "esfiha-bacon",
@@ -392,7 +392,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "Crocante",
-          "foto": "/images/cardapio/esfiha-bacon.jpg"
+          "foto": "/images/cardapio/esfiha-bacon.webp"
         },
         {
           "id": "esfiha-strogonoff",
@@ -402,7 +402,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Especial da Casa",
-          "foto": "/images/cardapio/esfiha-strogonoff.jpg"
+          "foto": "/images/cardapio/esfiha-strogonoff.webp"
         },
         {
           "id": "esfiha-palmito",
@@ -412,7 +412,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Leve",
-          "foto": "/images/cardapio/esfiha-palmito.jpg"
+          "foto": "/images/cardapio/esfiha-palmito.webp"
         },
         {
           "id": "esfiha-milho",
@@ -422,7 +422,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Leve",
-          "foto": "/images/cardapio/esfiha-milho.jpg"
+          "foto": "/images/cardapio/esfiha-milho.webp"
         },
         {
           "id": "esfiha-atum",
@@ -432,7 +432,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Artesanal",
-          "foto": "/images/cardapio/esfiha-atum.jpg"
+          "foto": "/images/cardapio/esfiha-atum.webp"
         },
         {
           "id": "esfiha-brigadeiro",
@@ -442,7 +442,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "Mais Pedida Doce",
-          "foto": "/images/cardapio/esfiha-brigadeiro.jpg"
+          "foto": "/images/cardapio/esfiha-brigadeiro.webp"
         },
         {
           "id": "esfiha-beijinho",
@@ -452,7 +452,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Clássica Doce",
-          "foto": "/images/cardapio/esfiha-beijinho.jpg"
+          "foto": "/images/cardapio/esfiha-beijinho.webp"
         },
         {
           "id": "esfiha-prestigio",
@@ -462,7 +462,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Irresistível",
-          "foto": "/images/cardapio/esfiha-prestigio.jpg"
+          "foto": "/images/cardapio/esfiha-prestigio.webp"
         },
         {
           "id": "esfiha-romeu-e-julieta",
@@ -472,7 +472,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "Tradicional",
-          "foto": "/images/cardapio/esfiha-romeu-e-julieta.jpg"
+          "foto": "/images/cardapio/esfiha-romeu-e-julieta.webp"
         },
         {
           "id": "esfiha-banana-canela",
@@ -482,7 +482,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Artesanal",
-          "foto": "/images/cardapio/esfiha-banana-canela.jpg"
+          "foto": "/images/cardapio/esfiha-banana-canela.webp"
         },
         {
           "id": "esfiha-oreo",
@@ -492,7 +492,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "Especial",
-          "foto": "/images/cardapio/esfiha-oreo.jpg"
+          "foto": "/images/cardapio/esfiha-oreo.webp"
         }
       ]
     },
@@ -510,7 +510,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Experimente",
-          "foto": "/images/cardapio/kit-esfiha-inicial.jpg",
+          "foto": "/images/cardapio/kit-esfiha-inicial.webp",
           "distribuicao": "2 Carne · 1 Queijo"
         },
         {
@@ -522,7 +522,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "8 Unidades",
-          "foto": "/images/cardapio/kit-esfiha-1.jpg",
+          "foto": "/images/cardapio/kit-esfiha-1.webp",
           "distribuicao": "2 Calabresa · 2 Carne · 2 Queijo · 2 Frango"
         },
         {
@@ -534,7 +534,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "10 Unidades",
-          "foto": "/images/cardapio/kit-esfiha-2.jpg",
+          "foto": "/images/cardapio/kit-esfiha-2.webp",
           "distribuicao": "10 Carne"
         },
         {
@@ -546,7 +546,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "12 Unidades",
-          "foto": "/images/cardapio/kit-esfiha-3.jpg",
+          "foto": "/images/cardapio/kit-esfiha-3.webp",
           "distribuicao": "3 Calabresa · 3 Carne · 3 Queijo · 3 Frango"
         },
         {
@@ -558,7 +558,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "16 Unidades",
-          "foto": "/images/cardapio/kit-esfiha-4.png",
+          "foto": "/images/cardapio/kit-esfiha-4.webp",
           "distribuicao": "4 Calabresa · 4 Carne · 4 Queijo · 4 Frango"
         },
         {
@@ -570,7 +570,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "25 Unidades",
-          "foto": "/images/cardapio/kit-esfiha-5.png",
+          "foto": "/images/cardapio/kit-esfiha-5.webp",
           "distribuicao": "5 Calabresa · 5 Carne · 5 Queijo · 5 Frango · 5 Bacon"
         },
         {
@@ -582,7 +582,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "30 Unidades",
-          "foto": "/images/cardapio/kit-esfiha-6.jpg",
+          "foto": "/images/cardapio/kit-esfiha-6.webp",
           "distribuicao": "10 Carne · 5 Calabresa · 5 Queijo · 5 Frango · 5 Bacon"
         }
       ]
@@ -601,7 +601,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "Familiar 1,5 L",
-          "foto": "/images/cardapio/refrigerante-1-5l.png"
+          "foto": "/images/cardapio/refrigerante-1-5l.webp"
         },
         {
           "id": "bebida-refrigerante-lata",
@@ -612,7 +612,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Lata 350 ml",
-          "foto": "/images/cardapio/refrigerante-lata.jpg"
+          "foto": "/images/cardapio/refrigerante-lata.webp"
         }
       ]
     }

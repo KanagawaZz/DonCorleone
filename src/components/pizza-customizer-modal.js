@@ -209,7 +209,7 @@ export function initPizzaCustomizerModal(config) {
           nome: item.nome,
           descricao: item.descricao,
           preco: typeof item.preco === 'number' ? item.preco : null,
-          foto: item.foto || '/images/cardapio/calabresa-artesanal.png',
+          foto: item.foto || '/images/cardapio/calabresa-artesanal.webp',
           categoriaId: cat.id,
           categoriaNome: cat.nome
         });

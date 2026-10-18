@@ -79,7 +79,7 @@ export function renderMontagem(config) {
           
           <!-- Moldura da Fotografia com Tilt Parallax e Camadas Hiper-realistas -->
           <div class="pizza-hero-card" id="pizza-hero-card">
-            <img src="/images/cardapio/calabresa-artesanal.jpg" alt="Pizza de Calabresa Artesanal Don Corleone" class="pizza-hero-image" />
+            <img src="/images/cardapio/calabresa-artesanal.webp" alt="Pizza de Calabresa Artesanal Don Corleone" class="pizza-hero-image" />
             
             <!-- Luz Especular Dinâmica que reflete a brasa e reage ao mouse -->
             <div class="pizza-specular-light" id="pizza-specular-light" aria-hidden="true"></div>

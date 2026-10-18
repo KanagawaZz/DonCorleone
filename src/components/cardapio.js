@@ -42,7 +42,7 @@ export function renderizarCardItem(item, catId = '') {
     <div class="cardapio-card-frame" aria-hidden="true"></div>
 
     <div class="cardapio-item-img-wrap">
-      <img src="${item.foto || '/images/cardapio/calabresa-artesanal.jpg'}" alt="${esc(nomeExibido)}" loading="lazy" class="cardapio-item-img" />
+      <img src="${item.foto || '/images/cardapio/calabresa-artesanal.webp'}" alt="${esc(nomeExibido)}" loading="lazy" class="cardapio-item-img" />
       
       ${item.tag ? `
         <span class="cardapio-item-tag">
@@ -149,7 +149,7 @@ export function renderCardapio(config, dadosCardapio = dadosCardapioPadrao) {
     return `
     <div class="destaque-card-mini" data-reveal>
       <div class="destaque-card-img-wrap">
-        <img src="${item.foto || '/images/cardapio/calabresa-artesanal.jpg'}" alt="${esc(item.nome)}" loading="lazy" class="destaque-card-img" />
+        <img src="${item.foto || '/images/cardapio/calabresa-artesanal.webp'}" alt="${esc(item.nome)}" loading="lazy" class="destaque-card-img" />
         <span class="destaque-pill-tag">${esc(item.tag || 'Destaque')}</span>
       </div>
       <div class="destaque-card-info">

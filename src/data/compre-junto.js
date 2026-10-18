@@ -17,7 +17,7 @@ export const ITENS_COMPRE_JUNTO = [
     nome: 'Guaraná Antarctica 1,5L',
     subtitulo: 'Garrafa 1,5L bem gelada',
     preco: 14.00,
-    foto: '/images/cardapio/refrigerante-1-5l.png',
+    foto: '/images/cardapio/refrigerante-1-5l.webp',
     icone: 'bebida'
   },
   {
@@ -28,7 +28,7 @@ export const ITENS_COMPRE_JUNTO = [
     nome: 'Coca-Cola 2 Litros',
     subtitulo: 'Garrafa 2L bem gelada',
     preco: 16.00,
-    foto: '/images/cardapio/refrigerante-1-5l.png',
+    foto: '/images/cardapio/refrigerante-1-5l.webp',
     icone: 'bebida'
   },
   {
@@ -39,7 +39,7 @@ export const ITENS_COMPRE_JUNTO = [
     nome: 'Refrigerante em Lata 350ml',
     subtitulo: 'Lata 350ml gelada',
     preco: 7.00,
-    foto: '/images/cardapio/refrigerante-lata.jpg',
+    foto: '/images/cardapio/refrigerante-lata.webp',
     icone: 'bebida'
   },
   {
@@ -50,7 +50,7 @@ export const ITENS_COMPRE_JUNTO = [
     nome: 'Broto Brigadeiro',
     subtitulo: 'Chocolate nobre e granulado',
     preco: 38.00,
-    foto: '/images/cardapio/brigadeiro.jpg',
+    foto: '/images/cardapio/brigadeiro.webp',
     icone: 'doce'
   },
   {
@@ -61,7 +61,7 @@ export const ITENS_COMPRE_JUNTO = [
     nome: 'Broto Romeu e Julieta',
     subtitulo: 'Goiabada cremosa com queijo',
     preco: 38.00,
-    foto: '/images/cardapio/romeu-e-julieta.jpg',
+    foto: '/images/cardapio/romeu-e-julieta.webp',
     icone: 'doce'
   },
   {
@@ -72,7 +72,7 @@ export const ITENS_COMPRE_JUNTO = [
     nome: 'Esfiha Doce Brigadeiro',
     subtitulo: 'Massa artesanal recheada',
     preco: 7.50,
-    foto: '/images/cardapio/esfiha-brigadeiro.jpg',
+    foto: '/images/cardapio/esfiha-brigadeiro.webp',
     icone: 'doce'
   }
 ];

@@ -87,7 +87,7 @@ class CarrinhoStore {
         tipo: 'simples',
         nome: produto.nome || 'Produto',
         precoUnitario: Number(produto.preco) || 0,
-        foto: produto.foto || '/images/cardapio/calabresa-artesanal.jpg',
+        foto: produto.foto || '/images/cardapio/calabresa-artesanal.webp',
         descricao: produto.descricao || '',
         quantidade: Math.max(1, quantidade)
       });
@@ -104,7 +104,7 @@ class CarrinhoStore {
     if (sabores.length === 0) return;
 
     const precoUnitario = calcularPrecoPizza(sabores, tamanho, borda);
-    const fotoCapa = sabores[0]?.foto || '/images/cardapio/calabresa-artesanal.png';
+    const fotoCapa = sabores[0]?.foto || '/images/cardapio/calabresa-artesanal.webp';
 
     if (idExistente) {
       const index = this.itens.findIndex(i => i.id === idExistente);
