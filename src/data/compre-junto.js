@@ -50,7 +50,7 @@ export const ITENS_COMPRE_JUNTO = [
     nome: 'Broto Brigadeiro',
     subtitulo: 'Chocolate nobre e granulado',
     preco: 38.00,
-    foto: '/images/cardapio/margherita-especial.jpg',
+    foto: '/images/cardapio/brigadeiro.jpg',
     icone: 'doce'
   },
   {
@@ -61,7 +61,7 @@ export const ITENS_COMPRE_JUNTO = [
     nome: 'Broto Romeu e Julieta',
     subtitulo: 'Goiabada cremosa com queijo',
     preco: 38.00,
-    foto: '/images/cardapio/mussarela-especial.jpg',
+    foto: '/images/cardapio/romeu-e-julieta.jpg',
     icone: 'doce'
   },
   {
@@ -72,7 +72,7 @@ export const ITENS_COMPRE_JUNTO = [
     nome: 'Esfiha Doce Brigadeiro',
     subtitulo: 'Massa artesanal recheada',
     preco: 7.50,
-    foto: '/images/cardapio/esfiha-queijo.jpg',
+    foto: '/images/cardapio/esfiha-brigadeiro.jpg',
     icone: 'doce'
   }
 ];

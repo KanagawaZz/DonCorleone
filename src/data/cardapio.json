@@ -66,7 +66,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Tradicional",
-          "foto": "/images/cardapio/mussarela-especial.jpg"
+          "foto": "/images/cardapio/presunto-queijo.jpg"
         },
         {
           "id": "pizza-genovesa",
@@ -102,7 +102,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Especial",
-          "foto": "/images/cardapio/calabresa-artesanal.png"
+          "foto": "/images/cardapio/dom-camilo.jpg"
         },
         {
           "id": "pizza-calabresa-catupiry",
@@ -129,7 +129,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Tradicional",
-          "foto": "/images/cardapio/mussarela-especial.jpg"
+          "foto": "/images/cardapio/mussarela.png"
         },
         {
           "id": "pizza-milho",
@@ -138,7 +138,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Leve",
-          "foto": "/images/cardapio/mussarela-especial.jpg"
+          "foto": "/images/cardapio/milho.jpg"
         },
         {
           "id": "pizza-palmito",
@@ -147,7 +147,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Vegetariana",
-          "foto": "/images/cardapio/margherita-especial.jpg"
+          "foto": "/images/cardapio/palmito.jpg"
         },
         {
           "id": "pizza-strogonoff-frango",
@@ -156,7 +156,7 @@
           "preco": 86.90,
           "destaque": true,
           "tag": "Especial da Casa",
-          "foto": "/images/cardapio/frango-catupiry.jpg"
+          "foto": "/images/cardapio/strogonoff-frango.jpg"
         },
         {
           "id": "pizza-americana",
@@ -165,7 +165,7 @@
           "preco": 86.90,
           "destaque": true,
           "tag": "Premium",
-          "foto": "/images/cardapio/parma-rucula.jpg"
+          "foto": "/images/cardapio/americana.jpg"
         },
         {
           "id": "pizza-moda-do-chef",
@@ -174,7 +174,7 @@
           "preco": 86.90,
           "destaque": true,
           "tag": "Chef Selection",
-          "foto": "/images/cardapio/parma-rucula.jpg"
+          "foto": "/images/cardapio/moda-do-chef.jpg"
         },
         {
           "id": "pizza-carne-seca",
@@ -183,7 +183,7 @@
           "preco": 86.90,
           "destaque": true,
           "tag": "Premium",
-          "foto": "/images/cardapio/parma-rucula.jpg"
+          "foto": "/images/cardapio/carne-seca.jpg"
         }
       ]
     },
@@ -199,7 +199,7 @@
           "preco": 76.90,
           "destaque": true,
           "tag": "Clássica Doce",
-          "foto": "/images/cardapio/mussarela-especial.jpg"
+          "foto": "/images/cardapio/romeu-e-julieta.jpg"
         },
         {
           "id": "pizza-doce-prestigio",
@@ -208,7 +208,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Irresistível",
-          "foto": "/images/cardapio/calabresa-artesanal.png"
+          "foto": "/images/cardapio/prestigio.jpg"
         },
         {
           "id": "pizza-doce-brigadeiro",
@@ -217,7 +217,7 @@
           "preco": 76.90,
           "destaque": true,
           "tag": "Mais Pedida",
-          "foto": "/images/cardapio/calabresa-artesanal.png"
+          "foto": "/images/cardapio/brigadeiro.jpg"
         },
         {
           "id": "pizza-doce-beijinho",
@@ -226,7 +226,7 @@
           "preco": 76.90,
           "destaque": false,
           "tag": "Tradicional",
-          "foto": "/images/cardapio/mussarela-especial.jpg"
+          "foto": "/images/cardapio/beijinho.jpg"
         },
         {
           "id": "pizza-doce-banana-canela",
@@ -235,7 +235,7 @@
           "preco": 76.90,
           "destaque": true,
           "tag": "Artesanal",
-          "foto": "/images/cardapio/margherita-especial.jpg"
+          "foto": "/images/cardapio/banana-canela.jpg"
         }
       ]
     },
@@ -247,13 +247,13 @@
         {
           "id": "combo-duas-grandes",
           "nome": "Combo Duas Grandes",
-          "descricao": "2 pizzas grandes de 35 cm com bordas de Catupiry e sabores selecionáveis à sua escolha.",
+          "descricao": "2 pizzas grandes de 35 cm e sabores selecionáveis à sua escolha.",
           "preco": null,
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "Super Combo",
-          "foto": "/images/cardapio/calabresa-artesanal.png",
-          "composicao": "2 Pizzas Grandes (35 cm) + Bordas de Catupiry"
+          "foto": "/images/cardapio/combo-duas-grandes.jpg",
+          "composicao": "2 Pizzas Grandes (35 cm)"
         },
         {
           "id": "combo-grande-pequena-guarana",
@@ -263,7 +263,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "Combo Família",
-          "foto": "/images/cardapio/frango-catupiry.jpg",
+          "foto": "/images/cardapio/combo-grande-pequena-guarana.jpg",
           "composicao": "1 Grande (35 cm) + 1 Pequena Doce (25 cm) + Guaraná 1,5 L"
         },
         {
@@ -274,7 +274,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "Promoção Limitada",
-          "foto": "/images/cardapio/esfiha-carne.jpg",
+          "foto": "/images/cardapio/combo-10-esfihas.jpg",
           "composicao": "10 Esfihas à sua escolha + 1 Guaraná Antarctica 1,5 L"
         }
       ]
@@ -284,16 +284,6 @@
       "nome": "Esfihas Unitárias",
       "descricao": "Massa artesanal aberta, crocante e com recheios generosos.",
       "itens": [
-        {
-          "id": "esfiha-queijo",
-          "nome": "Esfiha de Queijo",
-          "descricao": "Queijo mussarela de qualidade derretido e dourado no forno.",
-          "preco": null,
-          "precoTexto": "Sob consulta",
-          "destaque": false,
-          "tag": "Cremosa",
-          "foto": "/images/cardapio/esfiha-queijo.jpg"
-        },
         {
           "id": "esfiha-carne",
           "nome": "Esfiha de Carne",
@@ -312,17 +302,67 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Combinação Perfeita",
-          "foto": "/images/cardapio/esfiha-carne.jpg"
+          "foto": "/images/cardapio/esfiha-carne-queijo.jpg"
+        },
+        {
+          "id": "esfiha-carne-catupiry",
+          "nome": "Esfiha de Carne com Catupiry",
+          "descricao": "Carne bovina temperada artesanalmente com requeijão cremoso Catupiry.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": false,
+          "tag": "Cremosa",
+          "foto": "/images/cardapio/esfiha-carne-catupiry.jpg"
+        },
+        {
+          "id": "esfiha-carne-seca",
+          "nome": "Esfiha de Carne Seca",
+          "descricao": "Carne seca desfiada e temperada com mussarela derretida.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": true,
+          "tag": "Especial da Casa",
+          "foto": "/images/cardapio/esfiha-carne-seca.jpg"
+        },
+        {
+          "id": "esfiha-queijo",
+          "nome": "Esfiha de Queijo",
+          "descricao": "Queijo mussarela de qualidade derretido e dourado no forno.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": false,
+          "tag": "Cremosa",
+          "foto": "/images/cardapio/esfiha-queijo.jpg"
+        },
+        {
+          "id": "esfiha-tres-queijos",
+          "nome": "Esfiha Três Queijos",
+          "descricao": "Mussarela, provolone e requeijão cremoso gratinados no forno.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": false,
+          "tag": "Especial",
+          "foto": "/images/cardapio/esfiha-tres-queijos.jpg"
         },
         {
           "id": "esfiha-calabresa",
           "nome": "Esfiha de Calabresa",
-          "descricao": "Mussarela derretida com calabresa especial moída.",
+          "descricao": "Mussarela derretida com calabresa especial moída e orégano.",
           "preco": null,
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Tradicional",
           "foto": "/images/cardapio/esfiha-calabresa.jpg"
+        },
+        {
+          "id": "esfiha-calabresa-catupiry",
+          "nome": "Esfiha de Calabresa com Catupiry",
+          "descricao": "Calabresa moída especial com requeijão cremoso Catupiry.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": false,
+          "tag": "Favorita",
+          "foto": "/images/cardapio/esfiha-calabresa-catupiry.jpg"
         },
         {
           "id": "esfiha-frango-catupiry",
@@ -332,7 +372,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "Favorita",
-          "foto": "/images/cardapio/esfiha-carne.jpg"
+          "foto": "/images/cardapio/esfiha-frango-catupiry.jpg"
         },
         {
           "id": "esfiha-frango-queijo",
@@ -342,7 +382,37 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Artesanal",
-          "foto": "/images/cardapio/esfiha-queijo.jpg"
+          "foto": "/images/cardapio/esfiha-frango-queijo.jpg"
+        },
+        {
+          "id": "esfiha-frango-cheddar",
+          "nome": "Esfiha de Frango com Cheddar",
+          "descricao": "Frango desfiado temperado coberto com cheddar cremoso especial.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": false,
+          "tag": "Marcante",
+          "foto": "/images/cardapio/esfiha-frango-cheddar.jpg"
+        },
+        {
+          "id": "esfiha-bacon",
+          "nome": "Esfiha de Bacon",
+          "descricao": "Cubos crocantes de bacon com mussarela derretida no forno.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": true,
+          "tag": "Crocante",
+          "foto": "/images/cardapio/esfiha-bacon.jpg"
+        },
+        {
+          "id": "esfiha-strogonoff",
+          "nome": "Esfiha de Strogonoff de Frango",
+          "descricao": "Strogonoff de frango cremoso, batata palha crocante e queijo mussarela.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": false,
+          "tag": "Especial da Casa",
+          "foto": "/images/cardapio/esfiha-strogonoff.jpg"
         },
         {
           "id": "esfiha-palmito",
@@ -352,7 +422,7 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Leve",
-          "foto": "/images/cardapio/esfiha-queijo.jpg"
+          "foto": "/images/cardapio/esfiha-palmito.jpg"
         },
         {
           "id": "esfiha-milho",
@@ -362,7 +432,77 @@
           "precoTexto": "Sob consulta",
           "destaque": false,
           "tag": "Leve",
-          "foto": "/images/cardapio/esfiha-queijo.jpg"
+          "foto": "/images/cardapio/esfiha-milho.jpg"
+        },
+        {
+          "id": "esfiha-atum",
+          "nome": "Esfiha de Atum",
+          "descricao": "Atum sólido de qualidade com cebola fatiada e orégano.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": false,
+          "tag": "Artesanal",
+          "foto": "/images/cardapio/esfiha-atum.jpg"
+        },
+        {
+          "id": "esfiha-brigadeiro",
+          "nome": "Esfiha Doce de Brigadeiro",
+          "descricao": "Brigadeiro cremoso de chocolate nobre coberto com granulado.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": true,
+          "tag": "Mais Pedida Doce",
+          "foto": "/images/cardapio/esfiha-brigadeiro.jpg"
+        },
+        {
+          "id": "esfiha-beijinho",
+          "nome": "Esfiha Doce de Beijinho",
+          "descricao": "Recheio cremoso de beijinho de coco com leite condensado.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": false,
+          "tag": "Clássica Doce",
+          "foto": "/images/cardapio/esfiha-beijinho.jpg"
+        },
+        {
+          "id": "esfiha-prestigio",
+          "nome": "Esfiha Doce de Prestígio",
+          "descricao": "Chocolate cremoso nobre com flocos generosos de coco ralado.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": false,
+          "tag": "Irresistível",
+          "foto": "/images/cardapio/esfiha-prestigio.jpg"
+        },
+        {
+          "id": "esfiha-romeu-e-julieta",
+          "nome": "Esfiha Doce Romeu e Julieta",
+          "descricao": "Goiabada cremosa especial com queijo derretido no ponto perfeito.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": true,
+          "tag": "Tradicional",
+          "foto": "/images/cardapio/esfiha-romeu-e-julieta.jpg"
+        },
+        {
+          "id": "esfiha-banana-canela",
+          "nome": "Esfiha Doce de Banana com Canela",
+          "descricao": "Bananas fatiadas com açúcar, canela aromática e leite condensado.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": false,
+          "tag": "Artesanal",
+          "foto": "/images/cardapio/esfiha-banana-canela.jpg"
+        },
+        {
+          "id": "esfiha-oreo",
+          "nome": "Esfiha Doce de Oreo",
+          "descricao": "Creme doce suave especial com pedaços crocantes do biscoito Oreo.",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": true,
+          "tag": "Especial",
+          "foto": "/images/cardapio/esfiha-oreo.jpg"
         }
       ]
     },
@@ -440,7 +580,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "25 Unidades",
-          "foto": "/images/cardapio/esfiha-queijo.jpg",
+          "foto": "/images/cardapio/esfiha-bacon.jpg",
           "distribuicao": "5 Calabresa · 5 Carne · 5 Queijo · 5 Frango · 5 Bacon"
         },
         {
@@ -452,7 +592,7 @@
           "precoTexto": "Sob consulta",
           "destaque": true,
           "tag": "30 Unidades",
-          "foto": "/images/cardapio/esfiha-carne.jpg",
+          "foto": "/images/cardapio/combo-esfihas.jpg",
           "distribuicao": "10 Carne · 5 Calabresa · 5 Queijo · 5 Frango · 5 Bacon"
         }
       ]
@@ -483,78 +623,6 @@
           "destaque": false,
           "tag": "Lata 350 ml",
           "foto": "/images/cardapio/calabresa-artesanal.jpg"
-        }
-      ]
-    },
-    {
-      "id": "bordas-adicionais",
-      "nome": "Bordas Recheadas",
-      "descricao": "Bordas especiais associadas à Pizza Grande de 35 cm (máximo 1 borda por pizza).",
-      "itens": [
-        {
-          "id": "borda-sem-borda",
-          "nome": "Sem Borda",
-          "descricao": "Massa crocante tradicional assada no ponto perfeito.",
-          "preco": 0.00,
-          "precoTexto": "Sem adicional",
-          "destaque": false,
-          "tag": "Tradicional",
-          "foto": "/images/cardapio/calabresa-artesanal.png"
-        },
-        {
-          "id": "borda-catupiry",
-          "nome": "Borda de Catupiry",
-          "descricao": "Requeijão tipo catupiry cremoso. Inclusa em combos de pizza grande.",
-          "preco": null,
-          "precoTexto": "Sob consulta / Inclusa em combos",
-          "destaque": true,
-          "tag": "Favorita",
-          "foto": "/images/cardapio/frango-catupiry.jpg"
-        },
-        {
-          "id": "borda-chocolate",
-          "nome": "Borda de Chocolate",
-          "descricao": "Chocolate nobre cremoso derretido na borda.",
-          "preco": 9.90,
-          "destaque": true,
-          "tag": "Doce",
-          "foto": "/images/cardapio/margherita-especial.jpg"
-        },
-        {
-          "id": "borda-goiabada",
-          "nome": "Borda de Goiabada",
-          "descricao": "Goiabada cremosa especial, excelente contraste com a massa.",
-          "preco": 9.90,
-          "destaque": false,
-          "tag": "Doce",
-          "foto": "/images/cardapio/mussarela-especial.jpg"
-        },
-        {
-          "id": "borda-mussarela",
-          "nome": "Borda de Mussarela",
-          "descricao": "Generosa quantidade de queijo mussarela derretido na borda.",
-          "preco": 9.90,
-          "destaque": true,
-          "tag": "Queijo Derretido",
-          "foto": "/images/cardapio/mussarela-especial.jpg"
-        },
-        {
-          "id": "borda-requeijao-cremoso",
-          "nome": "Borda de Requeijão Cremoso",
-          "descricao": "Requeijão cremoso especial gratinado no forno.",
-          "preco": 9.90,
-          "destaque": false,
-          "tag": "Cremosa",
-          "foto": "/images/cardapio/quatro-queijos.jpg"
-        },
-        {
-          "id": "borda-cheddar",
-          "nome": "Borda de Cheddar",
-          "descricao": "Cheddar cremoso especial com sabor marcante.",
-          "preco": 9.90,
-          "destaque": false,
-          "tag": "Marcante",
-          "foto": "/images/cardapio/parma-rucula.jpg"
         }
       ]
     }

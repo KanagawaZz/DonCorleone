@@ -3,3 +3,11 @@ dist
 .env
 *.log
 .DS_Store
+
+# Pastas de importacao brutas temporarias
+/Combos/
+/Esfihas/
+/pizzas/
+/public/combos/
+/public/pizzas/
+

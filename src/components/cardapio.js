@@ -9,7 +9,6 @@ import dadosCardapioPadrao from '../data/cardapio.json';
  */
 export function renderizarCardItem(item, catId = '') {
   const isPizzaCategory = catId === 'pizzas-salgadas' || catId === 'pizzas-doces' || item.tipo === 'pizza';
-  const isBordasCategory = catId === 'bordas-adicionais' || item.tipo === 'borda';
 
   let precoExibido = '';
   if (typeof item.preco === 'number' && item.preco > 0) {
@@ -76,10 +75,6 @@ export function renderizarCardItem(item, catId = '') {
             </svg>
             <span>Montar Pizza</span>
           </button>
-        ` : isBordasCategory ? `
-          <button type="button" class="btn btn--outline btn--gold btn--abrir-montador-borda">
-            <span>Escolher ao Montar Pizza</span>
-          </button>
         ` : `
           <button type="button" class="btn btn--primary btn--pedir-simples" data-item-data="${itemJson}">
             <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
@@ -118,8 +113,7 @@ export function renderCardapio(config, dadosCardapio = dadosCardapioPadrao) {
     'combos-pizzas': 'presente',
     'esfihas-unitarias': 'esfiha',
     'kits-esfihas': 'caixa',
-    'bebidas': 'bebida',
-    'bordas-adicionais': 'borda'
+    'bebidas': 'bebida'
   };
 
   // 1. CARDS DE DESTAQUES (PRIMEIRO NO CARDÁPIO - INSPIRADO NO LAYOUT MOBILE APP)
@@ -413,21 +407,92 @@ export function initCardapio(config, dadosCardapio = dadosCardapioPadrao) {
 
     if (btnLimparBusca) btnLimparBusca.style.display = 'flex';
 
-    const encontrados = todosItens.filter(item => {
+    const palavras = termoNorm.split(/\s+/).filter(Boolean);
+
+    // Avalia e pontua cada item para priorizar:
+    // 1º: Match no Título / Nome da pizza (exato > começa com > contém termo completo > contém palavras)
+    // 2º: Match nos Ingredientes / Descrição / Composição
+    // 3º: Match em Tags / Categorias
+    const resultados = [];
+
+    todosItens.forEach(item => {
       const nomeNorm = normalizar(item.nome);
       const descNorm = normalizar(item.descricao);
-      const tagNorm = normalizar(item.tag);
       const compNorm = normalizar(item.composicao);
       const distNorm = normalizar(item.distribuicao);
+      const tagNorm = normalizar(item.tag);
       const catNorm = normalizar(item.categoriaNome);
 
-      return nomeNorm.includes(termoNorm) || 
-             descNorm.includes(termoNorm) || 
-             tagNorm.includes(termoNorm) ||
-             compNorm.includes(termoNorm) ||
-             distNorm.includes(termoNorm) ||
-             catNorm.includes(termoNorm);
+      const ingredientesNorm = `${descNorm} ${compNorm} ${distNorm}`.trim();
+
+      let score = 0;
+      let matchTipo = null; // 'titulo' | 'ingrediente' | 'outro'
+
+      // --- 1. AVALIAÇÃO DE PRIORIDADE NO TÍTULO (NOME DA PIZZA/PRODUTO) ---
+      if (nomeNorm === termoNorm) {
+        score = 1000;
+        matchTipo = 'titulo';
+      } else if (nomeNorm.startsWith(termoNorm)) {
+        score = 800;
+        matchTipo = 'titulo';
+      } else if (nomeNorm.includes(termoNorm)) {
+        score = 600;
+        matchTipo = 'titulo';
+      } else if (palavras.length > 1 && palavras.every(p => nomeNorm.includes(p))) {
+        score = 500;
+        matchTipo = 'titulo';
+      } else if (palavras.some(p => nomeNorm.includes(p))) {
+        const palavrasNoNome = palavras.filter(p => nomeNorm.includes(p)).length;
+        score = 300 + (palavrasNoNome / palavras.length) * 100;
+        matchTipo = 'titulo';
+      }
+
+      // --- 2. AVALIAÇÃO DE PRIORIDADE NOS INGREDIENTES / DESCRIÇÃO ---
+      if (!matchTipo) {
+        if (ingredientesNorm.includes(termoNorm)) {
+          score = 200;
+          matchTipo = 'ingrediente';
+        } else if (palavras.length > 1 && palavras.every(p => ingredientesNorm.includes(p))) {
+          score = 150;
+          matchTipo = 'ingrediente';
+        } else if (palavras.some(p => ingredientesNorm.includes(p))) {
+          const palavrasNosIngr = palavras.filter(p => ingredientesNorm.includes(p)).length;
+          score = 100 + (palavrasNosIngr / palavras.length) * 40;
+          matchTipo = 'ingrediente';
+        }
+      } else {
+        // Bônus se também tem nos ingredientes
+        if (ingredientesNorm.includes(termoNorm)) {
+          score += 20;
+        }
+      }
+
+      // --- 3. AVALIAÇÃO EM TAGS OU CATEGORIAS (se ainda não encontrou) ---
+      if (!matchTipo) {
+        if (tagNorm.includes(termoNorm) || catNorm.includes(termoNorm) || palavras.some(p => tagNorm.includes(p) || catNorm.includes(p))) {
+          score = 50;
+          matchTipo = 'outro';
+        }
+      }
+
+      if (score > 0) {
+        const isPizza = item.categoriaId === 'pizzas-salgadas' || item.categoriaId === 'pizzas-doces';
+        if (isPizza) score += 5;
+        if (item.destaque) score += 2;
+
+        resultados.push({
+          ...item,
+          score,
+          matchTipo
+        });
+      }
     });
+
+    // Ordenação estrita por pontuação decrescente:
+    // Garante que Título da Pizza vem PRIMEIRO, seguido por Ingredientes.
+    resultados.sort((a, b) => b.score - a.score);
+
+    const encontrados = resultados;
 
     // Oculta visualização padrão por abas
     if (navTabsSticky) navTabsSticky.style.display = 'none';
@@ -439,7 +504,14 @@ export function initCardapio(config, dadosCardapio = dadosCardapioPadrao) {
 
     if (encontrados.length > 0) {
       if (buscaContador) {
-        buscaContador.innerHTML = `Encontramos <strong>${encontrados.length}</strong> produto(s) para "${esc(termoLimpo)}"`;
+        const porTitulo = encontrados.filter(i => i.matchTipo === 'titulo').length;
+        const porIngredientes = encontrados.filter(i => i.matchTipo === 'ingrediente').length;
+
+        if (porTitulo > 0 && porIngredientes > 0) {
+          buscaContador.innerHTML = `Encontramos <strong>${encontrados.length}</strong> produto(s) para "${esc(termoLimpo)}" <span class="busca-detalhe-pill">${porTitulo} no título · ${porIngredientes} nos ingredientes</span>`;
+        } else {
+          buscaContador.innerHTML = `Encontramos <strong>${encontrados.length}</strong> produto(s) para "${esc(termoLimpo)}"`;
+        }
       }
       if (gridResultados) {
         gridResultados.innerHTML = encontrados.map(item => renderizarCardItem(item, item.categoriaId)).join('');

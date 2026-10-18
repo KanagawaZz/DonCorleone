@@ -41,7 +41,7 @@ export function renderPizzaCustomizerModal(config) {
         <div class="pizza-modal-title-wrap">
           <span class="pizza-modal-tag">Montagem Artesanal</span>
           <h2 id="pizza-modal-titulo" class="pizza-modal-title">Monte Sua Pizza</h2>
-          <p class="pizza-modal-subtitle">Escolha o tamanho, sabores e borda recheada da sua preferência.</p>
+          <p class="pizza-modal-subtitle">Escolha o tamanho e os sabores da sua preferência.</p>
         </div>
         <button type="button" class="pizza-modal-close" id="btn-fechar-pizza-modal" aria-label="Fechar janela de montagem">
           <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
@@ -126,31 +126,9 @@ export function renderPizzaCustomizerModal(config) {
           </div>
         </div>
 
-        <!-- SEÇÃO 4: Borda Recheada (Máx 1 Borda) -->
-        <div class="borda-secao mt-4" id="borda-secao">
-          <div class="borda-secao-header mb-2">
-            <label class="secao-label-bold">4. Escolha a Borda Recheada (opcional · máx 1):</label>
-            <span class="borda-regra-info" id="borda-regra-info">Válida para Pizza Grande 35 cm</span>
-          </div>
-          <div class="borda-radios-grid" id="borda-radios-grid">
-            ${bordas.map((b, idx) => `
-              <label class="borda-radio-card ${idx === 0 ? 'active' : ''}" data-borda-id="${b.id}">
-                <input type="radio" name="pizza_borda_opcao" value="${b.id}" ${idx === 0 ? 'checked' : ''} class="sr-only" />
-                <div class="borda-card-body">
-                  <div class="borda-card-top">
-                    <span class="borda-nome">${esc(b.nome)}</span>
-                    <span class="borda-preco">${b.preco === 0 ? 'Inclusa' : (b.preco ? `+${formatarPreco(b.preco)}` : (b.precoTexto || 'Sob consulta'))}</span>
-                  </div>
-                  <span class="borda-desc">${esc(b.descricao || '')}</span>
-                </div>
-              </label>
-            `).join('')}
-          </div>
-        </div>
-
-        <!-- SEÇÃO 5: Observações da Pizza -->
+        <!-- SEÇÃO 4: Observações da Pizza -->
         <div class="pizza-obs-secao mt-4">
-          <label for="pizza-obs-input" class="secao-label-bold">5. Observações desta pizza (opcional):</label>
+          <label for="pizza-obs-input" class="secao-label-bold">4. Observações desta pizza (opcional):</label>
           <input type="text" id="pizza-obs-input" class="form-input" placeholder="Ex: Sem cebola em metade da pizza, bem assada..." />
         </div>
 
@@ -201,8 +179,6 @@ export function initPizzaCustomizerModal(config) {
   const slicesContainer = document.querySelector('#pizza-slices-container');
   const previewCaption = document.querySelector('#pizza-preview-caption');
   const regraPrecoTexto = document.querySelector('#regra-preco-texto');
-  const bordaSecao = document.querySelector('#borda-secao');
-  const bordaRadios = document.querySelectorAll('.borda-radio-card');
   const tamanhoChips = document.querySelectorAll('.tamanho-chip');
   const filtroChips = document.querySelectorAll('.filtro-chip');
 
@@ -212,18 +188,7 @@ export function initPizzaCustomizerModal(config) {
     { id: 'grande', nome: 'Pizza Grande', diametro: '35 cm', fatias: 8, maxSabores: 3, preco: 76.90 }
   ];
 
-  const listaBordas = config.regrasPizza?.bordas || [
-    { id: "sem-borda", nome: "Sem Borda", preco: 0.00 },
-    { id: "borda-catupiry", nome: "Borda de Catupiry", preco: null, precoTexto: "Sob consulta / Inclusa em combos" },
-    { id: "borda-chocolate", nome: "Borda de Chocolate", preco: 9.90 },
-    { id: "borda-goiabada", nome: "Borda de Goiabada", preco: 9.90 },
-    { id: "borda-mussarela", nome: "Borda de Mussarela", preco: 9.90 },
-    { id: "borda-requeijao-cremoso", nome: "Borda de Requeijão Cremoso", preco: 9.90 },
-    { id: "borda-cheddar", nome: "Borda de Cheddar", preco: 9.90 }
-  ];
-
   let tamanhoSelecionado = listaTamanhos.find(t => t.id === 'grande') || listaTamanhos[0];
-  let bordaSelecionada = listaBordas[0];
   let maxSabores = tamanhoSelecionado.maxSabores || 3;
   let saboresSelecionados = [];
   let quantidade = 1;
@@ -350,21 +315,11 @@ export function initPizzaCustomizerModal(config) {
       }
     }
 
-    // 3. Regra de Borda Recheada (disponível para Pizza Grande)
+    // 3. Preço e Subtotal
     const isGrande = tamanhoSelecionado.id === 'grande';
-    if (bordaSecao) {
-      if (!isGrande) {
-        bordaSecao.classList.add('borda-desabilitada');
-        bordaSelecionada = listaBordas[0]; // Sem borda
-      } else {
-        bordaSecao.classList.remove('borda-desabilitada');
-      }
-    }
-
-    // 4. Preço e Subtotal
     if (regraPrecoTexto) {
       if (isGrande) {
-        regraPrecoTexto.textContent = 'Preço da pizza grande calculado pelo sabor de maior valor selecionado + borda.';
+        regraPrecoTexto.textContent = 'Preço da pizza grande calculado pelo sabor de maior valor selecionado.';
       } else {
         regraPrecoTexto.textContent = `Pizzas de tamanho ${tamanhoSelecionado.nome} têm valor sob consulta com a cantina.`;
       }
@@ -372,7 +327,7 @@ export function initPizzaCustomizerModal(config) {
 
     if (precoTotalDisplay) {
       if (isGrande) {
-        const precoUnitario = calcularPrecoPizza(saboresSelecionados, tamanhoSelecionado, bordaSelecionada, config);
+        const precoUnitario = calcularPrecoPizza(saboresSelecionados, tamanhoSelecionado, null, config);
         const subtotal = precoUnitario * quantidade;
         precoTotalDisplay.textContent = formatarPreco(subtotal);
       } else {
@@ -411,7 +366,6 @@ export function initPizzaCustomizerModal(config) {
           <div class="pizza-slice-part slice-full">
             <img src="${s1.foto}" alt="${esc(s1.nome)}" class="slice-full-img" />
             <div class="slice-relief-overlay"></div>
-            <span class="slice-badge-tag">100% · ${esc(s1.nome)}</span>
           </div>
         `;
         previewCaption.innerHTML = `<strong>${esc(tamanhoSelecionado.nome)}:</strong> ${esc(s1.nome)}`;
@@ -422,12 +376,10 @@ export function initPizzaCustomizerModal(config) {
           <div class="pizza-slice-part slice-half slice-left">
             <img src="${s1.foto}" alt="${esc(s1.nome)}" class="slice-half-img" />
             <div class="slice-relief-overlay"></div>
-            <span class="slice-badge-tag">1/2 · ${esc(s1.nome)}</span>
           </div>
           <div class="pizza-slice-part slice-half slice-right">
             <img src="${s2.foto}" alt="${esc(s2.nome)}" class="slice-half-img" />
             <div class="slice-relief-overlay"></div>
-            <span class="slice-badge-tag">1/2 · ${esc(s2.nome)}</span>
           </div>
           <div class="slice-divide-ridge vertical" aria-hidden="true"></div>
         `;
@@ -440,17 +392,14 @@ export function initPizzaCustomizerModal(config) {
           <div class="pizza-slice-part slice-third slice-third-1">
             <img src="${s1.foto}" alt="${esc(s1.nome)}" class="slice-third-img" />
             <div class="slice-relief-overlay"></div>
-            <span class="slice-badge-tag">1/3 · ${esc(s1.nome)}</span>
           </div>
           <div class="pizza-slice-part slice-third slice-third-2">
             <img src="${s2.foto}" alt="${esc(s2.nome)}" class="slice-third-img" />
             <div class="slice-relief-overlay"></div>
-            <span class="slice-badge-tag">1/3 · ${esc(s2.nome)}</span>
           </div>
           <div class="pizza-slice-part slice-third slice-third-3">
             <img src="${s3.foto}" alt="${esc(s3.nome)}" class="slice-third-img" />
             <div class="slice-relief-overlay"></div>
-            <span class="slice-badge-tag">1/3 · ${esc(s3.nome)}</span>
           </div>
           <div class="slice-divide-tri-ridges" aria-hidden="true"></div>
         `;
@@ -519,32 +468,19 @@ export function initPizzaCustomizerModal(config) {
       if (inputObs) inputObs.value = itemParaEditar.observacoes || '';
       if (btnAddLabel) btnAddLabel.textContent = 'Salvar Alterações';
 
-      // Atualiza chips ativos de tamanho e borda
+      // Atualiza chips ativos de tamanho
       tamanhoChips.forEach(c => {
         c.classList.toggle('active', c.dataset.tamanhoId === tamanhoSelecionado.id);
-      });
-      bordaRadios.forEach(c => {
-        const isThis = c.dataset.bordaId === bordaSelecionada.id;
-        c.classList.toggle('active', isThis);
-        const radio = c.querySelector('input[type="radio"]');
-        if (radio) radio.checked = isThis;
       });
     } else {
       itemEditandoId = null;
       quantidade = 1;
       tamanhoSelecionado = listaTamanhos.find(t => t.id === 'grande') || listaTamanhos[0];
-      bordaSelecionada = listaBordas[0];
       if (inputObs) inputObs.value = '';
       if (btnAddLabel) btnAddLabel.textContent = 'Adicionar ao Carrinho';
 
       tamanhoChips.forEach(c => {
         c.classList.toggle('active', c.dataset.tamanhoId === tamanhoSelecionado.id);
-      });
-      bordaRadios.forEach(c => {
-        const isThis = c.dataset.bordaId === bordaSelecionada.id;
-        c.classList.toggle('active', isThis);
-        const radio = c.querySelector('input[type="radio"]');
-        if (radio) radio.checked = isThis;
       });
 
       if (saborInicial) {
@@ -609,7 +545,7 @@ export function initPizzaCustomizerModal(config) {
     carrinho.salvarPizza({
       sabores: saboresSelecionados,
       tamanho: tamanhoSelecionado,
-      borda: bordaSelecionada,
+      borda: null,
       quantidade,
       observacoes: inputObs?.value?.trim() || ''
     }, itemEditandoId);

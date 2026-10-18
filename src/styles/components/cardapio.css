@@ -977,6 +977,19 @@
   box-sizing: border-box;
 }
 
+.busca-detalhe-pill {
+  display: inline-block;
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: #D4AF37;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin-left: 6px;
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  vertical-align: middle;
+}
+
 .btn-voltar-categorias {
   background: transparent;
   border: 1px solid rgba(200, 161, 90, 0.35);

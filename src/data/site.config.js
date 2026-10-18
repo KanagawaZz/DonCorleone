@@ -151,16 +151,8 @@ export const siteConfig = {
         padrao: true
       }
     ],
-    // Bordas Recheadas (associadas à Pizza Grande de 35 cm, máximo 1 por pizza)
-    bordas: [
-      { id: "sem-borda", nome: "Sem Borda", preco: 0.00, descricao: "Massa crocante tradicional" },
-      { id: "borda-catupiry", nome: "Borda de Catupiry", preco: null, precoTexto: "Sob consulta / Inclusa em combos", descricao: "Requeijão tipo catupiry cremoso" },
-      { id: "borda-chocolate", nome: "Borda de Chocolate", preco: 9.90, descricao: "Recheio doce de chocolate" },
-      { id: "borda-goiabada", nome: "Borda de Goiabada", preco: 9.90, descricao: "Goiabada cremosa selecionada" },
-      { id: "borda-mussarela", nome: "Borda de Mussarela", preco: 9.90, descricao: "Mussarela derretida no forno" },
-      { id: "borda-requeijao", nome: "Borda de Requeijão Cremoso", preco: 9.90, descricao: "Requeijão cremoso especial" },
-      { id: "borda-cheddar", nome: "Borda de Cheddar", preco: 9.90, descricao: "Cheddar cremoso nobre" }
-    ]
+    // Bordas Recheadas
+    bordas: []
   },
 
   // Regras Comerciais e Entrega
