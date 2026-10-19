@@ -5,7 +5,7 @@ export function renderMarquee(config) {
     "Entrega & Retirada",
     "Abre às 17h30",
     "Cidade Alta — Cuiabá",
-    "Pedido Mínimo R$ 22,00",
+    "Pedido Mínimo R$ 23,00",
     "Sabor Incomparável"
   ];
 

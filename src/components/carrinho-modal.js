@@ -1232,6 +1232,8 @@ export function initCarrinhoModal(config) {
     if (footerModal) footerModal.style.display = 'flex';
     if (telaPosEnvio) telaPosEnvio.style.display = 'none';
 
+    verificarStatusFuncionamento();
+
     if (listaItens) {
       listaItens.innerHTML = itens.map(item => {
         const precoUnit = typeof item.precoUnitario === 'number' ? item.precoUnitario : (item.preco || 0);
@@ -1458,7 +1460,7 @@ export function initCarrinhoModal(config) {
     const subtotal = carrinho.obterSubtotal();
     const desconto = dados.promocaoInfo.desconto || 0;
     const subtotalComDesconto = Math.max(0, subtotal - desconto);
-    const pedidoMinimo = config.pagamento?.pedidoMinimo || 22.00;
+    const pedidoMinimo = config.regrasComerciais?.pedidoMinimo || config.pagamento?.pedidoMinimo || 23.00;
     const tempoRetiradaPadrao = config.operacional?.tempoRetirada || config.pagamento?.tempoMedioRetirada || '20 a 35 min';
 
     // Texto dinâmico de taxa
@@ -1678,7 +1680,7 @@ export function initCarrinhoModal(config) {
     let valido = true;
     let primeiroElementoInvalido = null;
 
-    const pedidoMinimo = config.pagamento?.pedidoMinimo || 22.00;
+    const pedidoMinimo = config.regrasComerciais?.pedidoMinimo || config.pagamento?.pedidoMinimo || 23.00;
     const subtotalAtual = carrinho.obterSubtotal();
     if (subtotalAtual > 0 && subtotalAtual < pedidoMinimo) {
       alert(`O valor mínimo para pedidos na Don Corleone é de ${formatarPreco(pedidoMinimo)}. Por favor, adicione mais itens ao seu carrinho.`);

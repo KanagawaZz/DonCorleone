@@ -692,6 +692,99 @@
   flex-shrink: 0;
 }
 
+.cardapio-item-preco-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.2rem;
+  flex-shrink: 0;
+}
+
+/* Régua de Tamanhos da Pizza com Mini-Cards Quadrados Compactos (P · M · G) */
+.cardapio-tamanhos-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 5px;
+  background: linear-gradient(180deg, rgba(26, 20, 16, 0.95) 0%, rgba(14, 11, 9, 0.98) 100%);
+  border: 1px solid rgba(247, 186, 42, 0.3);
+  border-radius: 9px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  margin-top: 4px;
+  user-select: none;
+  transition: border-color var(--transition-fast, 150ms ease), box-shadow var(--transition-fast, 150ms ease);
+}
+
+.cardapio-item-card:hover .cardapio-tamanhos-bar {
+  border-color: rgba(247, 186, 42, 0.48);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5), 0 0 8px rgba(247, 186, 42, 0.15);
+}
+
+/* Cada mini-card quadrado individual - Compacto e Bem Proporcionado */
+.tamanhos-bar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  padding: 2.5px 5px;
+  min-width: 42px;
+  background: rgba(30, 24, 19, 0.85);
+  border: 1px solid rgba(247, 186, 42, 0.22);
+  border-radius: 5px;
+  transition: all var(--transition-fast, 150ms ease);
+  cursor: default;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.tamanhos-bar-item:hover {
+  background: rgba(48, 36, 26, 0.95);
+  border-color: rgba(247, 186, 42, 0.45);
+  transform: translateY(-0.5px);
+}
+
+.tamanhos-bar-sigla {
+  font-family: var(--font-serif);
+  font-size: 0.62rem;
+  font-weight: 800;
+  color: var(--color-gold-light, #FFE082);
+  line-height: 1.1;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.8);
+  letter-spacing: 0.02em;
+}
+
+.tamanhos-bar-preco {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 1px;
+  font-family: var(--font-sans);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--color-gold, #F7BA2A);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  line-height: 1.1;
+}
+
+.tamanhos-bar-cifrao {
+  font-size: 0.5rem;
+  font-weight: 600;
+  color: var(--color-gold, #F7BA2A);
+  opacity: 0.9;
+}
+
+.cardapio-preco-tamanhos-pill {
+  font-size: 0.6875rem;
+  font-weight: 600;
+  color: var(--color-gold);
+  background: rgba(200, 161, 90, 0.12);
+  border: 1px solid rgba(200, 161, 90, 0.25);
+  padding: 1px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+
 /* Linha Ornamental Divisória Fina */
 .cardapio-ornament-line {
   height: 1px;
@@ -850,6 +943,10 @@
     gap: 6px;
   }
 
+  .cardapio-item-preco-box {
+    align-items: flex-start;
+  }
+
   .cardapio-item-img-wrap {
     height: 190px;
   }
@@ -869,6 +966,33 @@
   .cardapio-item-desc {
     font-size: 0.8125rem;
     margin-bottom: var(--space-4);
+  }
+}
+
+@media (max-width: 480px) {
+  .cardapio-tamanhos-bar {
+    gap: 3px;
+    padding: 2.5px 4px;
+    max-width: 100%;
+  }
+
+  .tamanhos-bar-item {
+    padding: 2px 4px;
+    min-width: 38px;
+    gap: 1px;
+    border-radius: 4px;
+  }
+
+  .tamanhos-bar-sigla {
+    font-size: 0.58rem;
+  }
+
+  .tamanhos-bar-preco {
+    font-size: 0.61rem;
+  }
+
+  .tamanhos-bar-cifrao {
+    font-size: 0.46rem;
   }
 }
 

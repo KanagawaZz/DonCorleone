@@ -3,7 +3,7 @@
  * 
  * Fonte de verdade factual extraída do Anota.ai:
  * - Endereço: Avenida Brasil, 2055, Cidade Alta, Cuiabá - MT, CEP 78030-409
- * - Pedido Mínimo: R$ 22,00
+ * - Pedido Mínimo: R$ 23,00
  * - PIX Oficial: 65993605364
  * - Formas de pagamento: Dinheiro, Cartão (Visa, Mastercard, Amex, Elo), PIX
  * - Horários específicos por dia da semana (17h30 até 23h00 / 23h15 / 23h30)
@@ -84,7 +84,7 @@ export const siteConfig = {
 
   // Dados para Pagamento e Cobrança
   pagamento: {
-    pedidoMinimo: 22.00,
+    pedidoMinimo: 23.00,
     pix: {
       chave: "65993605364",
       tipo: "Celular / WhatsApp",
@@ -113,7 +113,7 @@ export const siteConfig = {
     descontoPercentual: 0
   },
 
-  // Regras Oficiais de Tamanhos de Pizza
+  // Regras Oficiais de Tamanhos e Preços de Pizza
   regrasPizza: {
     regraPreco: "sabor_mais_caro",
     tamanhos: [
@@ -123,8 +123,10 @@ export const siteConfig = {
         diametro: "25 cm",
         fatias: 4,
         maxSabores: 2,
-        preco: null,
-        precoInfo: "Preço sob consulta",
+        preco: 45.90,
+        precoTradicional: 45.90,
+        precoPremium: 61.90,
+        precoInfo: "A partir de R$ 45,90",
         descricao: "25 cm · 4 fatias · até 2 sabores",
         padrao: false
       },
@@ -134,8 +136,10 @@ export const siteConfig = {
         diametro: "30 cm",
         fatias: 6,
         maxSabores: 2,
-        preco: null,
-        precoInfo: "Preço sob consulta",
+        preco: 62.90,
+        precoTradicional: 62.90,
+        precoPremium: 72.90,
+        precoInfo: "A partir de R$ 62,90",
         descricao: "30 cm · 6 fatias · até 2 sabores",
         padrao: false
       },
@@ -146,18 +150,28 @@ export const siteConfig = {
         fatias: 8,
         maxSabores: 3,
         preco: 76.90,
+        precoTradicional: 76.90,
+        precoPremium: 86.90,
         precoInfo: "A partir de R$ 76,90",
         descricao: "35 cm · 8 fatias · até 3 sabores",
         padrao: true
       }
     ],
-    // Bordas Recheadas
-    bordas: []
+    // Bordas Recheadas Oficiais (Cardápio Físico)
+    bordas: [
+      { id: "sem-borda", nome: "Massa Tradicional (Sem Borda)", preco: 0, precoTexto: "Sem adicional", padrao: true },
+      { id: "borda-catupiry", nome: "Borda de Catupiry", preco: 0, precoTexto: "Grátis", padrao: false, destaque: true },
+      { id: "borda-cheddar", nome: "Borda de Cheddar", preco: 9.90, precoTexto: "+ R$ 9,90", padrao: false },
+      { id: "borda-mussarela", nome: "Borda de Mussarela", preco: 9.90, precoTexto: "+ R$ 9,90", padrao: false },
+      { id: "borda-requeijao", nome: "Borda de Requeijão", preco: 9.90, precoTexto: "+ R$ 9,90", padrao: false },
+      { id: "borda-goiabada", nome: "Borda Doce de Goiabada", preco: 9.90, precoTexto: "+ R$ 9,90", padrao: false },
+      { id: "borda-brigadeiro", nome: "Borda Doce de Brigadeiro", preco: 9.90, precoTexto: "+ R$ 9,90", padrao: false }
+    ]
   },
 
   // Regras Comerciais e Entrega
   regrasComerciais: {
-    pedidoMinimo: 22.00,
+    pedidoMinimo: 23.00,
     taxaEntregaTexto: "Calculada por bairro (ou a confirmar com a atendente)",
     cidadePadrao: "Cuiabá",
     estadoPadrao: "MT",
@@ -181,7 +195,7 @@ export const siteConfig = {
       features: [
         "Pizzas & Esfihas",
         "Até 3 sabores na Grande",
-        "Pedido mínimo R$ 22,00",
+        "Pedido mínimo R$ 23,00",
         "Todos os dias a partir das 17h30"
       ]
     },
@@ -189,7 +203,7 @@ export const siteConfig = {
       "Pizzas Salgadas & Doces",
       "Monte até 3 Sabores",
       "Combos & Kits de Esfihas",
-      "Pedido Mínimo R$ 22,00",
+      "Pedido Mínimo R$ 23,00",
       "Avenida Brasil, 2055 — Cidade Alta",
       "Aberto a partir das 17h30",
       "Sabor Incomparável",
@@ -227,7 +241,7 @@ export const siteConfig = {
       destaques: [
         { rotulo: "Variedade", valor: "25+ Sabores de Pizza" },
         { rotulo: "Personalização", valor: "Até 3 Sabores" },
-        { rotulo: "Pedido Mínimo", valor: "R$ 22,00" },
+        { rotulo: "Pedido Mínimo", valor: "R$ 23,00" },
         { rotulo: "Atendimento", valor: "A partir das 17h30" }
       ]
     },

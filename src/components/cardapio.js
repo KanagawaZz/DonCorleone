@@ -7,6 +7,33 @@ import { exibirModalAvisoHorarioPizza } from './modal-aviso-horario.js';
 import dadosCardapioPadrao from '../data/cardapio.json';
 
 /**
+ * Renderiza a régua sofisticada de preços por tamanho (P · M · G) para pizzas.
+ */
+function renderTamanhosPizzaBar(item) {
+  const isPremium = item.categoriaPreco === 'premium' || item.preco === 86.9;
+  const precos = isPremium
+    ? { p: '61,90', m: '72,90', g: '86,90' }
+    : { p: '45,90', m: '62,90', g: '76,90' };
+
+  return `
+    <div class="cardapio-tamanhos-bar" aria-label="Preços por tamanho: Pequena, Média e Grande">
+      <div class="tamanhos-bar-item" title="Pequena: 25 cm · 4 fatias (até 2 sabores)">
+        <span class="tamanhos-bar-sigla">P</span>
+        <span class="tamanhos-bar-preco"><span class="tamanhos-bar-cifrao">R$</span>${precos.p}</span>
+      </div>
+      <div class="tamanhos-bar-item" title="Média: 30 cm · 6 fatias (até 2 sabores)">
+        <span class="tamanhos-bar-sigla">M</span>
+        <span class="tamanhos-bar-preco"><span class="tamanhos-bar-cifrao">R$</span>${precos.m}</span>
+      </div>
+      <div class="tamanhos-bar-item" title="Grande: 35 cm · 8 fatias (até 3 sabores)">
+        <span class="tamanhos-bar-sigla">G</span>
+        <span class="tamanhos-bar-preco"><span class="tamanhos-bar-cifrao">R$</span>${precos.g}</span>
+      </div>
+    </div>
+  `;
+}
+
+/**
  * Renderiza o card individual de um produto com formatação de preço e botões de ação.
  */
 export function renderizarCardItem(item, catId = '') {
@@ -14,7 +41,10 @@ export function renderizarCardItem(item, catId = '') {
   const isPizzaCategory = effectiveCatId === 'pizzas-salgadas' || effectiveCatId === 'pizzas-doces' || item.tipo === 'pizza';
 
   let precoExibido = '';
-  if (typeof item.preco === 'number' && item.preco > 0) {
+  if (isPizzaCategory) {
+    const isPrem = item.categoriaPreco === 'premium' || item.preco === 86.9;
+    precoExibido = isPrem ? 'A partir de R$ 61,90' : 'A partir de R$ 45,90';
+  } else if (typeof item.preco === 'number' && item.preco > 0) {
     precoExibido = formatarPreco(item.preco);
   } else if (item.preco === 0) {
     precoExibido = 'Sem adicional';
@@ -72,7 +102,10 @@ export function renderizarCardItem(item, catId = '') {
     <div class="cardapio-item-info">
       <div class="cardapio-item-header">
         <h3 class="cardapio-item-nome">${esc(nomeExibido)}</h3>
-        <span class="cardapio-item-preco ${!item.preco ? 'preco-consulta' : ''}">${precoExibido}</span>
+        <div class="cardapio-item-preco-box">
+          <span class="cardapio-item-preco ${!item.preco ? 'preco-consulta' : ''}">${precoExibido}</span>
+          ${isPizzaCategory ? renderTamanhosPizzaBar(item) : ''}
+        </div>
       </div>
       
       <div class="cardapio-ornament-line" aria-hidden="true"></div>
@@ -120,7 +153,7 @@ export function renderizarCardItem(item, catId = '') {
 export function renderCardapio(config, dadosCardapio = dadosCardapioPadrao) {
   const cardapioTextos = config.textos?.cardapio || {};
   const categorias = dadosCardapio?.categorias || [];
-  const pedidoMinimo = config.pagamento?.pedidoMinimo || 22.00;
+  const pedidoMinimo = config.regrasComerciais?.pedidoMinimo || config.pagamento?.pedidoMinimo || 23.00;
 
   // Extrair itens em destaque (combos e mais pedidos)
   const itensDestaque = [];
@@ -145,9 +178,16 @@ export function renderCardapio(config, dadosCardapio = dadosCardapioPadrao) {
   // 1. CARDS DE DESTAQUES (PRIMEIRO NO CARDÁPIO - INSPIRADO NO LAYOUT MOBILE APP)
   const destaquesHtml = itensDestaque.slice(0, 6).map(item => {
     const isPizza = item.categoriaId === 'pizzas-salgadas' || item.categoriaId === 'pizzas-doces';
-    const precoTxt = (typeof item.preco === 'number' && item.preco > 0) 
-      ? formatarPreco(item.preco) 
-      : (item.precoTexto || 'Sob consulta');
+    let precoTxt = '';
+    if (isPizza) {
+      precoTxt = (item.categoriaPreco === 'premium' || item.preco === 86.9)
+        ? 'A partir de R$ 61,90'
+        : 'A partir de R$ 45,90';
+    } else if (typeof item.preco === 'number' && item.preco > 0) {
+      precoTxt = formatarPreco(item.preco);
+    } else {
+      precoTxt = item.precoTexto || 'Sob consulta';
+    }
     const itemJson = JSON.stringify(item).replace(/"/g, '&quot;');
 
     return `
@@ -197,7 +237,7 @@ export function renderCardapio(config, dadosCardapio = dadosCardapioPadrao) {
 
     return `
     <div role="tabpanel" class="tab-panel ${idx === 0 ? 'active' : ''}" id="panel-${idx}" aria-labelledby="tab-${idx}">
-      <p class="cat-descricao text-center mb-6">${esc(cat.descricao || '')}</p>
+      ${cat.descricao ? `<p class="cat-descricao text-center mb-6">${esc(cat.descricao)}</p>` : ''}
       <div class="cardapio-grid">
         ${itensGrid}
       </div>
@@ -222,8 +262,8 @@ export function renderCardapio(config, dadosCardapio = dadosCardapioPadrao) {
           <div class="info-banner-item">
             <span class="info-banner-icon">${icone('pizza', 22)}</span>
             <div class="info-banner-text">
-              <strong>Regras de Tamanho:</strong>
-              <span>Grande (35cm · 8 fatias · até 3 sabores) · Média (30cm · 6 fatias) · Pequena (25cm · 4 fatias)</span>
+              <strong>Tamanhos &amp; Preços Oficiais:</strong>
+              <span>Tradicionais (P 45,90 · M 62,90 · G 76,90) · Premium (P 61,90 · M 72,90 · G 86,90) · Borda Catupiry Grátis!</span>
             </div>
           </div>
           <div class="info-banner-divider" aria-hidden="true"></div>

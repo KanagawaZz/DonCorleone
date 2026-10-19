@@ -76,7 +76,7 @@ export function exibirModalAvisoHorarioPizza({ itemData = null, status = {}, onS
       <div class="modal-horario-acoes">
         <button type="button" class="btn btn--primary btn-horario-simular" id="btn-horario-simular">
           ${icone('pizza', 18)}
-          <span>Simular &amp; Adicionar ao Carrinho</span>
+          <span>Simular Pedido &amp; Adicionar ao Carrinho</span>
         </button>
 
         <button type="button" class="btn btn--outline" id="btn-horario-entendi">

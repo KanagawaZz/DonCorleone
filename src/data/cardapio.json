@@ -3,187 +3,406 @@
     {
       "id": "pizzas-salgadas",
       "nome": "Pizzas Salgadas",
-      "descricao": "Massa artesanal assada no ponto perfeito com ingredientes selecionados.",
       "itens": [
+        {
+          "id": "pizza-don-corleone",
+          "nome": "Don Corleone",
+          "descricao": "Molho de tomate, mussarela, bacon em cubos, frango em cubos, cebola em rodelas e orégano.",
+          "preco": 76.9,
+          "destaque": true,
+          "tag": "Assinatura",
+          "foto": "/images/cardapio/don-corleone.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
+        },
+        {
+          "id": "pizza-sertaneja",
+          "nome": "Sertaneja",
+          "descricao": "Molho de tomate, mussarela, calabresa, bacon em cubos salpicados com milho e palmito e orégano.",
+          "preco": 76.9,
+          "destaque": true,
+          "tag": "Especial da Casa",
+          "foto": "/images/cardapio/sertaneja.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
+        },
         {
           "id": "pizza-calabresa",
           "nome": "Calabresa",
           "descricao": "Molho de tomate, mussarela, calabresa em fatias finas, cebola em rodelas e orégano.",
-          "preco": 76.90,
+          "preco": 76.9,
           "destaque": true,
           "tag": "Clássica",
-          "foto": "/images/cardapio/calabresa.webp"
+          "foto": "/images/cardapio/calabresa.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
         },
         {
           "id": "pizza-frango-catupiry",
           "nome": "Frango com Catupiry",
           "descricao": "Molho de tomate, mussarela, filé de frango desfiado, requeijão cremoso e orégano.",
-          "preco": 76.90,
+          "preco": 76.9,
           "destaque": true,
           "tag": "Mais Pedida",
-          "foto": "/images/cardapio/frango-catupiry.webp"
+          "foto": "/images/cardapio/frango-catupiry.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
         },
         {
           "id": "pizza-tres-queijos",
           "nome": "Três Queijos",
           "descricao": "Molho de tomate, mussarela, requeijão cremoso, provolone e orégano.",
-          "preco": 76.90,
+          "preco": 76.9,
           "destaque": false,
           "tag": "Cremosa",
-          "foto": "/images/cardapio/tres-queijos.webp"
+          "foto": "/images/cardapio/tres-queijos.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
         },
         {
           "id": "pizza-lombo-requeijao",
           "nome": "Lombo com Requeijão",
           "descricao": "Molho de tomate, mussarela, lombo, requeijão cremoso e orégano.",
-          "preco": 76.90,
+          "preco": 76.9,
           "destaque": false,
           "tag": "Especial",
-          "foto": "/images/cardapio/lombo.webp"
+          "foto": "/images/cardapio/lombo.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
         },
         {
           "id": "pizza-baiana-apimentada",
           "nome": "Baiana Apimentada",
           "descricao": "Molho de tomate, mussarela, calabresa, ovo, pimentão, cebola, pimenta e orégano.",
-          "preco": 76.90,
+          "preco": 76.9,
           "destaque": false,
           "tag": "Picante",
-          "foto": "/images/cardapio/baiana.webp"
+          "foto": "/images/cardapio/baiana.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
         },
         {
           "id": "pizza-mafiosa",
           "nome": "Mafiosa",
           "descricao": "Molho de tomate, mussarela, lombo, milho, ovo, cebola e orégano.",
-          "preco": 76.90,
+          "preco": 76.9,
           "destaque": false,
           "tag": "Don Corleone",
-          "foto": "/images/cardapio/mafiosa.webp"
+          "foto": "/images/cardapio/mafiosa.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
         },
         {
           "id": "pizza-presunto-queijo",
           "nome": "Presunto e Queijo",
           "descricao": "Molho de tomate, mussarela, presunto, tomate em rodelas e orégano.",
-          "preco": 76.90,
+          "preco": 76.9,
           "destaque": false,
           "tag": "Tradicional",
-          "foto": "/images/cardapio/presunto-queijo.webp"
+          "foto": "/images/cardapio/presunto-queijo.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
         },
         {
           "id": "pizza-genovesa",
           "nome": "Genovesa",
           "descricao": "Molho de tomate, mussarela, ervilha, calabresa, presunto, creme de leite e orégano.",
-          "preco": 76.90,
+          "preco": 76.9,
           "destaque": false,
           "tag": "Receita da Casa",
-          "foto": "/images/cardapio/genovesa.webp"
+          "foto": "/images/cardapio/genovesa.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
         },
         {
           "id": "pizza-moda-da-casa",
           "nome": "Moda da Casa",
           "descricao": "Molho de tomate, mussarela, presunto ralado, frango, ervilha, creme de leite, tomate e orégano.",
-          "preco": 76.90,
+          "preco": 76.9,
           "destaque": true,
           "tag": "Assinatura",
-          "foto": "/images/cardapio/moda-da-casa.webp"
+          "foto": "/images/cardapio/moda-da-casa.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
         },
         {
           "id": "pizza-portuguesa",
           "nome": "Portuguesa",
           "descricao": "Molho de tomate, mussarela, presunto ralado, calabresa, ovo fatiado, ervilhas, cebola em rodelas e orégano.",
-          "preco": 76.90,
+          "preco": 76.9,
           "destaque": true,
           "tag": "Favorita",
-          "foto": "/images/cardapio/portuguesa.webp"
+          "foto": "/images/cardapio/portuguesa.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
         },
         {
           "id": "pizza-dom-camilo",
           "nome": "Dom Camilo",
           "descricao": "Molho de tomate, mussarela, calabresa, presunto, creme de leite e orégano.",
-          "preco": 76.90,
+          "preco": 76.9,
           "destaque": false,
           "tag": "Especial",
-          "foto": "/images/cardapio/dom-camilo.webp"
+          "foto": "/images/cardapio/dom-camilo.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
         },
         {
           "id": "pizza-calabresa-catupiry",
           "nome": "Calabresa com Catupiry",
           "descricao": "Molho de tomate, mussarela, calabresa, requeijão cremoso e orégano.",
-          "preco": 76.90,
+          "preco": 76.9,
           "destaque": false,
           "tag": "Clássica",
-          "foto": "/images/cardapio/calabresa.webp"
+          "foto": "/images/cardapio/calabresa.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
         },
         {
           "id": "pizza-goiana",
           "nome": "Goiana",
           "descricao": "Molho de tomate, mussarela, frango desfiado, milho, creme de leite e orégano.",
-          "preco": 76.90,
+          "preco": 76.9,
           "destaque": false,
           "tag": "Sabor Regional",
-          "foto": "/images/cardapio/frango-catupiry.webp"
+          "foto": "/images/cardapio/frango-catupiry.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
         },
         {
           "id": "pizza-mussarela",
           "nome": "Mussarela",
           "descricao": "Molho de tomate, mussarela, tomates frescos e orégano.",
-          "preco": 76.90,
+          "preco": 76.9,
           "destaque": false,
           "tag": "Tradicional",
-          "foto": "/images/cardapio/mussarela.webp"
+          "foto": "/images/cardapio/mussarela.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
         },
         {
           "id": "pizza-milho",
           "nome": "Milho",
           "descricao": "Molho de tomate, mussarela, milho e orégano.",
-          "preco": 76.90,
+          "preco": 76.9,
           "destaque": false,
           "tag": "Leve",
-          "foto": "/images/cardapio/milho.webp"
+          "foto": "/images/cardapio/milho.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
         },
         {
           "id": "pizza-palmito",
           "nome": "Palmito",
           "descricao": "Molho de tomate, mussarela, palmito em cubos e orégano.",
-          "preco": 76.90,
+          "preco": 76.9,
           "destaque": false,
           "tag": "Vegetariana",
-          "foto": "/images/cardapio/palmito.webp"
+          "foto": "/images/cardapio/palmito.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
         },
         {
           "id": "pizza-strogonoff-frango",
           "nome": "Strogonoff de Frango",
           "descricao": "Molho de tomate, mussarela, strogonoff cremoso de frango e batata palha.",
-          "preco": 86.90,
+          "preco": 86.9,
           "destaque": true,
-          "tag": "Especial da Casa",
-          "foto": "/images/cardapio/strogonoff-frango.webp"
+          "tag": "Premium",
+          "foto": "/images/cardapio/strogonoff-frango.webp",
+          "categoriaPreco": "premium",
+          "precos": {
+            "pequena": 61.9,
+            "media": 72.9,
+            "grande": 86.9
+          },
+          "precoTexto": "A partir de R$ 61,90"
         },
         {
           "id": "pizza-americana",
           "nome": "Americana",
           "descricao": "Molho de tomate, mussarela, frango desfiado, bacon coberto por cheddar e orégano.",
-          "preco": 86.90,
+          "preco": 86.9,
           "destaque": true,
           "tag": "Premium",
-          "foto": "/images/cardapio/americana.webp"
+          "foto": "/images/cardapio/americana.webp",
+          "categoriaPreco": "premium",
+          "precos": {
+            "pequena": 61.9,
+            "media": 72.9,
+            "grande": 86.9
+          },
+          "precoTexto": "A partir de R$ 61,90"
         },
         {
           "id": "pizza-moda-do-chef",
           "nome": "Moda do Chef",
           "descricao": "Molho de tomate, mussarela, carne seca, rodelas de tomate, pimentão e orégano.",
-          "preco": 86.90,
+          "preco": 86.9,
           "destaque": true,
           "tag": "Chef Selection",
-          "foto": "/images/cardapio/moda-do-chef.webp"
+          "foto": "/images/cardapio/moda-do-chef.webp",
+          "categoriaPreco": "premium",
+          "precos": {
+            "pequena": 61.9,
+            "media": 72.9,
+            "grande": 86.9
+          },
+          "precoTexto": "A partir de R$ 61,90"
         },
         {
           "id": "pizza-carne-seca",
           "nome": "Carne Seca",
           "descricao": "Molho de tomate, mussarela, carne seca e requeijão cremoso.",
-          "preco": 86.90,
+          "preco": 86.9,
           "destaque": true,
           "tag": "Premium",
-          "foto": "/images/cardapio/carne-seca.webp"
+          "foto": "/images/cardapio/carne-seca.webp",
+          "categoriaPreco": "premium",
+          "precos": {
+            "pequena": 61.9,
+            "media": 72.9,
+            "grande": 86.9
+          },
+          "precoTexto": "A partir de R$ 61,90"
+        },
+        {
+          "id": "pizza-cuiabana",
+          "nome": "Cuiabana",
+          "descricao": "Molho de tomate, mussarela, carne seca desfiada, banana da terra, requeijão cremoso e orégano.",
+          "preco": 86.9,
+          "destaque": true,
+          "tag": "Sabor Regional",
+          "foto": "/images/cardapio/cuiabana.webp",
+          "categoriaPreco": "premium",
+          "precos": {
+            "pequena": 61.9,
+            "media": 72.9,
+            "grande": 86.9
+          },
+          "precoTexto": "A partir de R$ 61,90"
+        },
+        {
+          "id": "pizza-bacon",
+          "nome": "Bacon",
+          "descricao": "Molho de tomate, mussarela, generosas fatias de bacon crocante e orégano.",
+          "preco": 76.9,
+          "destaque": false,
+          "tag": "Clássica",
+          "foto": "/images/cardapio/bacon.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
+        },
+        {
+          "id": "pizza-frango-cheddar",
+          "nome": "Frango com Cheddar",
+          "descricao": "Molho de tomate, mussarela, filé de frango desfiado, cheddar cremoso e orégano.",
+          "preco": 76.9,
+          "destaque": false,
+          "tag": "Cremosa",
+          "foto": "/images/cardapio/frango-cheddar.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
         }
       ]
     },
@@ -196,46 +415,81 @@
           "id": "pizza-doce-romeu-julieta",
           "nome": "Romeu e Julieta",
           "descricao": "Creme de leite, mussarela, goiabada e leite condensado.",
-          "preco": 76.90,
+          "preco": 76.9,
           "destaque": true,
           "tag": "Clássica Doce",
-          "foto": "/images/cardapio/romeu-e-julieta.webp"
+          "foto": "/images/cardapio/romeu-e-julieta.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
         },
         {
           "id": "pizza-doce-prestigio",
           "nome": "Prestígio",
           "descricao": "Brigadeiro com coco ralado.",
-          "preco": 76.90,
+          "preco": 76.9,
           "destaque": false,
           "tag": "Irresistível",
-          "foto": "/images/cardapio/prestigio.webp"
+          "foto": "/images/cardapio/prestigio.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
         },
         {
           "id": "pizza-doce-brigadeiro",
           "nome": "Brigadeiro",
           "descricao": "Brigadeiro com chocolate granulado.",
-          "preco": 76.90,
+          "preco": 76.9,
           "destaque": true,
           "tag": "Mais Pedida",
-          "foto": "/images/cardapio/brigadeiro.webp"
+          "foto": "/images/cardapio/brigadeiro.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
         },
         {
           "id": "pizza-doce-beijinho",
           "nome": "Beijinho",
           "descricao": "Beijinho com coco ralado.",
-          "preco": 76.90,
+          "preco": 76.9,
           "destaque": false,
           "tag": "Tradicional",
-          "foto": "/images/cardapio/beijinho.webp"
+          "foto": "/images/cardapio/beijinho.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
         },
         {
           "id": "pizza-doce-banana-canela",
           "nome": "Banana com Canela",
           "descricao": "Creme de leite, mussarela, banana, canela e leite condensado.",
-          "preco": 76.90,
+          "preco": 76.9,
           "destaque": true,
           "tag": "Artesanal",
-          "foto": "/images/cardapio/banana-canela.webp"
+          "foto": "/images/cardapio/banana-canela.webp",
+          "categoriaPreco": "tradicional",
+          "precos": {
+            "pequena": 45.9,
+            "media": 62.9,
+            "grande": 76.9
+          },
+          "precoTexto": "A partir de R$ 45,90"
         }
       ]
     },
@@ -276,6 +530,19 @@
           "tag": "Promoção Limitada",
           "foto": "/images/cardapio/combo-10-esfihas.webp",
           "composicao": "10 Esfihas à sua escolha + 1 Guaraná Antarctica 1,5 L"
+        },
+        {
+          "id": "kit-inicial-ja-provou",
+          "nome": "Já Provou? — Kit Inicial",
+          "descricao": "2 esfihas de carne e 1 esfiha de queijo (+ adicionais da casa).",
+          "unidades": "3+ esfihas",
+          "preco": null,
+          "precoTexto": "Sob consulta",
+          "destaque": true,
+          "tag": "Experimente",
+          "foto": "/images/cardapio/kit-esfiha-inicial.webp",
+          "distribuicao": "2 Carne · 1 Queijo",
+          "composicao": "2 Esfihas de Carne + 1 Esfiha de Queijo"
         }
       ]
     },
@@ -288,211 +555,276 @@
           "id": "esfiha-carne",
           "nome": "Esfiha de Carne",
           "descricao": "Carne bovina de primeira temperada com tomates, cebola e especiarias aromáticas.",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 6.5,
+          "precoTexto": "R$ 6,50",
           "destaque": true,
           "tag": "Mais Pedida",
-          "foto": "/images/cardapio/esfiha-carne.webp"
+          "foto": "/images/cardapio/esfiha-carne.webp",
+          "categoriaPreco": "tradicional"
         },
         {
           "id": "esfiha-carne-queijo",
           "nome": "Esfiha de Carne com Queijo",
           "descricao": "Carne bovina temperada coberta por generosa camada de mussarela derretida.",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 6.5,
+          "precoTexto": "R$ 6,50",
           "destaque": false,
           "tag": "Combinação Perfeita",
-          "foto": "/images/cardapio/esfiha-carne-queijo.webp"
+          "foto": "/images/cardapio/esfiha-carne-queijo.webp",
+          "categoriaPreco": "tradicional"
         },
         {
           "id": "esfiha-carne-catupiry",
           "nome": "Esfiha de Carne com Catupiry",
           "descricao": "Carne bovina temperada artesanalmente com requeijão cremoso Catupiry.",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 8.5,
+          "precoTexto": "R$ 8,50",
           "destaque": false,
           "tag": "Cremosa",
-          "foto": "/images/cardapio/esfiha-carne-catupiry.webp"
+          "foto": "/images/cardapio/esfiha-carne-catupiry.webp",
+          "categoriaPreco": "especial"
         },
         {
           "id": "esfiha-queijo",
           "nome": "Esfiha de Queijo",
           "descricao": "Queijo mussarela de qualidade derretido e dourado no forno.",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 6.5,
+          "precoTexto": "R$ 6,50",
           "destaque": false,
           "tag": "Cremosa",
-          "foto": "/images/cardapio/esfiha-queijo.webp"
+          "foto": "/images/cardapio/esfiha-queijo.webp",
+          "categoriaPreco": "tradicional"
         },
         {
           "id": "esfiha-tres-queijos",
           "nome": "Esfiha Três Queijos",
           "descricao": "Mussarela, provolone e requeijão cremoso gratinados no forno.",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 8.5,
+          "precoTexto": "R$ 8,50",
           "destaque": false,
           "tag": "Especial",
-          "foto": "/images/cardapio/esfiha-tres-queijos.webp"
+          "foto": "/images/cardapio/esfiha-tres-queijos.webp",
+          "categoriaPreco": "especial"
         },
         {
           "id": "esfiha-calabresa",
           "nome": "Esfiha de Calabresa",
           "descricao": "Mussarela derretida com calabresa especial moída e orégano.",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 6.5,
+          "precoTexto": "R$ 6,50",
           "destaque": false,
           "tag": "Tradicional",
-          "foto": "/images/cardapio/esfiha-calabresa.webp"
+          "foto": "/images/cardapio/esfiha-calabresa.webp",
+          "categoriaPreco": "tradicional"
         },
         {
           "id": "esfiha-calabresa-catupiry",
           "nome": "Esfiha de Calabresa com Catupiry",
           "descricao": "Calabresa moída especial com requeijão cremoso Catupiry.",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 8.5,
+          "precoTexto": "R$ 8,50",
           "destaque": false,
           "tag": "Favorita",
-          "foto": "/images/cardapio/esfiha-calabresa-catupiry.webp"
+          "foto": "/images/cardapio/esfiha-calabresa-catupiry.webp",
+          "categoriaPreco": "especial"
         },
         {
           "id": "esfiha-frango-catupiry",
           "nome": "Esfiha de Frango com Catupiry",
           "descricao": "Frango desfiado temperado com requeijão cremoso Catupiry legítimo.",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 6.5,
+          "precoTexto": "R$ 6,50",
           "destaque": true,
           "tag": "Favorita",
-          "foto": "/images/cardapio/esfiha-frango-catupiry.webp"
+          "foto": "/images/cardapio/esfiha-frango-catupiry.webp",
+          "categoriaPreco": "tradicional"
         },
         {
           "id": "esfiha-frango-queijo",
           "nome": "Esfiha de Frango com Queijo",
           "descricao": "Frango desfiado temperado coberto com queijo mussarela derretido.",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 6.5,
+          "precoTexto": "R$ 6,50",
           "destaque": false,
           "tag": "Artesanal",
-          "foto": "/images/cardapio/esfiha-frango-queijo.webp"
+          "foto": "/images/cardapio/esfiha-frango-queijo.webp",
+          "categoriaPreco": "tradicional"
         },
         {
           "id": "esfiha-frango-cheddar",
           "nome": "Esfiha de Frango com Cheddar",
           "descricao": "Frango desfiado temperado coberto com cheddar cremoso especial.",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 8.5,
+          "precoTexto": "R$ 8,50",
           "destaque": false,
           "tag": "Marcante",
-          "foto": "/images/cardapio/esfiha-frango-cheddar.webp"
+          "foto": "/images/cardapio/esfiha-frango-cheddar.webp",
+          "categoriaPreco": "especial"
         },
         {
           "id": "esfiha-bacon",
           "nome": "Esfiha de Bacon",
           "descricao": "Cubos crocantes de bacon com mussarela derretida no forno.",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 6.5,
+          "precoTexto": "R$ 6,50",
           "destaque": true,
           "tag": "Crocante",
-          "foto": "/images/cardapio/esfiha-bacon.webp"
+          "foto": "/images/cardapio/esfiha-bacon.webp",
+          "categoriaPreco": "tradicional"
         },
         {
           "id": "esfiha-strogonoff",
           "nome": "Esfiha de Strogonoff de Frango",
           "descricao": "Strogonoff de frango cremoso, batata palha crocante e queijo mussarela.",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 8.5,
+          "precoTexto": "R$ 8,50",
           "destaque": false,
           "tag": "Especial da Casa",
-          "foto": "/images/cardapio/esfiha-strogonoff.webp"
+          "foto": "/images/cardapio/esfiha-strogonoff.webp",
+          "categoriaPreco": "especial"
         },
         {
           "id": "esfiha-palmito",
           "nome": "Esfiha de Palmito",
           "descricao": "Palmito em pedaços com queijo mussarela e toque de orégano.",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 6.5,
+          "precoTexto": "R$ 6,50",
           "destaque": false,
           "tag": "Leve",
-          "foto": "/images/cardapio/esfiha-palmito.webp"
+          "foto": "/images/cardapio/esfiha-palmito.webp",
+          "categoriaPreco": "tradicional"
         },
         {
           "id": "esfiha-milho",
           "nome": "Esfiha de Milho",
           "descricao": "Milho verde selecionado com mussarela e orégano.",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 6.5,
+          "precoTexto": "R$ 6,50",
           "destaque": false,
           "tag": "Leve",
-          "foto": "/images/cardapio/esfiha-milho.webp"
+          "foto": "/images/cardapio/esfiha-milho.webp",
+          "categoriaPreco": "tradicional"
         },
         {
           "id": "esfiha-atum",
           "nome": "Esfiha de Atum",
           "descricao": "Atum sólido de qualidade com cebola fatiada e orégano.",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 6.5,
+          "precoTexto": "R$ 6,50",
           "destaque": false,
           "tag": "Artesanal",
-          "foto": "/images/cardapio/esfiha-atum.webp"
+          "foto": "/images/cardapio/esfiha-atum.webp",
+          "categoriaPreco": "tradicional"
         },
         {
           "id": "esfiha-brigadeiro",
           "nome": "Esfiha Doce de Brigadeiro",
           "descricao": "Brigadeiro cremoso de chocolate nobre coberto com granulado.",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 7.5,
+          "precoTexto": "R$ 7,50",
           "destaque": true,
           "tag": "Mais Pedida Doce",
-          "foto": "/images/cardapio/esfiha-brigadeiro.webp"
+          "foto": "/images/cardapio/esfiha-brigadeiro.webp",
+          "categoriaPreco": "doce"
         },
         {
           "id": "esfiha-beijinho",
           "nome": "Esfiha Doce de Beijinho",
           "descricao": "Recheio cremoso de beijinho de coco com leite condensado.",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 7.5,
+          "precoTexto": "R$ 7,50",
           "destaque": false,
           "tag": "Clássica Doce",
-          "foto": "/images/cardapio/esfiha-beijinho.webp"
+          "foto": "/images/cardapio/esfiha-beijinho.webp",
+          "categoriaPreco": "doce"
         },
         {
           "id": "esfiha-prestigio",
           "nome": "Esfiha Doce de Prestígio",
           "descricao": "Chocolate cremoso nobre com flocos generosos de coco ralado.",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 7.5,
+          "precoTexto": "R$ 7,50",
           "destaque": false,
           "tag": "Irresistível",
-          "foto": "/images/cardapio/esfiha-prestigio.webp"
+          "foto": "/images/cardapio/esfiha-prestigio.webp",
+          "categoriaPreco": "doce"
         },
         {
           "id": "esfiha-romeu-e-julieta",
           "nome": "Esfiha Doce Romeu e Julieta",
           "descricao": "Goiabada cremosa especial com queijo derretido no ponto perfeito.",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 7.5,
+          "precoTexto": "R$ 7,50",
           "destaque": true,
           "tag": "Tradicional",
-          "foto": "/images/cardapio/esfiha-romeu-e-julieta.webp"
+          "foto": "/images/cardapio/esfiha-romeu-e-julieta.webp",
+          "categoriaPreco": "doce"
         },
         {
           "id": "esfiha-banana-canela",
           "nome": "Esfiha Doce de Banana com Canela",
           "descricao": "Bananas fatiadas com açúcar, canela aromática e leite condensado.",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 7.5,
+          "precoTexto": "R$ 7,50",
           "destaque": false,
           "tag": "Artesanal",
-          "foto": "/images/cardapio/esfiha-banana-canela.webp"
+          "foto": "/images/cardapio/esfiha-banana-canela.webp",
+          "categoriaPreco": "doce"
         },
         {
           "id": "esfiha-oreo",
           "nome": "Esfiha Doce de Oreo",
           "descricao": "Creme doce suave especial com pedaços crocantes do biscoito Oreo.",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 7.5,
+          "precoTexto": "R$ 7,50",
           "destaque": true,
           "tag": "Especial",
-          "foto": "/images/cardapio/esfiha-oreo.webp"
+          "foto": "/images/cardapio/esfiha-oreo.webp",
+          "categoriaPreco": "doce"
+        },
+        {
+          "id": "esfiha-dom-camilo",
+          "nome": "Esfiha Dom Camilo",
+          "descricao": "Molho especial, mussarela, calabresa moída, creme de leite e orégano.",
+          "categoriaPreco": "especial",
+          "preco": 8.5,
+          "precoTexto": "R$ 8,50",
+          "destaque": false,
+          "tag": "Especial",
+          "foto": "/images/cardapio/esfiha-calabresa.webp"
+        },
+        {
+          "id": "esfiha-lombo-catupiry",
+          "nome": "Esfiha de Lombo com Catupiry",
+          "descricao": "Mussarela derretida, lombo canadense fatiado e requeijão Catupiry cremoso.",
+          "categoriaPreco": "especial",
+          "preco": 8.5,
+          "precoTexto": "R$ 8,50",
+          "destaque": false,
+          "tag": "Especial",
+          "foto": "/images/cardapio/esfiha-carne.webp"
+        },
+        {
+          "id": "esfiha-carne-seca",
+          "nome": "Esfiha de Carne Seca",
+          "descricao": "Carne seca desfiada temperada com cebola, mussarela e orégano.",
+          "categoriaPreco": "especial",
+          "preco": 8.5,
+          "precoTexto": "R$ 8,50",
+          "destaque": false,
+          "tag": "Especial",
+          "foto": "/images/cardapio/esfiha-carne.webp"
+        },
+        {
+          "id": "esfiha-cuiabana",
+          "nome": "Esfiha Cuiabana",
+          "descricao": "Carne seca artesanal, banana da terra frita e requeijão Catupiry.",
+          "categoriaPreco": "especial",
+          "preco": 8.5,
+          "precoTexto": "R$ 8,50",
+          "destaque": true,
+          "tag": "Regional Especial",
+          "foto": "/images/cardapio/esfiha-carne-queijo.webp"
         }
       ]
     },
@@ -502,24 +834,12 @@
       "descricao": "Praticidade e economia com kits montados para grupos e reuniões.",
       "itens": [
         {
-          "id": "kit-inicial-ja-provou",
-          "nome": "Já Provou? — Kit Inicial",
-          "descricao": "2 esfihas de carne e 1 esfiha de queijo (+ adicionais da casa).",
-          "unidades": "3+ esfihas",
-          "preco": null,
-          "precoTexto": "Sob consulta",
-          "destaque": false,
-          "tag": "Experimente",
-          "foto": "/images/cardapio/kit-esfiha-inicial.webp",
-          "distribuicao": "2 Carne · 1 Queijo"
-        },
-        {
           "id": "kit-esfiha-1",
           "nome": "Kit Esfiha 1",
           "descricao": "2 de calabresa, 2 de carne, 2 de queijo e 2 de frango. Total: 8 esfihas.",
           "unidades": "8 esfihas",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 44.9,
+          "precoTexto": "R$ 44,90",
           "destaque": true,
           "tag": "8 Unidades",
           "foto": "/images/cardapio/kit-esfiha-1.webp",
@@ -528,10 +848,10 @@
         {
           "id": "kit-esfiha-2",
           "nome": "Kit Esfiha 2",
-          "descricao": "10 esfihas de carne bovina temperada.",
+          "descricao": "10 esfihas de carne bovina temperada (Não trocamos esse sabor).",
           "unidades": "10 esfihas",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 44.9,
+          "precoTexto": "R$ 44,90",
           "destaque": false,
           "tag": "10 Unidades",
           "foto": "/images/cardapio/kit-esfiha-2.webp",
@@ -542,8 +862,8 @@
           "nome": "Kit Esfiha 3",
           "descricao": "3 de calabresa, 3 de carne, 3 de queijo e 3 de frango. Total: 12 esfihas.",
           "unidades": "12 esfihas",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 57.9,
+          "precoTexto": "R$ 57,90",
           "destaque": true,
           "tag": "12 Unidades",
           "foto": "/images/cardapio/kit-esfiha-3.webp",
@@ -554,8 +874,8 @@
           "nome": "Kit Esfiha 4",
           "descricao": "4 de calabresa, 4 de carne, 4 de queijo e 4 de frango. Total: 16 esfihas.",
           "unidades": "16 esfihas",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 73.9,
+          "precoTexto": "R$ 73,90",
           "destaque": false,
           "tag": "16 Unidades",
           "foto": "/images/cardapio/kit-esfiha-4.webp",
@@ -566,8 +886,8 @@
           "nome": "Kit Esfiha 5",
           "descricao": "5 de calabresa, 5 de carne, 5 de queijo, 5 de frango e 5 de bacon. Total: 25 esfihas.",
           "unidades": "25 esfihas",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 112.9,
+          "precoTexto": "R$ 112,90",
           "destaque": true,
           "tag": "25 Unidades",
           "foto": "/images/cardapio/kit-esfiha-5.webp",
@@ -578,8 +898,8 @@
           "nome": "Kit Esfiha 6",
           "descricao": "10 de carne, 5 de calabresa, 5 de queijo, 5 de frango e 5 de bacon. Total: 30 esfihas.",
           "unidades": "30 esfihas",
-          "preco": null,
-          "precoTexto": "Sob consulta",
+          "preco": 129.9,
+          "precoTexto": "R$ 129,90",
           "destaque": true,
           "tag": "30 Unidades",
           "foto": "/images/cardapio/kit-esfiha-6.webp",

@@ -300,6 +300,7 @@
 @media (max-width: 480px) {
   :root {
     --header-height: 64px;
+    --header-total-height: calc(64px + var(--safe-area-top));
   }
 
   .header-container {

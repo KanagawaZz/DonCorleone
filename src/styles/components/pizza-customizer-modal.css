@@ -277,15 +277,15 @@
 }
 
 .slice-third-1 {
-  clip-path: polygon(50% 50%, 0% 0%, 100% 0%);
+  clip-path: polygon(50% 50%, 0% 21.13%, 0% 0%, 100% 0%, 100% 21.13%);
 }
 
 .slice-third-2 {
-  clip-path: polygon(50% 50%, 100% 0%, 100% 100%, 50% 100%);
+  clip-path: polygon(50% 50%, 100% 21.13%, 100% 100%, 50% 100%);
 }
 
 .slice-third-3 {
-  clip-path: polygon(50% 50%, 50% 100%, 0% 100%, 0% 0%);
+  clip-path: polygon(50% 50%, 50% 100%, 0% 100%, 0% 21.13%);
 }
 
 /* Sombras de Relevo Hiper-realista dos Ingredientes Sobrepostos */
@@ -296,6 +296,23 @@
   background: radial-gradient(circle at 40% 40%, rgba(255, 210, 140, 0.18) 0%, transparent 60%);
   box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.6);
   mix-blend-mode: multiply;
+}
+
+/* Linhas e Cortes de Fatias Hiper-realistas em SVG */
+.pizza-cut-lines-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.pizza-cut-line {
+  stroke: #120D09;
+  stroke-width: 2.8;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 1.5px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 1px rgba(200, 161, 90, 0.3));
 }
 
 /* Sulco de Corte Central (Cutter Ridge) */
@@ -320,59 +337,44 @@
   inset: 0;
   pointer-events: none;
   z-index: 5;
-  background: 
-    linear-gradient(60deg, transparent 49.2%, #100C09 49.5%, #100C09 50.5%, transparent 50.8%),
-    linear-gradient(120deg, transparent 49.2%, #100C09 49.5%, #100C09 50.5%, transparent 50.8%),
-    linear-gradient(180deg, transparent 49.2%, #100C09 49.5%, #100C09 50.5%, transparent 50.8%);
   opacity: 0.8;
 }
 
-/* Selo de Fração / Identificação Sobre a Fatia */
+/* Selo de Fração / Identificação Sobre a Fatia (Desativado para visual limpo) */
 .slice-badge-tag {
-  position: absolute;
-  padding: 3px 8px;
-  background: rgba(12, 10, 9, 0.85);
-  border: 1px solid var(--color-gold);
-  border-radius: var(--radius-pill);
-  font-size: 0.62rem;
-  font-weight: 700;
-  color: var(--color-gold-light);
-  backdrop-filter: blur(4px);
-  z-index: 4;
-  white-space: nowrap;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.7);
+  display: none !important;
 }
 
 .slice-full .slice-badge-tag {
-  bottom: 12px;
+  bottom: 14px;
   left: 50%;
   transform: translateX(-50%);
 }
 
 .slice-left .slice-badge-tag {
-  bottom: 16px;
-  left: 10px;
+  bottom: 24px;
+  left: 14px;
 }
 
 .slice-right .slice-badge-tag {
-  bottom: 16px;
-  right: 10px;
+  bottom: 24px;
+  right: 14px;
 }
 
 .slice-third-1 .slice-badge-tag {
-  top: 14px;
+  top: 18px;
   left: 50%;
   transform: translateX(-50%);
 }
 
 .slice-third-2 .slice-badge-tag {
-  bottom: 24px;
-  right: 12px;
+  bottom: 28px;
+  right: 16px;
 }
 
 .slice-third-3 .slice-badge-tag {
-  bottom: 24px;
-  left: 12px;
+  bottom: 28px;
+  left: 16px;
 }
 
 /* Cortador Central em Latão Dourado */
@@ -796,6 +798,13 @@
   margin-bottom: 0.2rem;
 }
 
+.sabor-card-nome-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
 .sabor-card-nome {
   font-size: 0.9375rem;
   font-weight: 700;
@@ -803,10 +812,28 @@
   margin: 0;
 }
 
+.sabor-badge-premium-pill {
+  font-size: 0.625rem;
+  font-weight: 800;
+  color: #14110E;
+  background: linear-gradient(135deg, #F0D59A, #C8A15A);
+  padding: 1px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+}
+
 .sabor-card-preco {
   font-size: 0.875rem;
   font-weight: 700;
   color: var(--color-gold, #C8A15A);
+  white-space: nowrap;
+}
+
+.borda-preco.gratis {
+  color: #52B788;
+  font-weight: 800;
 }
 
 .sabor-card-desc {

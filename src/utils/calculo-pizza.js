@@ -9,6 +9,69 @@
 
 import { siteConfig } from '../data/site.config.js';
 
+/**
+ * Tabela Oficial de Preços por Tamanho e Categoria (Cardápio Físico)
+ * P: 25 cm (4 fatias, até 2 sabores)
+ * M: 30 cm (6 fatias, até 2 sabores)
+ * G: 35 cm (8 fatias, até 3 sabores)
+ */
+export const TABELA_PRECOS_PIZZA = {
+  tradicional: {
+    pequena: 45.90,
+    media: 62.90,
+    grande: 76.90
+  },
+  premium: {
+    pequena: 61.90,
+    media: 72.90,
+    grande: 86.90
+  }
+};
+
+/**
+ * Identifica se um sabor é classificado como Premium / Especial
+ */
+export function isSaborPremium(sabor = {}) {
+  if (!sabor) return false;
+  if (sabor.categoriaPreco === 'premium' || sabor.isPremium) return true;
+  if (sabor.categoriaPreco === 'tradicional') return false;
+
+  const id = (sabor.id || '').toLowerCase();
+  const nome = (sabor.nome || '').toLowerCase();
+
+  // Don Corleone e Sertaneja são listados como TRADICIONAIS no cardápio físico
+  if (id.includes('don-corleone') || id.includes('sertaneja') || nome.includes('don corleone') || nome.includes('sertaneja')) {
+    return false;
+  }
+
+  // Sabores explicitamente Premium no cardápio físico:
+  // Strogonoff de Frango, Americana, Moda do Chef (Carne Seca), Cuiabana (Pantaneira)
+  if (
+    id.includes('strogonoff') || nome.includes('strogonoff') ||
+    id.includes('americana') || nome.includes('americana') ||
+    id.includes('moda-do-chef') || nome.includes('moda do chef') ||
+    id.includes('cuiabana') || nome.includes('cuiabana')
+  ) {
+    return true;
+  }
+
+  const tag = (sabor.tag || '').toLowerCase();
+  return tag.includes('premium') || tag.includes('chef selection');
+}
+
+/**
+ * Retorna o preço individual do sabor para o tamanho selecionado
+ */
+export function obterPrecoSaborTamanho(sabor, tamanhoId = 'grande') {
+  const tid = (tamanhoId || 'grande').toLowerCase();
+  if (sabor?.precos && typeof sabor.precos[tid] === 'number') {
+    return sabor.precos[tid];
+  }
+  const isPrem = isSaborPremium(sabor);
+  const tabela = isPrem ? TABELA_PRECOS_PIZZA.premium : TABELA_PRECOS_PIZZA.tradicional;
+  return tabela[tid] || (isPrem ? 86.90 : 76.90);
+}
+
 export function calcularPrecoPizza(sabores = [], tamanho = null, borda = null, config = siteConfig) {
   if (!Array.isArray(sabores) || sabores.length === 0) {
     return 0;
@@ -22,19 +85,26 @@ export function calcularPrecoPizza(sabores = [], tamanho = null, borda = null, c
     bordaObj = null;
   }
 
+  const tamanhoId = (tamanho?.id || 'grande').toLowerCase();
   const regra = cfg?.regrasPizza?.regraPreco || 'sabor_mais_caro';
   let precoBase = 0;
 
+  const precosSabores = sabores.map(s => {
+    if (s.precos && typeof s.precos[tamanhoId] === 'number') {
+      return s.precos[tamanhoId];
+    }
+    return obterPrecoSaborTamanho(s, tamanhoId);
+  });
+
   switch (regra) {
     case 'sabor_mais_caro': {
-      const precos = sabores.map(s => Number(s.preco) || 0);
-      precoBase = Math.max(...precos);
+      precoBase = Math.max(...precosSabores);
       break;
     }
 
     case 'media_proporcional': {
-      const soma = sabores.reduce((total, s) => total + (Number(s.preco) || 0), 0);
-      const media = soma / sabores.length;
+      const soma = precosSabores.reduce((total, p) => total + p, 0);
+      const media = soma / precosSabores.length;
       precoBase = Math.round(media * 100) / 100;
       break;
     }
@@ -43,14 +113,13 @@ export function calcularPrecoPizza(sabores = [], tamanho = null, borda = null, c
       if (tamanho && typeof tamanho.preco === 'number') {
         precoBase = tamanho.preco;
       } else {
-        precoBase = Number(sabores[0]?.preco) || 0;
+        precoBase = precosSabores[0] || 76.90;
       }
       break;
     }
 
     default: {
-      const precos = sabores.map(s => Number(s.preco) || 0);
-      precoBase = Math.max(...precos);
+      precoBase = Math.max(...precosSabores);
       break;
     }
   }
