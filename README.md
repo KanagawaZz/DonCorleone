@@ -1,6 +1,6 @@
-# DonCorleone — Cantina & Pizzaria | Arena Cuiabá
+# DonCorleone — Pizzaria & Esfiharia | Arena Cuiabá
 
-Landing page de alta conversão e web app gastronômico para a **Don Corleone — Cantina & Pizzaria** (Cuiabá/MT), com personalização artesanal de pizzas (até 3 sabores), carrinho integrado, verificação de funcionamento em tempo real e checkout direto para WhatsApp.
+Landing page de alta conversão e web app gastronômico para a **Don Corleone — Pizzaria & Esfiharia** (Cuiabá/MT), com personalização artesanal de pizzas (até 3 sabores), carrinho integrado, verificação de funcionamento em tempo real e checkout direto para WhatsApp.
 
 ---
 

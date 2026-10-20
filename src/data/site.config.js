@@ -14,7 +14,7 @@ export const siteConfig = {
   // Marca e Identidade
   marca: {
     nome: "Don Corleone",
-    segmento: "Cantina e pizzaria — pizzas e esfihas artesanais",
+    segmento: "Pizzaria e esfiharia — delivery e retirada",
     slogan: "Sabor incomparável",
     cidade: "Cuiabá",
     estado: "MT",
@@ -88,7 +88,7 @@ export const siteConfig = {
     pix: {
       chave: "65993605364",
       tipo: "Celular / WhatsApp",
-      titular: "Don Corleone Cantina & Pizzaria",
+      titular: "Don Corleone Pizzaria & Esfiharia",
       avisoInstrucao: "Seu pedido entra em preparo assim que enviarmos a confirmação do comprovante. Envie o comprovante no WhatsApp."
     },
     bandeirasCartao: ["Visa", "Mastercard", "American Express", "Elo"],
@@ -186,7 +186,7 @@ export const siteConfig = {
   // Textos Oficiais da Landing Page
   textos: {
     hero: {
-      badge: "CANTINA & PIZZARIA · CIDADE ALTA · CUIABÁ",
+      badge: "DELIVERY & RETIRADA · CIDADE ALTA · CUIABÁ",
       tituloLinha1: "Uma noite especial começa",
       tituloLinha2: "com uma boa pizza.",
       subtitulo: "Pizzas e esfihas artesanais preparadas com carinho. Peça para receber na sua casa ou retire no nosso balcão na Cidade Alta.",

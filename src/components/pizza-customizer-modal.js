@@ -65,7 +65,7 @@ export function renderPizzaCustomizerModal(config) {
         <div class="pizza-modal-banner-fechado" id="pizza-banner-fechado" style="display: none;">
           <span class="banner-fechado-icon">🕒</span>
           <div id="pizza-banner-fechado-texto">
-            <strong>Forno a lenha fora do expediente:</strong> Modo aberto para consulta dos sabores.
+            <strong>Pizzaria fora do expediente:</strong> Modo aberto para consulta dos sabores.
           </div>
         </div>
 

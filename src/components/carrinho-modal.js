@@ -39,7 +39,7 @@ export function renderCarrinhoModal(config) {
           <img src="${config.marca?.brasaoUrl || '/images/brand/brasao.svg'}" alt="Don Corleone" class="pedido-header-brasao" width="28" height="28" />
           <div>
             <h2 id="modal-titulo" class="pedido-modal-title">Seu Pedido</h2>
-            <p class="pedido-modal-subtitle">Don Corleone · Cantina &amp; Pizzaria Cidade Alta (Cuiabá/MT)</p>
+            <p class="pedido-modal-subtitle">Don Corleone · Pizzaria &amp; Esfiharia Cidade Alta (Cuiabá/MT)</p>
           </div>
         </div>
         <button type="button" class="pedido-modal-close" id="btn-fechar-modal" aria-label="Fechar janela de pedido">
@@ -58,7 +58,7 @@ export function renderCarrinhoModal(config) {
           <div class="aviso-fechado-icon">${icone('alerta', 26)}</div>
           <div class="aviso-fechado-textos">
             <strong>Pizzaria Fechada para Novos Pedidos</strong>
-            <p id="aviso-fechado-mensagem">Consulte o cardápio e valores livremente. Os pedidos só podem ser finalizados quando a cantina estiver aberta.</p>
+            <p id="aviso-fechado-mensagem">Consulte o cardápio e valores livremente. Os pedidos só podem ser finalizados quando a pizzaria estiver aberta.</p>
           </div>
         </div>
 
@@ -716,7 +716,7 @@ export function initCarrinhoModal(config) {
       if (avisoFechado) {
         avisoFechado.style.display = 'flex';
         if (avisoFechadoMensagem) {
-          avisoFechadoMensagem.textContent = `Pizzaria fechada no momento: ${status.statusTexto}. Você pode consultar os valores e montar suas pizzas, mas os pedidos só podem ser finalizados quando a cantina estiver aberta.`;
+          avisoFechadoMensagem.textContent = `Pizzaria fechada no momento: ${status.statusTexto}. Você pode consultar os valores e montar suas pizzas, mas os pedidos só podem ser finalizados quando a pizzaria estiver aberta.`;
         }
       }
 
@@ -1823,7 +1823,7 @@ export function initCarrinhoModal(config) {
     // Revalidação em tempo real do horário no momento do envio (TAREFA 5)
     const statusAgora = verificarStatusFuncionamento();
     if (!statusAgora.podeFazerPedido) {
-      alert(`A cantina acabou de encerrar os pedidos para hoje (${statusAgora.statusTexto}). Não é possível enviar novos pedidos no momento.`);
+      alert(`A pizzaria acabou de encerrar os pedidos para hoje (${statusAgora.statusTexto}). Não é possível enviar novos pedidos no momento.`);
       return;
     }
 
@@ -1871,7 +1871,7 @@ export function initCarrinhoModal(config) {
         const tempoMsg = dados.modalidade === 'retirada'
           ? (config.operacional?.tempoRetirada || config.pagamento?.tempoMedioRetirada || '20 a 35 min')
           : (config.pagamento?.tempoMedioEspera || '40 min');
-        posOutrosMsg.textContent = `Pedido enviado! A cantina vai confirmar em instantes. Tempo médio: ${tempoMsg}.`;
+        posOutrosMsg.textContent = `Pedido enviado! A pizzaria vai confirmar em instantes. Tempo médio: ${tempoMsg}.`;
       }
     }
 

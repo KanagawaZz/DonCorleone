@@ -44,7 +44,7 @@ export function renderSobre(config) {
       <div class="sobre-content-col" data-reveal>
         <div class="sobre-ornamento-top">
           <img src="${config.marca?.seloUrl || '/images/brand/selo.svg'}" alt="Don Corleone Selo" class="sobre-selo-img" width="48" height="48" />
-          <span class="section-tag">Cantina &amp; Pizzaria</span>
+          <span class="section-tag">Pizzaria &amp; Esfiharia</span>
         </div>
 
         <h2 id="sobre-titulo" class="section-title">${esc(sobre.titulo || 'Mais sabor para os seus momentos.')}</h2>

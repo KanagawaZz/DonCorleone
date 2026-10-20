@@ -14,7 +14,7 @@ export function renderMontagem(config) {
       <!-- Coluna de Conteúdo Hero -->
       <div class="montagem-info">
         <div class="montagem-header-top">
-          <span class="hero-badge">${hero.badge || 'CANTINA &amp; PIZZARIA · CIDADE ALTA, CUIABÁ'}</span>
+          <span class="hero-badge">${hero.badge || 'Pizzaria &amp; Esfiharia · CIDADE ALTA, CUIABÁ'}</span>
           ${statusHtml}
         </div>
 
@@ -43,12 +43,6 @@ export function renderMontagem(config) {
 
         <!-- Destaques Verificados com Ícones Vetoriais Gastronômicos -->
         <div class="hero-features-list">
-          <div class="feature-tag">
-            <svg class="feature-icon" viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true">
-              <path d="M12 2c-.6 2.3-2.5 4.5-2.5 7 0 2.8 2.2 5 5 5 1.5 0 2.8-.7 3.7-1.8C17.5 15.6 15 18 12 18c-3.3 0-6-2.7-6-6 0-3.5 2.5-6.5 6-10z"/>
-            </svg>
-            <span>Forno a Lenha Artesanal</span>
-          </div>
           <div class="feature-tag">
             <svg class="feature-icon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
               <path d="M2 22l10-10M12 12c1-2 3-3 6-3-1 3-2 5-6 6zm0 0c2 1 3 3 3 6-3-1-5-2-6-6z"/>
@@ -91,13 +85,13 @@ export function renderMontagem(config) {
               <span class="steam-vap s3"></span>
             </div>
 
-            <!-- Selo Circular Decorativo Vintage (Tradição & Forno a Lenha) -->
+            <!-- Selo Circular Decorativo Vintage -->
             <div class="vintage-circular-seal" aria-hidden="true">
               <div class="seal-inner-ring">
                 <span class="seal-icon-fire">${icone('fogo', 16)}</span>
                 <span class="seal-text-top">TRADIÇÃO ITALIANA</span>
                 <span class="seal-text-center">DON CORLEONE</span>
-                <span class="seal-text-bottom">FORNO A LENHA · CUIABÁ</span>
+                <span class="seal-text-bottom">CIDADE ALTA · CUIABÁ</span>
               </div>
             </div>
 

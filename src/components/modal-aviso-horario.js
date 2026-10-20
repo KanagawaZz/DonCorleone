@@ -2,7 +2,7 @@
  * Modal Amigável de Aviso de Horário de Expediente — Don Corleone
  * 
  * Exibido quando o cliente clica para "Montar Pizza" fora do horário de atendimento.
- * Explica com cordialidade italiana as regras do forno a lenha, informa o horário oficial
+ * Explica com cordialidade italiana as regras de funcionamento, informa o horário oficial
  * e permite que o cliente prossiga para degustar/simular os sabores no montador visual.
  */
 
@@ -31,7 +31,7 @@ export function exibirModalAvisoHorarioPizza({ itemData = null, status = {}, onS
       <!-- Badge de Status -->
       <div class="modal-horario-badge">
         <span class="badge-fire-dot">✦</span>
-        <span>FORNO A LENHA EM PREPARAÇÃO</span>
+        <span>FORNO EM PREPARAÇÃO</span>
       </div>
 
       <!-- Ícone Dourado de Forno e Horário -->

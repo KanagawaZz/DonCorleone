@@ -282,7 +282,7 @@ export function montarMensagemWhatsApp(dados = {}) {
 
   linhas.push('');
   linhas.push(divisor);
-  linhas.push('*Don Corleone Cantina & Pizzaria*');
+  linhas.push('*Don Corleone Pizzaria & Esfiharia*');
   linhas.push('Avenida Brasil, 2055 · Cidade Alta');
   linhas.push('Cuiabá/MT');
 
