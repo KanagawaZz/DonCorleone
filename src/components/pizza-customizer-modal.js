@@ -16,6 +16,20 @@ import { pararLenis, retomarLenis } from '../utils/motion.js';
 import { obterStatusFuncionamento } from '../utils/horario.js';
 import dadosCardapio from '../data/cardapio.json';
 
+/**
+ * Gera o SVG com os cortes da pizza. Cada corte atravessa o centro,
+ * então `qtdCortes` cortes resultam em `qtdCortes * 2` fatias (o primeiro é sempre vertical).
+ */
+function svgCortesPizza(qtdCortes) {
+  const linhas = Array.from({ length: qtdCortes }, (_, i) => {
+    const angulo = Math.PI / 2 + (i * Math.PI) / qtdCortes;
+    const dx = 100 * Math.cos(angulo);
+    const dy = 100 * Math.sin(angulo);
+    return `<line x1="${(100 + dx).toFixed(1)}" y1="${(100 - dy).toFixed(1)}" x2="${(100 - dx).toFixed(1)}" y2="${(100 + dy).toFixed(1)}" class="pizza-cut-line" />`;
+  }).join('');
+  return `<svg class="pizza-cut-lines-svg" viewBox="0 0 200 200" aria-hidden="true">${linhas}</svg>`;
+}
+
 export function renderPizzaCustomizerModal(config) {
   const tamanhos = config.regrasPizza?.tamanhos || [
     { id: 'pequena', nome: 'Pizza Pequena', diametro: '25 cm', fatias: 4, maxSabores: 2, preco: 45.90, precoTradicional: 45.90, precoPremium: 61.90, precoInfo: 'A partir de R$ 45,90' },
@@ -443,12 +457,7 @@ export function initPizzaCustomizerModal(config) {
             <img src="${s1.foto}" alt="${esc(s1.nome)}" class="slice-full-img" />
             <div class="slice-relief-overlay"></div>
           </div>
-          <svg class="pizza-cut-lines-svg" viewBox="0 0 200 200" aria-hidden="true">
-            <line x1="100" y1="0" x2="100" y2="200" class="pizza-cut-line" />
-            <line x1="0" y1="100" x2="200" y2="100" class="pizza-cut-line" />
-            <line x1="170.7" y1="29.3" x2="29.3" y2="170.7" class="pizza-cut-line" />
-            <line x1="170.7" y1="170.7" x2="29.3" y2="29.3" class="pizza-cut-line" />
-          </svg>
+          ${svgCortesPizza(tamanhoSelecionado.fatias / 2)}
         `;
         previewCaption.innerHTML = `<strong>${esc(tamanhoSelecionado.nome)}:</strong> ${esc(s1.nome)}${esc(bordaDescricaoCaption)}`;
       } else if (saboresSelecionados.length === 2) {
@@ -463,10 +472,7 @@ export function initPizzaCustomizerModal(config) {
             <img src="${s2.foto}" alt="${esc(s2.nome)}" class="slice-half-img" />
             <div class="slice-relief-overlay"></div>
           </div>
-          <svg class="pizza-cut-lines-svg" viewBox="0 0 200 200" aria-hidden="true">
-            <line x1="100" y1="0" x2="100" y2="200" class="pizza-cut-line" />
-            <line x1="0" y1="100" x2="200" y2="100" class="pizza-cut-line" />
-          </svg>
+          ${svgCortesPizza(tamanhoSelecionado.fatias / 2)}
         `;
         previewCaption.innerHTML = `<strong>Meio a Meio:</strong> 1/2 ${esc(s1.nome)} + 1/2 ${esc(s2.nome)}${esc(bordaDescricaoCaption)}`;
       } else {
