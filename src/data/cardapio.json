@@ -791,7 +791,7 @@
           "precoTexto": "R$ 8,50",
           "destaque": false,
           "tag": "Especial",
-          "foto": "/images/cardapio/esfiha-calabresa.webp"
+          "foto": "/images/cardapio/esfiha-dom-camilo.webp"
         },
         {
           "id": "esfiha-lombo-catupiry",
@@ -802,7 +802,7 @@
           "precoTexto": "R$ 8,50",
           "destaque": false,
           "tag": "Especial",
-          "foto": "/images/cardapio/esfiha-carne.webp"
+          "foto": "/images/cardapio/esfiha-lombo-catupiry.webp"
         },
         {
           "id": "esfiha-carne-seca",
@@ -813,7 +813,7 @@
           "precoTexto": "R$ 8,50",
           "destaque": false,
           "tag": "Especial",
-          "foto": "/images/cardapio/esfiha-carne.webp"
+          "foto": "/images/cardapio/esfiha-carne-seca.webp"
         },
         {
           "id": "esfiha-cuiabana",
@@ -824,7 +824,7 @@
           "precoTexto": "R$ 8,50",
           "destaque": true,
           "tag": "Regional Especial",
-          "foto": "/images/cardapio/esfiha-carne-queijo.webp"
+          "foto": "/images/cardapio/esfiha-cuiabana.webp"
         }
       ]
     },
