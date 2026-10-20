@@ -1,5 +1,3 @@
-import { esc } from '../utils/dom.js';
-
 export function renderGaleria(config) {
   const fotos = config.galeria?.fotos || [];
 

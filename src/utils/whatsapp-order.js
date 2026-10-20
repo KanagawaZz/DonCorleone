@@ -44,7 +44,7 @@ function obterDataHoraCuiaba() {
  * @param {object} dados
  * @returns {string}
  */
-export function montarMensagemWhatsApp(dados = {}) {
+function montarMensagemWhatsApp(dados = {}) {
   const {
     codigoPedido = 'DC-PEDIDO',
     itens = [],

@@ -360,24 +360,6 @@
   color: var(--color-gold, #C8A15A);
 }
 
-/* Destaque do Cardápio */
-.cardapio-highlight-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1.25rem;
-  border-radius: 30px;
-  background: rgba(200, 161, 90, 0.12);
-  border: 1px solid rgba(200, 161, 90, 0.3);
-  color: #F5EBE1;
-  font-size: 0.875rem;
-  margin: 0 auto;
-}
-
-.cardapio-highlight-badge svg {
-  color: var(--color-gold, #C8A15A);
-}
-
 /* Campos de Formulário */
 .form-grid-2 {
   display: grid;
@@ -627,8 +609,7 @@
   border-bottom: none;
 }
 
-.bairro-dropdown-item:hover,
-.bairro-dropdown-item.ativo {
+.bairro-dropdown-item:hover {
   background: rgba(200, 161, 90, 0.18);
 }
 
@@ -1060,28 +1041,6 @@
 
 .btn-limpar-dados:hover {
   color: #E26D2B;
-}
-
-/* Select de Bairros */
-.form-select {
-  appearance: auto;
-  cursor: pointer;
-  background-color: #1A1613;
-  color: #F5EBE1;
-}
-
-.form-select optgroup {
-  background: #14110E;
-  color: #B8860B;
-  font-weight: 700;
-  font-family: var(--font-cinzel, serif);
-}
-
-.form-select option {
-  background: #1A1613;
-  color: #F5EBE1;
-  padding: 6px 10px;
-  font-family: var(--font-manrope, sans-serif);
 }
 
 .form-help-subtle {

@@ -43,43 +43,6 @@
 .mb-8 { margin-bottom: var(--space-8); }
 .mt-12 { margin-top: var(--space-12); }
 
-/* Abas */
-.cardapio-tabs-wrapper {
-  display: flex;
-  justify-content: center;
-  margin-bottom: var(--space-8);
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: var(--space-2);
-  scrollbar-width: none;
-  width: 100%;
-}
-
-.cardapio-tabs-wrapper::-webkit-scrollbar {
-  display: none;
-}
-
-.cardapio-highlight-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1.25rem;
-  border-radius: var(--radius-pill);
-  background: rgba(200, 161, 90, 0.12);
-  border: 1px solid rgba(200, 161, 90, 0.3);
-  color: #F5EBE1;
-  font-size: var(--text-xs);
-  margin: 0 auto;
-  max-width: 100%;
-  line-height: 1.4;
-  text-align: left;
-}
-
-.cardapio-highlight-badge svg {
-  color: var(--color-gold);
-  flex-shrink: 0;
-}
-
 /* Banner de Informações Oficiais e Tamanhos */
 .cardapio-info-banner {
   display: flex;
@@ -774,17 +737,6 @@
   opacity: 0.9;
 }
 
-.cardapio-preco-tamanhos-pill {
-  font-size: 0.6875rem;
-  font-weight: 600;
-  color: var(--color-gold);
-  background: rgba(200, 161, 90, 0.12);
-  border: 1px solid rgba(200, 161, 90, 0.25);
-  padding: 1px 6px;
-  border-radius: 4px;
-  white-space: nowrap;
-}
-
 /* Linha Ornamental Divisória Fina */
 .cardapio-ornament-line {
   height: 1px;
@@ -925,11 +877,6 @@
 
   .info-banner-item {
     width: 100%;
-  }
-
-  .cardapio-tabs-wrapper {
-    justify-content: flex-start;
-    padding-inline: var(--space-4);
   }
 
   .cardapio-grid {

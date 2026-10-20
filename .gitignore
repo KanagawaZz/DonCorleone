@@ -4,13 +4,5 @@ dist
 *.log
 .DS_Store
 
-# Pastas de importacao brutas temporarias
-/Combos/
-/Esfihas/
-/kit esfihas/
-/pizzas/
-/public/combos/
-/public/pizzas/
-/refrigerantes/
-
-
+# Fotos originais em alta resolucao (fonte das .webp em public/images/cardapio)
+/originais/

@@ -298,68 +298,6 @@
   filter: drop-shadow(0 0 1.5px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 1px rgba(200, 161, 90, 0.3));
 }
 
-/* Sulco de Corte Central (Cutter Ridge) */
-.slice-divide-ridge.vertical {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 3px;
-  transform: translateX(-50%);
-  background: #100C09;
-  box-shadow: 
-    -2px 0 5px rgba(0, 0, 0, 0.8),
-    2px 0 5px rgba(0, 0, 0, 0.8),
-    0 0 3px rgba(200, 161, 90, 0.35);
-  pointer-events: none;
-  z-index: 5;
-}
-
-.slice-divide-tri-ridges {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 5;
-  opacity: 0.8;
-}
-
-/* Selo de Fração / Identificação Sobre a Fatia (Desativado para visual limpo) */
-.slice-badge-tag {
-  display: none !important;
-}
-
-.slice-full .slice-badge-tag {
-  bottom: 14px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.slice-left .slice-badge-tag {
-  bottom: 24px;
-  left: 14px;
-}
-
-.slice-right .slice-badge-tag {
-  bottom: 24px;
-  right: 14px;
-}
-
-.slice-third-1 .slice-badge-tag {
-  top: 18px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-.slice-third-2 .slice-badge-tag {
-  bottom: 28px;
-  right: 16px;
-}
-
-.slice-third-3 .slice-badge-tag {
-  bottom: 28px;
-  left: 16px;
-}
-
 /* Cortador Central em Latão Dourado */
 .pizza-center-cutter-seal {
   position: absolute;
@@ -682,11 +620,6 @@
   font-size: 0.6875rem;
   color: #A09A92;
   line-height: 1.3;
-}
-
-.borda-desabilitada {
-  opacity: 0.45;
-  pointer-events: none;
 }
 
 /* Grid de Sabores */

@@ -66,23 +66,3 @@ export function calcularTaxaEntrega(modalidade = 'entrega', bairroEscolhido = ''
     cidade: 'Cuiabá / Várzea Grande'
   };
 }
-
-/**
- * Agrupa os bairros por cidade para geração de optgroups no select.
- * 
- * @param {Array<{ cidade: string, bairro: string, taxa: number }>} bairrosLista 
- * @returns {Record<string, Array<{ cidade: string, bairro: string, taxa: number }>>}
- */
-export function obterBairrosAgrupadosPorCidade(bairrosLista = []) {
-  const agrupados = {};
-
-  bairrosLista.forEach(item => {
-    const cidade = item.cidade || 'Outros';
-    if (!agrupados[cidade]) {
-      agrupados[cidade] = [];
-    }
-    agrupados[cidade].push(item);
-  });
-
-  return agrupados;
-}

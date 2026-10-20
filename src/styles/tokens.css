@@ -3,27 +3,15 @@
   --color-bg-primary: #0C0A09;
   --color-bg-surface: #171310;
   --color-bg-card: #1F1915;
-  --color-bg-card-hover: #29221C;
-  --color-bg-glass: rgba(16, 13, 11, 0.78);
   --color-border-glass: rgba(247, 186, 42, 0.22);
-  --color-border-light: rgba(243, 235, 221, 0.1);
 
   /* Gold / Champagne / Radiant Brass Accents */
   --color-gold: #F7BA2A;
   --color-gold-light: #FFE082;
-  --color-gold-dark: #C48416;
-  --color-gold-aged: #D99313;
-  --color-gold-glow: rgba(247, 186, 42, 0.32);
-  --color-gold-border: rgba(247, 186, 42, 0.42);
 
   /* Brand Accents & Oven Heat */
-  --color-red: #A82A22;
-  --color-red-hover: #C2342A;
   --color-red-glow: rgba(168, 42, 34, 0.35);
   --color-oven-amber: #E26D2B;
-  --color-oven-glow: rgba(226, 109, 43, 0.28);
-  --color-basil: #5E7A4A;
-  --color-basil-light: #7E9E66;
   --color-status-open: #2EB872;
   --color-status-closed: #E05252;
 
@@ -75,28 +63,19 @@
   --radius-circle: 50%;
 
   /* Shadows & Depth Gastronômico */
-  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.45);
   --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.6);
   --shadow-gold: 0 0 30px rgba(247, 186, 42, 0.28);
-  --shadow-red: 0 6px 24px rgba(168, 42, 34, 0.35);
-  --shadow-oven: 0 18px 42px rgba(0, 0, 0, 0.78), 0 0 32px rgba(226, 109, 43, 0.18);
-  --shadow-brass-tactile: inset 0 1px 1px rgba(255, 255, 255, 0.3), 0 4px 12px rgba(0, 0, 0, 0.5);
 
   /* Gradients & Texturas Metálicas */
   --gradient-brass: linear-gradient(135deg, #FFE082 0%, #F7BA2A 50%, #C48416 100%);
-  --gradient-brass-hover: linear-gradient(135deg, #FFF0B3 0%, #FCC748 50%, #D49018 100%);
-  --gradient-oven-ember: radial-gradient(circle, rgba(226, 109, 43, 0.28) 0%, rgba(247, 186, 42, 0.16) 50%, transparent 75%);
 
   /* Easings */
   --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
   /* Transitions */
   --transition-fast: 150ms var(--ease-smooth);
   --transition-normal: 300ms var(--ease-smooth);
-  --transition-slow: 600ms var(--ease-smooth);
 
   /* Safe Area Insets (PWA / Mobile Notch, Dynamic Island, Home Indicator) */
   --safe-area-top: env(safe-area-inset-top, 0px);
@@ -106,7 +85,6 @@
 
   /* Layout */
   --container-max: 1200px;
-  --container-narrow: 840px;
   --header-height: 76px;
   --header-total-height: calc(var(--header-height) + var(--safe-area-top));
   --bottom-bar-height: 72px;

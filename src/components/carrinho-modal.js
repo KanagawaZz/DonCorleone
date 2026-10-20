@@ -15,7 +15,7 @@ import { carrinho } from '../utils/carrinho.js';
 import { formatarPreco, esc, extrairNumeroMoeda } from '../utils/dom.js';
 import { icone } from '../utils/icons.js';
 import { formatarTituloPizza } from '../utils/calculo-pizza.js';
-import { gerarLinkWhatsAppPedido, montarMensagemWhatsApp } from '../utils/whatsapp-order.js';
+import { gerarLinkWhatsAppPedido } from '../utils/whatsapp-order.js';
 import { pararLenis, retomarLenis } from '../utils/motion.js';
 import bairrosLista from '../data/bairros.json';
 import { calcularTaxaEntrega } from '../utils/entrega.js';
@@ -616,8 +616,6 @@ export function initCarrinhoModal(config) {
   const posOutrosMsg = document.querySelector('#pos-envio-outros-msg');
   const btnReabrirWhats = document.querySelector('#btn-reabrir-whats');
   const btnNovoPedido = document.querySelector('#btn-novo-pedido');
-
-  let ultimoLinkWhatsGerado = '';
 
   // 1. CARREGAR DADOS SALVOS NO LOCALSTORAGE (TAREFA 6)
   function carregarDadosSalvos() {
@@ -1843,7 +1841,6 @@ export function initCarrinhoModal(config) {
 
     // Gerar link e abrir WhatsApp
     const linkWhats = gerarLinkWhatsAppPedido(config, dados);
-    ultimoLinkWhatsGerado = linkWhats;
 
     try {
       window.open(linkWhats, '_blank', 'noopener,noreferrer');

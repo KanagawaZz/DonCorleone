@@ -15,7 +15,7 @@ import { siteConfig } from '../data/site.config.js';
  * M: 30 cm (6 fatias, até 2 sabores)
  * G: 35 cm (8 fatias, até 3 sabores)
  */
-export const TABELA_PRECOS_PIZZA = {
+const TABELA_PRECOS_PIZZA = {
   tradicional: {
     pequena: 45.90,
     media: 62.90,
@@ -138,26 +138,4 @@ export function formatarTituloPizza(pizza, config = siteConfig) {
   const nomeTamanho = pizza.tamanho?.nome || 'Pizza';
   const sufixoSabores = qtdSabores === 1 ? '1 Sabor' : `${qtdSabores} Sabores`;
   return `${nomeTamanho} — ${sufixoSabores}`;
-}
-
-/**
- * Retorna a lista legível dos sabores selecionados
- */
-export function formatarSaboresDescricao(sabores = []) {
-  if (!Array.isArray(sabores) || sabores.length === 0) return '';
-  return sabores.map(s => s.nome).join(' + ');
-}
-
-/**
- * Retorna a descrição legível da borda selecionada
- */
-export function formatarBordaDescricao(borda = null) {
-  if (!borda || borda.id === 'sem-borda') return '';
-  if (typeof borda.preco === 'number' && borda.preco > 0) {
-    return `${borda.nome} (+R$ ${borda.preco.toFixed(2).replace('.', ',')})`;
-  }
-  if (borda.precoTexto) {
-    return `${borda.nome} (${borda.precoTexto})`;
-  }
-  return borda.nome || '';
 }

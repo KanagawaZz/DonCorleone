@@ -1,4 +1,4 @@
-# DonCorleone — Pizzaria & Esfiharia | Arena Cuiabá
+# DonCorleone — Pizzaria & Esfiharia | Cidade Alta, Cuiabá
 
 Landing page de alta conversão e web app gastronômico para a **Don Corleone — Pizzaria & Esfiharia** (Cuiabá/MT), com personalização artesanal de pizzas (até 3 sabores), carrinho integrado, verificação de funcionamento em tempo real e checkout direto para WhatsApp.
 
@@ -32,7 +32,7 @@ npm run preview    # Pré-visualiza o build de produção localmente
 
 ## 🏷️ Como Configurar e Ligar/Desligar Promoções
 
-No arquivo [`src/data/site.config.js`](file:///c:/Users/kayron.eduardo/Documents/DonCorleone/src/data/site.config.js), localize o bloco `promocao`:
+No arquivo [`src/data/site.config.js`](src/data/site.config.js), localize o bloco `promocao`:
 
 ```javascript
 promocao: {
@@ -55,7 +55,7 @@ promocao: {
 
 ## 📍 Como Atualizar as Taxas de Entrega por Bairro
 
-As taxas de entrega ficam no arquivo [`src/data/bairros.json`](file:///c:/Users/kayron.eduardo/Documents/DonCorleone/src/data/bairros.json):
+As taxas de entrega ficam no arquivo [`src/data/bairros.json`](src/data/bairros.json):
 
 ```json
 [
@@ -74,17 +74,19 @@ As taxas de entrega ficam no arquivo [`src/data/bairros.json`](file:///c:/Users/
 
 ## ⏰ Horário de Funcionamento e Horário de Corte
 
-No arquivo [`src/data/site.config.js`](file:///c:/Users/kayron.eduardo/Documents/DonCorleone/src/data/site.config.js):
+No arquivo [`src/data/site.config.js`](src/data/site.config.js):
 
-- `horario.horaAbertura`: Hora de início dos atendimentos (padrão: `17` = 17:00).
-- `horario.horaFechamento`: Hora limite de funcionamento da casa (padrão: `23` = 23:00).
-- `horario.horarioCorte`: Último horário para aceitar novos pedidos na cozinha (padrão: `"22:30"`). Das 22:30 em diante, o botão de finalização no checkout é automaticamente bloqueado com aviso *"Pedidos encerrados por hoje"*.
+- `horario.dias`: Um item por dia da semana (`0` = domingo … `6` = sábado), cada um com:
+  - `abertura`: início dos atendimentos (ex.: `"17:30"`).
+  - `fechamento`: horário em que a casa fecha (ex.: `"23:00"`).
+  - `corte`: último horário para aceitar novos pedidos (ex.: `"22:45"`). A partir dele, a finalização no checkout é bloqueada com aviso.
+- `horario.textoGeral`: Resumo do horário exibido no site.
 
 ---
 
 ## 💳 Chave Pix e Pagamentos
 
-No arquivo [`src/data/site.config.js`](file:///c:/Users/kayron.eduardo/Documents/DonCorleone/src/data/site.config.js) no bloco `pagamento`:
+No arquivo [`src/data/site.config.js`](src/data/site.config.js) no bloco `pagamento`:
 
 - `pix.chave`: Chave Pix exibida na tela pós-envio com botão de cópia de 1 clique.
 - `pix.tipo`: Tipo da chave (ex: `"Celular / WhatsApp"`, `"CNPJ"`, `"Chave Aleatória"`).
@@ -93,20 +95,37 @@ No arquivo [`src/data/site.config.js`](file:///c:/Users/kayron.eduardo/Documents
 
 ---
 
+## 🖼️ Fotos do Cardápio
+
+- O site usa apenas as imagens otimizadas em `public/images/cardapio/` (`.webp`, 1000 px de largura).
+- As fotos originais em alta resolução ficam em `originais/` (fora do Git e fora do build), separadas em `combos/`, `esfihas/`, `kit-esfihas/`, `pizzas/` e `refrigerantes/`.
+- Para converter uma foto nova:
+
+```bash
+node -e "require('sharp')('originais/esfihas/minha-foto.jpg').resize({width:1000}).webp({quality:80}).toFile('public/images/cardapio/esfiha-nova.webp')"
+```
+
+Depois, aponte o campo `foto` do item em `src/data/cardapio.json` para o novo arquivo.
+
+---
+
 ## 📦 Estrutura de Arquivos
 
 ```text
 DonCorleone/
 ├── index.html                   # HTML base, metadados OpenGraph e Schema.org
-├── package.json                 # Dependências (Vite, GSAP, Lenis, Three.js)
+├── package.json                 # Dependências (Vite, GSAP, Lenis, Sharp)
 ├── vite.config.js               # Configuração do Vite
+├── docs/                        # Guia de edição, pendências e planos futuros
+├── originais/                   # Fotos originais em alta (ignoradas pelo Git)
+├── public/                      # Arquivos servidos como estão (imagens, PWA, SEO)
 ├── src/
 │   ├── main.js                  # Ponto de entrada da aplicação
 │   ├── data/
 │   │   ├── site.config.js       # Central de configurações, Pix, horários e promoções
 │   │   ├── cardapio.json        # Catálogo de pizzas, esfihas e sobremesas
 │   │   ├── bairros.json         # Tabela de bairros e taxas de entrega (Cuiabá e VG)
-│   │   └── depoimentos.json     # Avaliações da cantina
+│   │   └── depoimentos.json     # Avaliações de clientes
 │   ├── utils/
 │   │   ├── entrega.js           # Cálculo puro de taxa de entrega por modalidade/bairro
 │   │   ├── codigo-pedido.js     # Gerador de códigos curtos padronizados (DC-DDMM-XXX)

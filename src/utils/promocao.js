@@ -12,7 +12,7 @@
  * @param {string} fuso 
  * @returns {string}
  */
-export function formatarDataParaComparacao(date = new Date(), fuso = 'America/Cuiaba') {
+function formatarDataParaComparacao(date = new Date(), fuso = 'America/Cuiaba') {
   try {
     const formatador = new Intl.DateTimeFormat('en-CA', {
       timeZone: fuso,

@@ -1,5 +1,5 @@
 import { carrinho } from '../utils/carrinho.js';
-import { formatarPreco, esc } from '../utils/dom.js';
+import { formatarPreco } from '../utils/dom.js';
 import { obterStatusFuncionamento } from '../utils/horario.js';
 
 export function renderBarraPedido(config) {

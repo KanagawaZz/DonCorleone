@@ -45,18 +45,18 @@ export function inicializarPWA() {
   conectarBotoesInstalacao();
 }
 
-export function isAppInstalado() {
+function isAppInstalado() {
   return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
 }
 
-export function isIOS() {
+function isIOS() {
   const ua = (typeof navigator !== 'undefined' && navigator.userAgent) || '';
   const isIos = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
   const isIpadOS = /Macintosh/.test(ua) && typeof navigator !== 'undefined' && navigator.maxTouchPoints > 1;
   return isIos || isIpadOS;
 }
 
-export function isInAppBrowser() {
+function isInAppBrowser() {
   const ua = (typeof navigator !== 'undefined' && navigator.userAgent) || '';
   return /FBAN|FBAV|Instagram|WhatsApp|Line|Twitter/i.test(ua);
 }
@@ -133,7 +133,7 @@ async function tratarCliqueInstalacao(e) {
   exibirModalInstrucoes('geral');
 }
 
-export function exibirModalInstrucoes(tipo = 'geral') {
+function exibirModalInstrucoes(tipo = 'geral') {
   let modal = document.querySelector('#modal-pwa-instrucoes');
   if (!modal) {
     modal = document.createElement('div');

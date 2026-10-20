@@ -36,7 +36,7 @@ function renderTamanhosPizzaBar(item) {
 /**
  * Renderiza o card individual de um produto com formatação de preço e botões de ação.
  */
-export function renderizarCardItem(item, catId = '') {
+function renderizarCardItem(item, catId = '') {
   const effectiveCatId = item.categoriaId || catId;
   const isPizzaCategory = effectiveCatId === 'pizzas-salgadas' || effectiveCatId === 'pizzas-doces' || item.tipo === 'pizza';
 
