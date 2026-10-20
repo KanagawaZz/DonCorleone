@@ -3,7 +3,7 @@
  * Suporte a funcionamento offline básico, cache de ativos e instalação como App.
  */
 
-const CACHE_NAME = 'don-corleone-cache-v1';
+const CACHE_NAME = 'don-corleone-cache-v2';
 const ASSETS_TO_CACHE = [
   '/',
   '/index.html',
@@ -44,6 +44,20 @@ self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   const url = new URL(event.request.url);
   if (!url.protocol.startsWith('http')) return;
+
+  // Páginas HTML: rede primeiro, para que cada deploy apareça na hora (cache só como fallback offline)
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          const responseToCache = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseToCache));
+          return networkResponse;
+        })
+        .catch(() => caches.match(event.request).then((r) => r || caches.match('/index.html')))
+    );
+    return;
+  }
 
   // Stale-while-revalidate para recursos estáticos da aplicação
   event.respondWith(

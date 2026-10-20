@@ -27,8 +27,11 @@ if (typeof window !== 'undefined') {
 }
 
 export function inicializarPWA() {
-  // 1. Registro do Service Worker
-  if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
+  // 1. Registro do Service Worker (só em produção: em dev ele serviria código antigo do cache)
+  if ('serviceWorker' in navigator && import.meta.env.DEV) {
+    navigator.serviceWorker.getRegistrations().then((regs) => regs.forEach((r) => r.unregister()));
+    caches.keys().then((keys) => keys.forEach((k) => caches.delete(k)));
+  } else if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('/sw.js').then((reg) => {
         // SW registrado com sucesso
